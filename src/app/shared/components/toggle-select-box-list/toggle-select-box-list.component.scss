@@ -1,0 +1,27 @@
+@use "../../../../assets/styles/variables" as *;
+@use "../../../../assets/styles/mixins" as *;
+
+.toggle-select-box-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem 0.5rem;
+  &__item {
+    padding: 0.6rem 1rem;
+    border-radius: 0.5rem;
+    background: $black-08;
+    cursor: pointer;
+    border: 1px solid $black-15;
+    @include font-base(1.2rem, $regular, $grey-60);
+    @include mq-md {
+      @include font-base(1.4rem, $regular, $grey-60);
+    }
+    &:hover:not(.toggle-select-box-list__item--active) {
+      background: $black-20;
+      color: $grey-60;
+    }
+    &--active {
+      background: $primary;
+      color: $white;
+    }
+  }
+}

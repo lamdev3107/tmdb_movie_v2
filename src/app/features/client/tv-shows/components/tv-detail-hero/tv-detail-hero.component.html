@@ -1,0 +1,163 @@
+<div
+  class="hero-section"
+  [style.background-image]="
+    'linear-gradient(to bottom, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.8)), url(' +
+    imageBaseUrl +
+    tvShow?.backdrop_path +
+    ')'
+  "
+  [style.background-repeat]="'no-repeat'"
+  [style.background-position]="'center'"
+  [style.background-size]="'cover'"
+>
+  <div class="hero-section__container">
+    <div class="hero-section__poster" *ngIf="tvShow?.poster_path">
+      <img
+        class="hero-section__poster-image"
+        [src]="
+          tvShow?.poster_path
+            ? (tvShow?.poster_path | imageUrl : 500 : false)
+            : 'assets/images/no-picture.png'
+        "
+        [alt]="tvShow?.name"
+        loading="lazy"
+      />
+    </div>
+    <div
+      class="hero-section__poster hero-section__poster--no-image"
+      *ngIf="!tvShow?.poster_path"
+    >
+      <img
+        class="hero-section__poster-image--no-image"
+        src="assets/icons/picture.svg"
+        alt="No poster"
+        class="hero-section__poster-image--no-image"
+        loading="lazy"
+      />
+    </div>
+    <div class="hero-section__content">
+      <div class="hero-section__info">
+        <h1 class="hero-section__info-title">
+          {{ tvShow?.name || "-------" }}
+          <span class="hero-section__info-year"
+            >({{ tvShow?.first_air_date | date : "yyyy" }})</span
+          >
+        </h1>
+        <div class="hero-section__meta">
+          <span class="hero-section__meta-age">{{ age }}</span>
+          <span> </span>
+          <span class="hero-section__meta-date">{{
+            tvShow?.first_air_date | date : "dd/MM/yyyy"
+          }}</span>
+          <span class="hero-section__meta-genre">{{ genres }}</span>
+        </div>
+      </div>
+
+      <div class="hero-section__user-score">
+        <app-user-score
+          [size]="'medium'"
+          [score]="tvShow?.vote_average"
+        ></app-user-score>
+        <span class="hero-section__user-score-label">User Score</span>
+      </div>
+
+      <div class="hero-section__actions">
+        <app-button
+          variant="primary"
+          size="large"
+          [disabled]="disablePlayTrailer"
+          (click)="onPlayTrailer()"
+        >
+          <img
+            class="btn-icon"
+            src="assets/icons/play.svg"
+            alt="play"
+            loading="lazy"
+          />
+          Play Trailer
+        </app-button>
+
+        <!-- Icon buttons -->
+        <!-- (clicked)="onAddToList()" -->
+
+        <app-tooltip
+          [text]="
+            accountStates?.watchlist
+              ? 'Remove from watchlist'
+              : 'Add to watchlist'
+          "
+          [position]="'top'"
+        >
+          <app-button
+            variant="icon"
+            size="medium"
+            (click)="handleToggleAddBtn()"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              class="action-btn-icon"
+              [class.action-btn-icon--is-watchlist]="accountStates?.watchlist"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M6.32 2.577a49.255 49.255 0 0 1 11.36 0c1.497.174 2.57 1.46 2.57 2.93V21a.75.75 0 0 1-1.085.67L12 18.089l-7.165 3.583A.75.75 0 0 1 3.75 21V5.507c0-1.47 1.073-2.756 2.57-2.93Z"
+                clip-rule="evenodd"
+              />
+            </svg>
+          </app-button>
+        </app-tooltip>
+
+        <!-- (clicked)="onLike() -->
+        <app-tooltip
+          [text]="
+            accountStates?.favorite
+              ? 'Remove from favorite list'
+              : 'Mark as favorite'
+          "
+          [position]="'top'"
+        >
+          <app-button
+            variant="icon"
+            size="medium"
+            (click)="handleToggleLikeBtn()"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="white"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              class="action-btn-icon"
+              stroke="currentColor"
+              [class.action-btn-icon--is-favorite]="accountStates?.favorite"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z"
+              />
+            </svg>
+          </app-button>
+        </app-tooltip>
+      </div>
+
+      <p class="hero-section__tagline">
+        {{ tvShow?.tagline }}
+      </p>
+
+      <div class="hero-section__overview">
+        <h2 class="hero-section__overview-text">Overview</h2>
+        <p class="hero-section__overview-content">
+          {{ tvShow?.overview }}
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-trailer-modal
+  [openModal]="openTrailerModal"
+  (closeEvent)="onCloseTrailerModal()"
+  [trailer]="trailer"
+></app-trailer-modal>

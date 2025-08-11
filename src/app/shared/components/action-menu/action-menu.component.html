@@ -1,0 +1,110 @@
+<div class="action-menu">
+  <button class="action-menu__trigger" (click)="toggleMenu($event)">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      class="action-menu__icon"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M12 6.75a.75.75 0 110-1.5.75.75 0 010 1.5zm0 6a.75.75 0 110-1.5.75.75 0 010 1.5zm0 6a.75.75 0 110-1.5.75.75 0 010 1.5z"
+      />
+    </svg>
+  </button>
+
+  <!-- Menu -->
+  <div *ngIf="isOpen" class="action-menu__dropdown">
+    <ul class="action-menu__list">
+      <!-- <li
+        class="action-menu__item"
+        (click)="handleMenuClick($event, 'addToList')"
+      >
+        <svg
+          class="action-menu__item-icon"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M3 6H21M3 12H21M3 18H21"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+        <span class="action-menu__item-text">Add to list</span>
+      </li> -->
+      <li
+        class="action-menu__item"
+        (click)="handleMenuClick($event, 'addToFavorite')"
+      >
+        <div
+          class="action-menu__item-icon"
+          [class.action-menu__item-icon--favorite]="accountStates?.favorite"
+        >
+          <svg
+            class="action-menu__item-icon"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+            />
+          </svg>
+        </div>
+        <span class="action-menu__item-text">Favorite</span>
+      </li>
+      <li
+        class="action-menu__item"
+        (click)="handleMenuClick($event, 'addToWatchlist')"
+      >
+        <div
+          class="action-menu__item-icon"
+          [class.action-menu__item-icon--watchlist]="accountStates?.watchlist"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            class="action-menu__item-icon"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M6.32 2.577a49.255 49.255 0 0 1 11.36 0c1.497.174 2.57 1.46 2.57 2.93V21a.75.75 0 0 1-1.085.67L12 18.089l-7.165 3.583A.75.75 0 0 1 3.75 21V5.507c0-1.47 1.073-2.756 2.57-2.93Z"
+              clip-rule="evenodd"
+            />
+          </svg>
+        </div>
+
+        <span class="action-menu__item-text">Watchlist</span>
+      </li>
+      <!-- <li
+        class="action-menu__item"
+        (click)="handleMenuClick($event, 'rateMovie')"
+      >
+        <svg
+          class="action-menu__item-icon action-menu__item-icon--rating"
+          [ngClass]="{y
+            'action-menu__item-icon': true,
+            'action-menu__item-icon--rated': accountStates?.rated
+          }"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
+          />
+        </svg>
+        <span class="action-menu__item-text">Your rating</span>
+      </li> -->
+    </ul>
+  </div>
+</div>
+<!-- Rating Modal -->

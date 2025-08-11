@@ -1,0 +1,40 @@
+@use "variables" as var;
+//Mobile first
+@mixin mq-xs {
+  @media (min-width: var.$breakpoint-xs) {
+    @content;
+  }
+}
+@mixin mq-sm {
+  @media (min-width: var.$breakpoint-sm) {
+    @content;
+  }
+}
+@mixin mq-md {
+  @media (min-width: var.$breakpoint-md) {
+    @content;
+  }
+}
+@mixin mq-lg {
+  @media (min-width: var.$breakpoint-lg) {
+    @content;
+  }
+}
+@mixin mq-xl {
+  @media (min-width: var.$breakpoint-xl) {
+    @content;
+  }
+}
+
+@mixin font-base(
+  $size: 1.6rem,
+  $weight: var.$regular,
+  $color: var.$white,
+  $lineHeight: 1.5
+) {
+  font-family: "Manrope", sans-serif;
+  font-size: $size;
+  font-weight: $weight;
+  color: $color;
+  line-height: $lineHeight;
+}

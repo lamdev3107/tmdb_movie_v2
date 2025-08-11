@@ -1,0 +1,15 @@
+@use "../../../../assets/styles/variables" as *;
+@use "../../../../assets/styles/mixins" as *;
+@use "../../../../assets/styles/base" as *;
+
+.main-layout {
+  display: flex;
+  flex-direction: column;
+
+  .body {
+    flex: 1;
+  }
+  .footer {
+    margin-top: auto;
+  }
+}

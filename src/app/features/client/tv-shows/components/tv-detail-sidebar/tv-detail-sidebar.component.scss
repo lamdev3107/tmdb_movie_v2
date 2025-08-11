@@ -1,0 +1,52 @@
+@use "../../../../../../assets/styles/variables" as *;
+@use "../../../../../../assets/styles/mixins" as *;
+// Sidebar styles
+.movie-detail-sidebar {
+  background: $black-10;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  margin-top: 1rem;
+  position: static;
+  height: fit-content;
+  &__title {
+    margin-bottom: 1rem;
+    @include font-base(1.8rem, $bold, $white);
+  }
+  .movie-detail-sidebar-item {
+    &__title {
+      @include font-base(1.8rem, $bold, $white);
+      margin-bottom: 0.8rem;
+    }
+    &__content {
+      @include font-base(1.4rem, $regular, $grey-60);
+    }
+    .movie-page {
+      display: block;
+      padding: 0.8rem 1.4rem;
+      @include font-base(1.4rem, $regular, $grey-60);
+      svg {
+        width: 2.4rem;
+        height: 2.4rem;
+        fill: $grey-65;
+      }
+    }
+    .movie-keywords {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem 0.5rem;
+      &__item {
+        padding: 0.8rem 1.4rem;
+        width: fit-content;
+        border-radius: 0.5rem;
+        background: $black-08;
+        border: 1px solid $black-15;
+        @include font-base(1.2rem, $regular, $grey-60);
+        @include mq-md {
+          @include font-base(1.4rem, $regular, $grey-60);
+        }
+      }
+    }
+  }
+}

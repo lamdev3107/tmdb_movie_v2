@@ -1,0 +1,30 @@
+<div class="movie-card">
+  <a [routerLink]="renderLink()" class="movie-card__image-wrapper">
+    <img
+      [src]="getPosterPath()"
+      [ngClass]="{
+        'movie-card__post--no-image': hasImage,
+        'movie-card__poster': true
+      }"
+      loading="lazy"
+      [alt]="renderTitle()"
+    />
+    <div class="movie-card__rating" *ngIf="type !== CardType.CAST">
+      <app-user-score [size]="'small'" [score]="renderScore()"></app-user-score>
+      <app-action-menu [data]="data" [type]="type"></app-action-menu>
+    </div>
+  </a>
+  <div class="movie-card-content">
+    <a [routerLink]="renderLink()" class="movie-card-content__title">{{
+      renderTitle()
+    }}</a>
+
+    <div *ngIf="type !== CardType.CAST" class="movie-card-content__subtitle">
+      {{ renderDate() | formatDate }}
+    </div>
+
+    <div *ngIf="type === CardType.CAST" class="movie-card-content__subtitle">
+      {{ renderKnownForText() }}
+    </div>
+  </div>
+</div>

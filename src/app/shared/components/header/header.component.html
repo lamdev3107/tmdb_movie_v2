@@ -1,0 +1,261 @@
+<header class="header" [class.header--hidden]="!isHeaderVisible">
+  <div class="header__container">
+    <a routerLink="/" class="header__logo">
+      <img src="assets/images/logo-mobile.svg" alt="StreamVibe" />
+    </a>
+    <a routerLink="/" class="header__logo header__logo--laptop">
+      <img src="assets/images/logo-tablet.svg" alt="StreamVibe" />
+    </a>
+    <a routerLink="/" class="header__logo header__logo--desktop">
+      <img src="assets/images/logo-desktop.svg" alt="StreamVibe" />
+    </a>
+
+    <button
+      class="header__hamburger"
+      type="button"
+      aria-label="Mở menu"
+      (click)="onClickOpenMenuBurger()"
+    >
+      <img src="assets/icons/menu.svg" alt="Menu" />
+    </button>
+
+    <nav class="header__nav">
+      <a
+        *ngFor="let item of headerNavigation"
+        [routerLink]="item.link"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        class="header__nav-item"
+      >
+        {{ item.title }}
+      </a>
+    </nav>
+
+    <div class="header__buttons">
+      <a [routerLink]="['/search']" class="header__buttons-item">
+        <img
+          src="assets/icons/search.svg"
+          class="icon icon--white"
+          alt="Search"
+        />
+      </a>
+      <div class="header__user-menu-container" #userMenuContainer>
+        <button
+          class="header__buttons-item"
+          (click)="toggleUserMenu($event)"
+          [class.active]="isUserMenuOpen"
+        >
+          <img
+            src="assets/icons/user-solid.svg"
+            class="icon icon--white"
+            alt="User"
+          />
+        </button>
+        <div
+          class="header__user-menu"
+          [class.header__user-menu--open]="isUserMenuOpen"
+        >
+          <div class="header__user-menu-item">
+            <!-- <a routerLink="/account" (click)="closeUserMenu()">
+              <img src="assets/icons/user-solid.svg" alt="User" />
+              <ng-container *ngIf="accountDetails$ | async as accountDetails">
+                <span>{{ accountDetails.username }}</span>
+              </ng-container>
+            </a> -->
+            <a
+              class="header__user-menu-item-link"
+              routerLink="/account/watchlist"
+              (click)="onClickCloseMenuBurger()"
+            >
+              <img src="assets/icons/bookmark.svg" alt="User" />
+              <span>My Watchlist</span>
+            </a>
+            <a
+              class="header__user-menu-item-link"
+              routerLink="/account/favorite"
+              (click)="onClickCloseMenuBurger()"
+            >
+              <img src="assets/icons/heart-white.svg" alt="User" />
+              <span>My Favorites</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Search Box -->
+  <!-- <div class="search-container" *ngIf="isHeaderVisible && isSearchVisible">
+    <div class="search-box">
+      <div class="search-input">
+        <button class="search-input__button">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="search-input__icon"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
+            />
+          </svg>
+        </button>
+        <input
+          type="text"
+          #searchInput
+          class="search-input__input"
+          placeholder="Search for a movie, tv show, person..."
+        />
+      </div>
+
+      <div
+        class="search-results"
+        *ngIf="searchResults$ | async as searchResults"
+      >
+        <ng-container *ngIf="searchResults.loading; else resultsContent">
+          <div class="search-results__loading">
+            <div class="spinner-loading">
+              <svg class="spinner" width="32" height="32" viewBox="0 0 50 50">
+                <circle
+                  class="path"
+                  cx="25"
+                  cy="25"
+                  r="20"
+                  fill="none"
+                  stroke-width="5"
+                ></circle>
+              </svg>
+            </div>
+          </div>
+        </ng-container>
+
+        <ng-template #resultsContent>
+          <ng-container
+            *ngIf="searchResults.data && searchResults.data.length > 0"
+          >
+            <div
+              class="search-results__item"
+              *ngFor="let item of searchResults.data"
+            >
+              <p class="search-results__item-title">
+                {{ getItemTitle(item) }}
+              </p>
+            </div>
+          </ng-container>
+        </ng-template>
+
+        <ng-container *ngIf="trendingResults$ | async as trendingResults">
+          <div
+            class="search-results__loading"
+            *ngIf="trendingResults.loading; else trendingResultsContent"
+          >
+            <div class="spinner-loading">
+              <svg class="spinner" width="32" height="32" viewBox="0 0 50 50">
+                <circle
+                  class="path"
+                  cx="25"
+                  cy="25"
+                  r="20"
+                  fill="none"
+                  stroke-width="5"
+                ></circle>
+              </svg>
+            </div>
+          </div>
+
+          <ng-template #trendingResultsContent>
+            <div
+              class="search-results__trending"
+              *ngIf="trendingResults.data && trendingResults.data.length > 0"
+            >
+              <p class="search-results__trending-title">Trending</p>
+              <div
+                class="search-results__item"
+                *ngFor="let item of trendingResults.data || []"
+              >
+                <p class="search-results__item-title">
+                  {{ item.title }}
+                </p>
+              </div>
+            </div>
+          </ng-template>
+        </ng-container>
+      </div>
+    </div>
+  </div> -->
+</header>
+
+<div class="hamburger-menu" [class.hamburger-menu--open]="isOpenHamburgerMenu">
+  <div class="hamburger-menu-overlay" (click)="onClickCloseMenuBurger()">
+    <div class="hamburger-menu-content" (click)="$event.stopPropagation()">
+      <div class="hamburger-menu-header">
+        <a routerLink="/" class="hamburger-menu-logo">
+          <img src="assets/images/logo-mobile.svg" alt="StreamVibe" />
+        </a>
+        <button class="hamburger-menu-close" (click)="onClickCloseMenuBurger()">
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"
+              fill="currentColor"
+            />
+          </svg>
+        </button>
+      </div>
+      <div class="hamburger-menu-list">
+        <!-- Nav items -->
+        <a
+          *ngFor="let item of headerNavigation"
+          [routerLink]="item.link"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+          class="hamburger-menu-item"
+          (click)="onClickCloseMenuBurger()"
+        >
+          <span>{{ item.title }}</span>
+        </a>
+
+        <div class="hamburger-menu-divider"></div>
+
+        <!-- Actions -->
+        <a
+          [routerLink]="['/search']"
+          class="hamburger-menu-item"
+          (click)="onClickCloseMenuBurger()"
+        >
+          <img
+            src="assets/icons/search.svg"
+            class="icon icon--white"
+            alt="Search"
+          />
+          <span>Search</span>
+        </a>
+        <a
+          routerLink="/account/watchlist"
+          class="hamburger-menu-item"
+          (click)="onClickCloseMenuBurger()"
+        >
+          <img src="assets/icons/bookmark.svg" alt="User" />
+          <span>My Watchlist</span>
+        </a>
+        <a
+          routerLink="/account/favorite"
+          class="hamburger-menu-item"
+          (click)="onClickCloseMenuBurger()"
+        >
+          <img src="assets/icons/heart-white.svg" alt="User" />
+          <span>My Favorites</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>

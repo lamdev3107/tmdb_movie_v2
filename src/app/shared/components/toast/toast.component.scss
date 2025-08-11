@@ -1,0 +1,126 @@
+@use "../../../../assets/styles/variables" as *;
+@use "../../../../assets/styles/mixins" as *;
+
+.toast {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.2rem;
+  padding: 1.6rem;
+  border-radius: 0.8rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  min-width: 300px;
+  max-width: 400px;
+  margin-bottom: 1rem;
+  animation: slideIn 0.3s ease-out;
+  position: relative;
+  overflow: hidden;
+
+  &__icon {
+    flex-shrink: 0;
+    width: 2rem;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+  }
+
+  &__content {
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__message {
+    font-size: 1.4rem;
+    line-height: 1.5;
+    color: white;
+    word-wrap: break-word;
+  }
+
+  &__close {
+    flex-shrink: 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.4rem;
+    border-radius: 0.4rem;
+    transition: background-color 0.2s ease;
+    width: 2rem;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    img {
+      width: 1.2rem;
+      height: 1.2rem;
+      filter: brightness(0) invert(1);
+    }
+  }
+
+  // Variants
+  &--success {
+    background-color: $green;
+    border-left: 4px solid darken($green, 10%);
+  }
+
+  &--error {
+    background-color: $red;
+    border-left: 4px solid darken($red, 10%);
+  }
+
+  &--warning {
+    background-color: $yellow;
+    border-left: 4px solid darken($yellow, 10%);
+    color: $black;
+
+    .toast__message {
+      color: $black;
+    }
+
+    .toast__close img {
+      filter: none;
+    }
+  }
+
+  &--info {
+    background-color: $blue;
+    border-left: 4px solid darken($blue, 10%);
+  }
+}
+
+// Animations
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOut {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+.toast.toast--removing {
+  animation: slideOut 0.3s ease-in forwards;
+}

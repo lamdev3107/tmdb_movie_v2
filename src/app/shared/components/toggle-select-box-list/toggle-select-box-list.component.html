@@ -1,0 +1,10 @@
+<div class="toggle-select-box-list">
+  <div
+    class="toggle-select-box-list__item"
+    *ngFor="let item of list"
+    (click)="toggleItem(item)"
+    [class.toggle-select-box-list__item--active]="isItemSelected(item) > -1"
+  >
+    {{ item.label }}
+  </div>
+</div>

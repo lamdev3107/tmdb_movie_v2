@@ -1,0 +1,21 @@
+<div class="tooltip-wrapper" [class.tooltip-wrapper--visible]="isVisible">
+  <ng-content></ng-content>
+
+  <div
+    *ngIf="isVisible && text"
+    class="tooltip-content"
+    [ngClass]="tooltipClasses"
+    [ngStyle]="tooltipStyles"
+    role="tooltip"
+    aria-live="polite"
+  >
+    <span class="tooltip-text">{{ text }}</span>
+
+    <!-- Arrow -->
+    <div
+      *ngIf="showArrow"
+      class="tooltip-arrow"
+      [ngClass]="'tooltip-arrow--' + position"
+    ></div>
+  </div>
+</div>

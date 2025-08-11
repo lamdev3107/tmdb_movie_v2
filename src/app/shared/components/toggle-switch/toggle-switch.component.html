@@ -1,0 +1,10 @@
+<div class="custom-toggle-switch">
+  <button
+    *ngFor="let option of options; let i = index"
+    class="toggle-button"
+    [class.active]="selectedOption?.value === option.value"
+    (click)="selectOption(option)"
+  >
+    {{ option.label }}
+  </button>
+</div>

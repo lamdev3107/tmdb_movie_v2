@@ -1,0 +1,13 @@
+<div class="movies-page">
+  <div class="movies-page__sidebar">
+    <ng-content select=".sidebar"></ng-content>
+  </div>
+  <div class="movies-page__main">
+    <div class="movies-list">
+      <ng-content select=".main"></ng-content>
+    </div>
+    <div class="load-more-btn">
+      <ng-content select=".load-more"></ng-content>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,104 @@
+<div class="cast-page">
+  <div class="header">
+    <div class="cast-page-header">
+      <img
+        crossorigin="anonymous"
+        class="cast-page-header__image"
+        [src]="
+          tvShow?.poster_path
+            ? (tvShow?.poster_path | imageUrl : 500 : false)
+            : 'assets/images/default-avatar.jpg'
+        "
+        loading="lazy"
+        [alt]="tvShow?.name"
+      />
+      <div class="cast-page-header__content">
+        <div class="cast-page-header__content-title-wrapper">
+          <a
+            [routerLink]="['/tv_shows/details', tvShowId]"
+            class="cast-page-header__content-title"
+            >{{ tvShow?.name }}</a
+          >
+          <p
+            *ngIf="tvShow?.first_air_date"
+            class="cast-page-header__content-year"
+          >
+            (
+            {{ tvShow?.first_air_date | date : "yyyy" }} )
+          </p>
+        </div>
+        <a
+          class="cast-page-header__back"
+          [routerLink]="['/tv_shows/details', tvShowId]"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="cast-page-header__back-icon"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18"
+            />
+          </svg>
+
+          <span class="cast-page-header__back-text">Back to TV Show</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="cast-page-content">
+    <div class="cast-page-credits">
+      <h2 *ngIf="casts.length > 0" class="cast-page-credits__title">
+        Cast ({{ casts.length }})
+      </h2>
+      <div class="cast-page-credits__list">
+        <ng-container *ngIf="loadingService.loading$ | async; else castList">
+          <ng-container *ngFor="let i of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]">
+            <app-skeleton [width]="'100%'" [height]="'66px'"></app-skeleton>
+          </ng-container>
+        </ng-container>
+        <ng-template #castList>
+          <app-cast-card
+            *ngFor="let cast of casts"
+            [cast]="cast"
+          ></app-cast-card>
+        </ng-template>
+      </div>
+    </div>
+
+    <div class="cast-page-credits">
+      <h2 *ngIf="crew.length > 0" class="cast-page-credits__title">
+        Crew ({{ crew.length }})
+        <div class="cast-page-credits__crew">
+          <ng-container *ngIf="loadingService.loading$ | async; else crewList">
+            <ng-container *ngFor="let i of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]">
+              <app-skeleton [width]="'100%'" [height]="'66px'"></app-skeleton>
+            </ng-container>
+          </ng-container>
+          <ng-template #crewList>
+            <ng-container
+              *ngFor="let department of crewByDepartment | keyvalue"
+            >
+              <div class="cast-page-credits__crew-department">
+                <h3 class="cast-page-credits__crew-title">
+                  {{ department.key }}
+                </h3>
+                <div class="cast-page-credits__list">
+                  <app-cast-card
+                    *ngFor="let crewMember of department.value"
+                    [crew]="crewMember"
+                  ></app-cast-card>
+                </div>
+              </div>
+            </ng-container>
+          </ng-template>
+        </div>
+      </h2>
+    </div>
+  </div>
+</div>

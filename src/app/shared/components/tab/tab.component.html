@@ -1,0 +1,28 @@
+<div class="tab">
+  <div class="tab__header">
+    <button
+      *ngFor="let tab of tabs"
+      [id]="'tab-' + tab.id"
+      [class]="
+        'tab-item' +
+        (isActive(tab.id) ? ' tab-item--active' : '') +
+        (tab.disabled ? ' tab-item--disabled' : '')
+      "
+      [disabled]="tab.disabled"
+      (click)="onTabClick(tab)"
+      role="tab"
+      [attr.aria-selected]="isActive(tab.id)"
+      [attr.aria-controls]="'panel-' + tab.id"
+      type="button"
+    >
+      <span class="tab-label">{{ tab.label }}</span>
+      <!-- <span *ngIf="showCount && tab.count !== undefined" class="tab-count">
+          {{ tab.count }}
+        </span> -->
+    </button>
+  </div>
+
+  <div class="tab__content" role="tabpanel">
+    <ng-content></ng-content>
+  </div>
+</div>

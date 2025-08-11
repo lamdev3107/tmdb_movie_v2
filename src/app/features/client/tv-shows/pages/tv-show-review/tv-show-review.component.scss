@@ -1,0 +1,98 @@
+@use "../../../../../../assets/styles/variables" as *;
+@use "../../../../../../assets/styles/mixins" as *;
+@use "../../../../../../assets/styles/base" as *;
+
+.header {
+  background-color: $black-10;
+  margin-top: 8rem;
+  @include mq-md {
+    margin-top: 9rem;
+  }
+}
+
+.review-page-header {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
+  @extend .container;
+  &__image {
+    width: 72px;
+    height: 87px;
+    object-fit: cover;
+    border-radius: 1rem;
+  }
+  &__content {
+    display: flex;
+    gap: 1.2rem;
+    flex-direction: column;
+    &-title-wrapper {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+    &-title {
+      @include font-base(3.2rem, $bold, $white);
+      &:hover {
+        color: $grey-75;
+      }
+    }
+    &-year {
+      @include font-base(2.4rem, $regular, $grey-65);
+    }
+  }
+  &__back {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    &:hover {
+      .review-page-header__back-icon {
+        stroke: $grey-60;
+      }
+      .review-page-header__back-text {
+        color: $grey-60;
+      }
+    }
+    &-icon {
+      width: 1.6rem;
+      height: 1.6rem;
+      stroke: $grey-65;
+    }
+    &-text {
+      @include font-base(1.6rem, $regular, $grey-65);
+      display: block;
+    }
+  }
+}
+
+.review-page-content {
+  padding-top: 2.4rem;
+  padding-bottom: 2.4rem;
+  display: flex;
+  row-gap: 4rem;
+  flex-wrap: wrap;
+  column-gap: 5rem;
+  @extend .container;
+  .button-wrapper {
+    display: flex;
+    justify-content: center;
+    min-width: 200px;
+    flex-shrink: 0;
+  }
+  &__button {
+    position: sticky;
+    top: calc(117px + 82px + 2.4rem);
+  }
+  .review-page-content__reviews {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2.4rem;
+    &-item {
+      padding: 1rem;
+      border-radius: 1rem;
+      background-color: $black-10;
+    }
+  }
+}

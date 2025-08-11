@@ -1,0 +1,35 @@
+<app-list-page-layout>
+  <div class="sidebar">
+    <app-movie-filter
+      [filterObject]="filterObj"
+      [category]="category"
+      (onClickFilter)="handleFilter($event)"
+    ></app-movie-filter>
+  </div>
+
+  <div class="main">
+    <p
+      class="no-data"
+      *ngIf="!(loadingService.loading$ | async) && movies.length === 0"
+    >
+      Not found any movie
+    </p>
+    <ng-container *ngFor="let movie of movies">
+      <app-card [data]="movie" [type]="cardType"></app-card>
+    </ng-container>
+    <ng-container *ngIf="loadingService.loading$ | async">
+      <ng-container *ngFor="let i of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]">
+        <app-skeleton [width]="'100%'" [height]="'300px'"></app-skeleton>
+      </ng-container>
+    </ng-container>
+  </div>
+
+  <div
+    class="load-more"
+    *ngIf="!(loadingService.loading$ | async) && movies.length > 0"
+  >
+    <app-button [size]="'full-width'" (click)="handleLoadMore()">
+      Load More
+    </app-button>
+  </div>
+</app-list-page-layout>

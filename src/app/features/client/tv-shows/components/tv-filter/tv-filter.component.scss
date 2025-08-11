@@ -1,0 +1,108 @@
+@use "../../../../../../assets/styles/base" as *;
+@use "../../../../../../assets/styles/mixins" as *;
+@use "../../../../../../assets/styles/variables" as *;
+
+.movie-filter {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  .filter-section {
+    border-radius: 1.2rem;
+    padding: 1rem;
+    height: fit-content;
+    border: 1px solid $black-20;
+    height: 100%;
+    background-color: $black-12;
+    &__title {
+      @include font-base(1.6rem, $bold, $white);
+      margin-bottom: 1.2rem;
+    }
+  }
+  .filter-item {
+    margin-top: 1.6rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    border-bottom: 1px solid $black-20;
+    padding-bottom: 1.2rem;
+    &:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+    &__title {
+      @include font-base(1.5rem, $medium, $grey-80);
+    }
+  }
+}
+.movie-genres {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem 0.5rem;
+  &__item {
+    padding: 0.6rem 1rem;
+    border-radius: 0.5rem;
+    background: $black-08;
+    cursor: pointer;
+    border: 1px solid $black-15;
+    @include font-base(1.2rem, $regular, $grey-60);
+    @include mq-md {
+      @include font-base(1.4rem, $regular, $grey-60);
+    }
+    &:hover {
+      background: $black-20;
+      color: $grey-60;
+    }
+    &--active {
+      background: $primary;
+      color: $white;
+    }
+  }
+}
+
+.movie-release-date {
+  display: flex;
+  gap: 1.2rem;
+  flex-direction: column;
+  &__item {
+    display: flex;
+    gap: 0.8rem;
+    flex: 1;
+
+    align-items: center;
+    &-title {
+      min-width: 4rem;
+      @include font-base(1.2rem, $medium, $grey-60);
+      margin-bottom: 0.2rem;
+    }
+    &-input {
+      padding: 0.6rem 1rem;
+      border-radius: 0.4rem;
+      border: 1px solid $black-15;
+      background: $black-08;
+      color: $white;
+      font-size: 1.3rem;
+      outline: none;
+      transition: border-color 0.2s;
+      &:focus {
+        border-color: $primary;
+      }
+      &::-webkit-calendar-picker-indicator {
+        filter: invert(1);
+      }
+    }
+  }
+}
+
+.checkbox-select {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  &__input {
+    cursor: pointer;
+    width: 1.6rem;
+    height: 1.6rem;
+  }
+  &__label {
+    @include font-base(1.4rem, $medium, $grey-60);
+  }
+}

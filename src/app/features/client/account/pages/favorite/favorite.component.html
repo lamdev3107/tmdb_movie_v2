@@ -1,0 +1,46 @@
+<div class="watchlist-page">
+  <h2 class="watchlist-title">My Favorite</h2>
+
+  <!-- Watchlist Sub-tabs -->
+  <app-tab
+    [tabs]="favoriteSubTabs"
+    [activeTabId]="activeFavoriteTab"
+    (tabChange)="onFavoriteTabChange($event)"
+  >
+    <div class="sub-tab-content">
+      <!-- Movies Tab -->
+      <div *ngIf="activeFavoriteTab === 'movies'" class="sub-tab-panel">
+        <ng-container *ngIf="favoriteMovies$ | async as favoriteMovies">
+          <div class="watchlist-items">
+            <app-watchlist-card
+              *ngFor="let item of favoriteMovies.results"
+              [mediaType]="'movie'"
+              [data]="item"
+              (removeFromList)="handleRemoveFromFavorite()"
+            ></app-watchlist-card>
+          </div>
+          <div *ngIf="favoriteMovies.results.length === 0">
+            <p class="no-data-text">No movies in watchlist</p>
+          </div>
+        </ng-container>
+      </div>
+
+      <!-- TV Shows Tab -->
+      <div *ngIf="activeFavoriteTab === 'tv'" class="sub-tab-panel">
+        <ng-container *ngIf="favoriteTv$ | async as favoriteTv">
+          <div class="watchlist-items">
+            <app-watchlist-card
+              *ngFor="let item of favoriteTv.results"
+              [mediaType]="'tv'"
+              [data]="item"
+              (removeFromList)="handleRemoveFromFavorite()"
+            ></app-watchlist-card>
+          </div>
+          <div *ngIf="favoriteTv.results.length === 0">
+            <p class="no-data-text">No tv shows in favorite</p>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </app-tab>
+</div>

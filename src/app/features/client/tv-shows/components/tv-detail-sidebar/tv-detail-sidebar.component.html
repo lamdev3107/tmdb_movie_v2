@@ -1,0 +1,81 @@
+<div class="movie-detail-sidebar">
+  <!--links-->
+  <div class="movie-detail-sidebar-item">
+    <h2 class="movie-detail-sidebar-item__title">Pages</h2>
+    <div *ngIf="tvShow?.homepage === ''">
+      <p class="movie-detail-sidebar-item__content">No homepage</p>
+    </div>
+    <app-tooltip
+      [text]="'Visit HomePage'"
+      position="top"
+      [delay]="200"
+      *ngIf="tvShow?.homepage !== ''"
+    >
+      <a
+        [href]="tvShow?.homepage"
+        target="_blank"
+        class="movie-page"
+        *ngIf="tvShow?.homepage"
+      >
+        <svg
+          class="movie-page__icon"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="size-6"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244"
+          />
+        </svg>
+      </a>
+    </app-tooltip>
+  </div>
+
+  <div class="movie-detail-sidebar-item">
+    <h3 class="movie-detail-sidebar-item__title">Original Name</h3>
+    <p class="movie-detail-sidebar-item__content">
+      {{ tvShow?.original_name }}
+    </p>
+  </div>
+
+  <!-- Status -->
+  <div class="movie-detail-sidebar-item">
+    <h3 class="movie-detail-sidebar-item__title">Status</h3>
+    <p class="movie-detail-sidebar-item__content">{{ tvShow?.status }}</p>
+  </div>
+
+  <div class="movie-detail-sidebar-item">
+    <h3 class="movie-detail-sidebar-item__title">Type</h3>
+    <p class="movie-detail-sidebar-item__content">{{ tvShow?.type }}</p>
+  </div>
+
+  <div class="movie-detail-sidebar-item">
+    <h3 class="movie-detail-sidebar-item__title">Original Language</h3>
+    <p class="movie-detail-sidebar-item__content">
+      {{ tvShow?.original_language | uppercase }}
+    </p>
+  </div>
+
+  <!--Keywords-->
+  <div class="movie-detail-sidebar-item">
+    <h3 class="movie-detail-sidebar-item__title">Keywords</h3>
+    <div class="movie-keywords">
+      <div *ngIf="keywords?.length === 0">
+        <p class="movie-detail-sidebar-item__content">
+          No keywords have been added.
+        </p>
+      </div>
+      <ng-container *ngIf="keywords && keywords.length > 0">
+        <div class="movie-keywords__item" *ngFor="let keyword of keywords">
+          {{ keyword.name }}
+        </div>
+      </ng-container>
+      <!-- Sidebar content -->
+    </div>
+  </div>
+</div>

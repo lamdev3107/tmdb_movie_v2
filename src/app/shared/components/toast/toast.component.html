@@ -1,0 +1,17 @@
+<div class="toast" [class]="'toast--' + toast.type">
+  <div class="toast__icon">
+    <img [src]="getIconPath()" [alt]="toast.type" />
+  </div>
+  <div class="toast__content">
+    <div class="toast__message">{{ toast.message }}</div>
+  </div>
+  <button 
+    *ngIf="toast.showCloseButton" 
+    class="toast__close" 
+    (click)="onClose()"
+    type="button"
+    aria-label="Close toast"
+  >
+    <img src="assets/icons/close.svg" alt="Close" />
+  </button>
+</div> 

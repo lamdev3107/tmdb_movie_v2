@@ -1,0 +1,32 @@
+<div class="review-card">
+  <div class="review-card-header">
+    <div class="review-card-header__avatar">
+      <img
+        [src]="
+          review?.author_details?.avatar_path
+            ? imgBaseUrl + review?.author_details?.avatar_path
+            : 'assets/images/default-avatar.jpg'
+        "
+        [alt]="review?.author"
+        class="review-card-header__avatar-image"
+        loading="lazy"
+      />
+    </div>
+
+    <div class="review-card-info">
+      <p class="review-card-info__title">
+        {{ "A review by " + review?.author }}
+      </p>
+      <div class="review-card-info__meta">
+        <p>{{ review?.created_at | date : "dd/MM/yyyy" }}</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="review-card-content">
+    <p class="review-card-content__text">{{ review?.content }}</p>
+    <a [href]="review?.url" target="_blank" class="review-card-content__more"
+      >See the rest</a
+    >
+  </div>
+</div>

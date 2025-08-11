@@ -1,0 +1,19 @@
+<div class="search-list">
+  <div
+    *ngIf="data && data.results && data.results.length > 0; else noMovieResults"
+    class="search-list__grid"
+  >
+    <p class="search-list__title">Có {{ data?.total_results }} kết quả</p>
+    <div *ngFor="let movie of data.results" class="search-list__item">
+      <app-search-card [item]="movie" [type]="activeTabId"></app-search-card>
+    </div>
+    <app-pagination
+      [totalPages]="data.total_pages"
+      [currentPage]="data.page"
+      (pageChange)="onPageChange($event)"
+    ></app-pagination>
+  </div>
+  <ng-template #noMovieResults>
+    <p class="search-list__no-results">Không tìm thấy kết quả phim nào</p>
+  </ng-template>
+</div>

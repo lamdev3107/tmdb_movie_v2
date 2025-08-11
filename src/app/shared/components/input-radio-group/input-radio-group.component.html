@@ -1,0 +1,25 @@
+<div class="radio-group" [class.radio-group--inline]="inline">
+  <div
+    class="radio-option"
+    *ngFor="let option of options"
+    [class.radio-option--disabled]="isOptionDisabled(option)"
+  >
+    <input
+      type="radio"
+      [id]="option.value"
+      [name]="option.value"
+      [value]="option.value"
+      [checked]="selectedValue === option.value"
+      [disabled]="isOptionDisabled(option)"
+      (change)="onRadioChange(option.value)"
+      class="radio-option__input"
+    />
+    <label
+      [for]="option.value"
+      class="radio-option__label"
+      [class.radio-option__label--disabled]="isOptionDisabled(option)"
+    >
+      {{ option.label }}
+    </label>
+  </div>
+</div>

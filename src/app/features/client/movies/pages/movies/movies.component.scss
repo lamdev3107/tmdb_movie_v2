@@ -1,0 +1,32 @@
+@use "../../../../../../assets/styles/variables" as *;
+@use "../../../../../../assets/styles/mixins" as *;
+@use "../../../../../../assets/styles/base" as *;
+
+// Styles cho sidebar
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+}
+
+// Styles cho main content
+.main {
+  display: contents; // Để nội dung được render trực tiếp vào grid
+}
+
+// Styles cho load-more
+.load-more {
+  display: contents; // Để nội dung được render trực tiếp vào load-more-btn
+}
+
+.no-data {
+  text-align: center;
+  margin-top: 2rem;
+  width: 100%;
+  font-style: italic;
+  @include font-base(1.6rem, $medium, $grey-70);
+}
+
+.movies-page__pagination-button {
+  width: 100%;
+}

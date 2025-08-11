@@ -1,0 +1,37 @@
+<div class="input-range-container">
+  <div class="input-range-wrapper">
+    <div class="input-range-tooltip" *ngIf="isShowTooltip">
+      {{ tooltipText + " " + minValue + " - " + maxValue }}
+    </div>
+
+    <div #sliderTrack class="input-range-track"></div>
+    <input
+      class="input-range input-range--min"
+      type="range"
+      [attr.min]="initMinValue"
+      [attr.max]="initMaxValue"
+      [ngModel]="minValue"
+      [attr.step]="step"
+      #sliderOne
+      (input)="onMinValueChange()"
+    />
+    <input
+      class="input-range input-range--max"
+      type="range"
+      [attr.min]="initMinValue"
+      [attr.max]="initMaxValue"
+      [ngModel]="maxValue"
+      [attr.step]="step"
+      #sliderTwo
+      (input)="onMaxValueChange()"
+    />
+    <div class="input-range-ticks">
+      <span *ngFor="let tick of ticks" class="input-range-ticks__item"></span>
+    </div>
+  </div>
+  <div class="input-range-labels">
+    <span *ngFor="let label of labels" class="input-range-labels__item">{{
+      label
+    }}</span>
+  </div>
+</div>

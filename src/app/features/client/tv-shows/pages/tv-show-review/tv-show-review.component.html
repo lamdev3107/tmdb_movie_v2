@@ -1,0 +1,79 @@
+<div class="review-page">
+  <div class="header">
+    <div class="review-page-header">
+      <img
+        crossorigin="anonymous"
+        class="review-page-header__image"
+        [src]="
+          tvShow?.poster_path
+            ? (tvShow?.poster_path | imageUrl : 500 : false)
+            : 'assets/images/default-avatar.jpg'
+        "
+        loading="lazy"
+        [alt]="tvShow?.name"
+      />
+      <div class="review-page-header__content">
+        <div class="review-page-header__content-title-wrapper">
+          <app-skeleton
+            *ngIf="(loadingService.loading$ | async) && !tvShow"
+            [width]="'250px'"
+            [height]="'3rem'"
+          ></app-skeleton>
+          <a
+            #title
+            [routerLink]="['/tvShows/details', tvShowId]"
+            class="review-page-header__content-title"
+            >{{ tvShow?.name }}</a
+          >
+          <p
+            *ngIf="tvShow?.first_air_date"
+            class="review-page-header__content-year"
+          >
+            (
+            {{ tvShow?.first_air_date | date : "yyyy" }} )
+          </p>
+        </div>
+        <a
+          class="review-page-header__back"
+          [routerLink]="['/tvShows/details', tvShowId]"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="review-page-header__back-icon"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18"
+            />
+          </svg>
+
+          <span class="review-page-header__back-text">Back to tvShows</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="review-page-content">
+    <div class="button-wrapper">
+      <app-button
+        class="review-page-content__button"
+        variant="primary"
+        size="medium"
+      >
+        Write Review
+      </app-button>
+    </div>
+
+    <div class="review-page-content__reviews">
+      <ng-container *ngFor="let review of reviews">
+        <div class="review-page-content__reviews-item">
+          <app-review-card [review]="review"></app-review-card>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,125 @@
+@use "../../../../../../assets/styles/variables.scss" as *;
+@use "../../../../../../assets/styles/mixins.scss" as *;
+@use "../../../../../../assets/styles/base.scss" as *;
+
+.hero-section {
+  color: #fff;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  &__container {
+    @extend .container;
+    padding-top: 112px;
+    flex-wrap: wrap;
+    row-gap: 3rem;
+    column-gap: 4rem;
+    display: flex;
+    flex-direction: row;
+    padding-bottom: 30px;
+    @include mq-sm {
+      flex-wrap: nowrap;
+      padding-top: 132px;
+    }
+  }
+  &__poster {
+    display: flex;
+    align-items: center;
+    justify-items: center;
+    justify-content: center;
+    height: 450px;
+    width: 300px;
+    flex-shrink: 0;
+    border-radius: 1rem;
+    overflow: hidden;
+    aspect-ratio: 3/4;
+    &-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      &--no-image {
+        height: 70%;
+        width: 70%;
+        object-fit: contain;
+      }
+    }
+    &--no-image {
+      background-color: $black-20;
+    }
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+  }
+
+  &__info {
+    &-title {
+      @include font-base(3rem, $bold, $white, 1.2);
+      margin-bottom: 0.4rem;
+    }
+    &-year {
+      @include font-base(2.4rem, $regular, $grey-65, 1.5);
+    }
+  }
+
+  &__meta {
+    display: flex;
+    align-items: center;
+    span {
+      @include font-base(1.5rem, $regular, $grey-65, 1.5);
+      &:not(:first-child):not(:last-child)::after {
+        content: "•";
+        margin-left: 0.5rem;
+        margin-right: 0.5rem;
+      }
+    }
+    &-age {
+      @include font-base(1.5rem, $regular, $grey-65, 1.5);
+      padding: 0 0.5rem;
+      border: 1px solid $grey-65;
+    }
+  }
+
+  &__user-score {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    &-label {
+      @include font-base(2rem, $bold, $grey-80, 1.5);
+    }
+  }
+
+  &__actions {
+    display: flex;
+    gap: 2rem;
+    margin-top: 0.5rem;
+  }
+
+  &__tagline {
+    @include font-base(1.6rem, $regular, $grey-75, 1.5);
+    font-style: italic;
+    margin-top: 1rem;
+  }
+
+  &__overview {
+    &-text {
+      @include font-base(2rem, $bold, $white, 1.5);
+    }
+    &-content {
+      @include font-base(1.5rem, $regular, $grey-65, 1.5);
+    }
+  }
+
+  .action-btn-icon {
+    width: 2.4rem;
+    &--is-favorite {
+      fill: $primary;
+      stroke: $primary;
+    }
+    &--is-watchlist {
+      fill: $green;
+      stroke: $green;
+    }
+  }
+}

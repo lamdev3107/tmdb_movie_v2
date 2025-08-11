@@ -1,0 +1,90 @@
+@use "../../../../assets/styles/variables.scss" as *;
+@use "../../../../assets/styles/base.scss" as *;
+@use "../../../../assets/styles/mixins.scss" as *;
+
+.btn {
+  display: flex;
+  align-items: center;
+  width: fit-content;
+  justify-content: center;
+  gap: 8px;
+  border: none;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  text-decoration: none;
+
+  &:disabled {
+    opacity: 0.8;
+    cursor: not-allowed;
+  }
+
+  // Primary button (Play Now style)
+  &--primary {
+    background: $primary;
+    color: $white;
+    &:hover:not(:disabled) {
+      background-color: $red-50;
+    }
+
+    &:active:not(:disabled) {
+      background-color: $red-50;
+    }
+  }
+
+  // Secondary button (icon buttons style)
+  &--secondary {
+    background-color: $black-10;
+    border: 2px solid $black-15;
+    color: $white;
+
+    &:hover:not(:disabled) {
+      background: $black-15;
+    }
+
+    &:active:not(:disabled) {
+      transform: translateY(-1px);
+    }
+  }
+
+  // Icon button
+  &--icon {
+    background-color: $black-10;
+    border: 2px solid $black-15;
+    color: $white;
+    padding: 1.4rem;
+    border-radius: 8px;
+    &:hover:not(:disabled) {
+      background: $black-15;
+    }
+    &:active:not(:disabled) {
+      background: $black-15;
+    }
+  }
+
+  // Sizes
+  &--medium {
+    padding: 1.4rem 2rem;
+    @include font-base(1.6rem, $semi-bold, $white, 1.5);
+    &.btn--icon {
+      padding: 1.4rem;
+    }
+  }
+
+  &--large {
+    padding: 1.4rem 2.4rem;
+    @include font-base(1.8rem, $semi-bold, $white, 1.5);
+
+    &.btn--icon {
+      padding: 1.4rem;
+    }
+  }
+
+  &--full-width {
+    padding: 1.4rem 2.4rem;
+    width: 100%;
+    @include font-base(1.6rem, $semi-bold, $white, 1.5);
+    &.btn--icon {
+      padding: 1.4rem;
+    }
+  }
+}

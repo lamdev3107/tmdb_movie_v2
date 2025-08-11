@@ -1,0 +1,44 @@
+@use "../../../../assets/styles/variables.scss" as *;
+@use "../../../../assets/styles/base.scss" as *;
+@use "../../../../assets/styles/mixins.scss" as *;
+
+.tab {
+  width: 100%;
+  border-bottom: 2px solid transparent;
+  &__header {
+    margin-bottom: 1rem;
+    display: flex;
+    width: fit-content;
+    gap: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+  .tab-item {
+    padding: 0.8rem 1.6rem;
+    cursor: pointer;
+    border: none;
+    background: none;
+    @include font-base(1.4rem, $semi-bold, $grey-65);
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    position: relative;
+
+    &:hover {
+      color: $white;
+    }
+    &--active {
+      border-bottom: 2px solid $primary;
+      @include font-base(1.4rem, $bold, $white);
+    }
+  }
+}
+
+.tab-label {
+  font-size: inherit;
+  font-weight: inherit;
+}

@@ -1,0 +1,46 @@
+<div class="trailer-card">
+  <div class="trailer-thumbnail">
+    <img
+      [src]="imageBaseUrl + trailer?.backdrop_path"
+      alt="Trailer thumbnail"
+      loading="lazy"
+      class="trailer-thumbnail__image"
+    />
+    <button class="trailer-thumbnail__play-button" (click)="onClickPlayBtn()">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="white"
+        viewBox="0 0 24 24"
+        class="size-6"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 0 1 0 1.972l-11.54 6.347a1.125 1.125 0 0 1-1.667-.986V5.653Z"
+        />
+      </svg>
+    </button>
+    <button class="options-btn">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        width="24"
+        height="24"
+      >
+        <circle cx="5" cy="12" r="2" />
+        <circle cx="12" cy="12" r="2" />
+        <circle cx="19" cy="12" r="2" />
+      </svg>
+    </button>
+  </div>
+  <div class="trailer-info">
+    <a
+      [routerLink]="'/movies/details/' + trailer?.id?.toString()"
+      class="trailer-info__title"
+      >{{ trailer?.title }}</a
+    >
+    <div class="trailer-info__desc">{{ trailer?.description }}</div>
+  </div>
+</div>

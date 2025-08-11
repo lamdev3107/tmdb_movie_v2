@@ -1,0 +1,93 @@
+<div class="account-layout">
+  <!-- Header Section -->
+  <div class="account-header">
+    <div class="account-header__content">
+      <ng-container *ngIf="accountDetails$ | async as accountDetails">
+        <ng-container
+          *ngIf="accountDetails.loading; else accountDetailsContent"
+        >
+          <div class="account-profile">
+            <div class="account-avatar">
+              <ng-container
+                *ngIf="
+                  accountDetails.data.avatar.tmdb.avatar_path;
+                  else defaultAvatar
+                "
+              >
+                <img
+                  class="avatar-image"
+                  [src]="'assets/images/default-avatar.png'"
+                  alt="Account Avatar"
+                />
+              </ng-container>
+              <ng-template #defaultAvatar>
+                <div class="avatar-circle">
+                  <span class="avatar-letter">{{
+                    accountDetails?.data?.username?.charAt(0)?.toUpperCase() ||
+                      "A"
+                  }}</span>
+                </div>
+              </ng-template>
+            </div>
+            <div class="account-info">
+              <h1 class="account-username">
+                <app-skeleton
+                  [width]="'100px'"
+                  [height]="'24px'"
+                ></app-skeleton>
+              </h1>
+              <p class="account-membership">Member since April 2025</p>
+            </div>
+          </div>
+        </ng-container>
+        <ng-template #accountDetailsContent>
+          <div class="account-profile">
+            <div class="account-avatar">
+              <ng-container
+                *ngIf="
+                  accountDetails?.data?.avatar?.tmdb?.avatar_path;
+                  else defaultAvatar
+                "
+              >
+                <img
+                  class="avatar-image"
+                  [src]="accountDetails.data.avatar.tmdb.avatar_path"
+                  alt="Account Avatar"
+                />
+              </ng-container>
+              <ng-template #defaultAvatar>
+                <div class="avatar-circle">
+                  <span class="avatar-letter">{{
+                    accountDetails?.data?.username?.charAt(0)?.toUpperCase() ||
+                      "A"
+                  }}</span>
+                </div>
+              </ng-template>
+            </div>
+            <div class="account-info">
+              <h1 class="account-username">
+                {{ accountDetails?.data?.username || "account1234z" }}
+              </h1>
+              <p class="account-membership">Member since April 2025</p>
+            </div>
+          </div>
+        </ng-template>
+      </ng-container>
+    </div>
+  </div>
+
+  <!-- Navigation Tabs -->
+  <div class="account-container">
+    <div class="account-navigation">
+      <!-- <app-tab
+        [tabs]="mainTabs"
+        [activeTabId]="activeMainTab"
+        (tabChange)="onMainTabChange($event)"
+      >
+        <div class="tab-content"> -->
+      <router-outlet></router-outlet>
+      <!-- </div>
+      </app-tab> -->
+    </div>
+  </div>
+</div>

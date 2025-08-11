@@ -1,0 +1,55 @@
+@use "../../../../../../assets/styles/variables" as *;
+@use "../../../../../../assets/styles/mixins" as *;
+.carousel-wrapper {
+  position: relative;
+  width: 100%;
+  .custom-carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    border-radius: 50%;
+    &:hover {
+      background-color: $black;
+    }
+    &:hover svg {
+      fill: $red-45;
+    }
+    svg {
+      width: 20px;
+      height: 20px;
+    }
+    &--prev {
+      left: 10px;
+    }
+    &--next {
+      right: 10px;
+    }
+  }
+
+  .custom-pagination {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 2rem;
+
+    .pagination-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 9999px;
+      background-color: $grey-70;
+      border: none;
+      cursor: pointer;
+
+      &.active {
+        background-color: $red-45;
+      }
+    }
+  }
+}

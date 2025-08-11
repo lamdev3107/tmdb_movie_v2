@@ -1,0 +1,69 @@
+<!-- Custom Navigation Buttons -->
+<div class="carousel-wrapper">
+  <swiper
+    #swiper
+    [config]="config"
+    (swiper)="onSwiper($event)"
+    (slideChange)="onSlideChange()"
+  >
+    <ng-template swiperSlide *ngFor="let trailer of trailerList">
+      <app-trailer-card
+        [trailer]="trailer"
+        (clickTrailerEvent)="handleOnPlayTrailer(trailer)"
+      ></app-trailer-card>
+    </ng-template>
+  </swiper>
+  <button
+    *ngIf="!isBeginning"
+    (click)="slidePrev()"
+    class="custom-carousel-btn custom-carousel-btn--prev left-2"
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke-width="1.5"
+      stroke="currentColor"
+      class="size-6"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18"
+      />
+    </svg>
+  </button>
+  <button
+    *ngIf="!isEnd"
+    (click)="slideNext()"
+    class="custom-carousel-btn custom-carousel-btn--next right-2"
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke-width="1.5"
+      stroke="currentColor"
+      class="size-6"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"
+      />
+    </svg>
+  </button>
+  <div class="custom-pagination">
+    <button
+      *ngFor="let page of totalPagesArray; let i = index"
+      (click)="goToSlide(i)"
+      [class.active]="currentPage === i"
+      class="pagination-dot"
+    ></button>
+  </div>
+</div>
+<app-trailer-modal
+  [openModal]="openTrailerModal"
+  [trailer]="selectedTrailer"
+  (closeEvent)="closeTrailerModal()"
+></app-trailer-modal>

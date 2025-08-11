@@ -1,0 +1,44 @@
+<div class="checkbox-group" [class.disabled]="disabled">
+  <div [class]="getContainerClass()">
+    <div
+      *ngFor="let option of options"
+      [class]="getOptionClass(option)"
+      (click)="toggleOption(option)"
+      [title]="option.disabled ? 'Tùy chọn này bị vô hiệu hóa' : ''"
+    >
+      <div class="checkbox-wrapper">
+        <div class="checkbox-input">
+          <div
+            class="checkbox-inner"
+            [class.checked]="isOptionSelected(option.value)"
+          >
+            <svg
+              *ngIf="isOptionSelected(option.value)"
+              class="check-icon"
+              width="12"
+              height="12"
+              viewBox="0 0 12 12"
+              fill="none"
+            >
+              <path
+                d="M2 6L5 9L10 3"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </div>
+        </div>
+
+        <span class="checkbox-label">{{ option.label }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="checkbox-info" *ngIf="maxSelections">
+    <span class="selection-count">
+      {{ selectedValues.length }}/{{ maxSelections }} đã chọn
+    </span>
+  </div>
+</div>

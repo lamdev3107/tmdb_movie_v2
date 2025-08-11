@@ -1,0 +1,125 @@
+@use "variables" as *;
+@use "mixins" as mix;
+
+* {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+html {
+  height: 100%;
+  font-size: 10px;
+}
+body {
+  font-family: "Manrope", sans-serif;
+  font-size: 14px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100%;
+  background-color: $black-08;
+}
+
+//DOM Native element style
+a {
+  text-decoration: none;
+}
+button {
+  cursor: pointer;
+}
+//Scrollbar style
+* {
+  scrollbar-width: thin;
+  scrollbar-color: $black-20 $black-08;
+}
+
+/* Chrome, Edge, Safari */
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+  background: $black-08;
+}
+/* Ẩn thanh trackbar, chỉ hiện thanh scroll (thumb) */
+*::-webkit-scrollbar-corner {
+  background: transparent; /* Góc cuộn */
+}
+*::-webkit-scrollbar-thumb {
+  background: $black-20;
+  border-radius: 8px;
+}
+*::-webkit-scrollbar-track {
+  background: transparent !important;
+}
+*::-webkit-scrollbar-thumb:hover {
+  background: $black-30;
+}
+
+//--------Common-----------
+.icon {
+  width: 24px;
+  height: 24px;
+  &--white {
+    filter: brightness(0) invert(1);
+  }
+}
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+.container {
+  margin: 0 auto;
+  padding: 0 1.6rem;
+
+  @include mix.mq-md {
+    max-width: 1280px; // Tablet
+    padding: 0 4rem;
+  }
+  @include mix.mq-lg {
+    max-width: 1440px; // Desktop
+    padding: 0 5rem;
+  }
+  @include mix.mq-xl {
+    max-width: 1440px; // Large desktop
+  }
+}
+.section {
+  margin: 2rem auto 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
+  @extend .container;
+  padding-top: 1.6rem;
+  padding-bottom: 1.6rem; // Mobile default
+
+  @include mix.mq-md {
+    padding-top: 4rem;
+    padding-bottom: 4rem; // Tablet
+  }
+  @include mix.mq-lg {
+    padding-top: 5rem;
+    padding-bottom: 5rem; // Desktop
+  }
+  &-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    &__title {
+      @include mix.font-base(2rem, $bold, $white);
+      @include mix.mq-md {
+        @include mix.font-base(2.8rem, $bold, $white);
+      }
+    }
+  }
+}
+
+//Override default styles for Swiper
+.swiper-slide {
+  height: auto !important;
+}

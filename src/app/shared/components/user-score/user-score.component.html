@@ -1,0 +1,42 @@
+<div class="user-score-container">
+  <div class="score-circle" [style.width.px]="width" [style.height.px]="height">
+    <svg
+      [attr.width]="width"
+      [attr.height]="height"
+      [attr.viewBox]="'0 0 ' + width + ' ' + height"
+    >
+      <!-- Vòng tròn nền -->
+      <circle
+        [attr.cx]="width / 2"
+        [attr.cy]="height / 2"
+        [attr.r]="radius"
+        fill="none"
+        stroke="#1a2e2e"
+        [attr.stroke-width]="strokeWidth"
+      />
+
+      <!-- Vòng tròn tiến trình -->
+      <circle
+        [attr.cx]="width / 2"
+        [attr.cy]="height / 2"
+        [attr.r]="radius"
+        fill="none"
+        [attr.stroke]="scoreColor"
+        [attr.stroke-width]="strokeWidth"
+        stroke-linecap="round"
+        [attr.stroke-dasharray]="strokeDasharray"
+        [attr.stroke-dashoffset]="strokeDashoffset"
+        [attr.transform]="'rotate(-90 ' + width / 2 + ' ' + height / 2 + ')'"
+      />
+    </svg>
+
+    <!-- Hiển thị điểm số -->
+    <div class="score-text">
+      <span [style.font-size.px]="fontSize" class="score-number">{{
+        score
+      }}</span>
+      <sup>%</sup>
+      <!-- <span [style.font-size.px]="fontSize * 0.5" class="score-percent">%</span> -->
+    </div>
+  </div>
+</div>

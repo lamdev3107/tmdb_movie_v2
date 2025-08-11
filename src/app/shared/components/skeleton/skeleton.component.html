@@ -1,0 +1,89 @@
+<!-- Text skeleton -->
+<div
+  *ngIf="type === 'text'"
+  class="skeleton skeleton--text"
+  [ngClass]="className"
+  [ngStyle]="skeletonStyles"
+></div>
+
+<!-- Avatar skeleton -->
+<div
+  *ngIf="type === 'avatar'"
+  class="skeleton skeleton--avatar"
+  [ngClass]="className"
+  [ngStyle]="skeletonStyles"
+></div>
+
+<!-- Card skeleton -->
+<div
+  *ngIf="type === 'card'"
+  class="skeleton skeleton--card"
+  [ngClass]="className"
+>
+  <div class="skeleton__image" [ngStyle]="skeletonStyles"></div>
+  <div class="skeleton__content">
+    <div class="skeleton__title"></div>
+    <div class="skeleton__text"></div>
+  </div>
+</div>
+
+<!-- List item skeleton -->
+<div
+  *ngIf="type === 'list-item'"
+  class="skeleton skeleton--list-item"
+  [ngClass]="className"
+>
+  <div class="skeleton__avatar"></div>
+  <div class="skeleton__content">
+    <div class="skeleton__title"></div>
+    <div class="skeleton__text"></div>
+  </div>
+</div>
+
+<!-- Cast item skeleton -->
+<div
+  *ngIf="type === 'cast-item'"
+  class="skeleton skeleton--cast-item"
+  [ngClass]="className"
+>
+  <div class="skeleton__photo"></div>
+  <div class="skeleton__info">
+    <div class="skeleton__name"></div>
+    <div class="skeleton__character"></div>
+  </div>
+</div>
+
+<!-- Review card skeleton -->
+<div
+  *ngIf="type === 'review-card'"
+  class="skeleton skeleton--review-card"
+  [ngClass]="className"
+>
+  <div class="skeleton__header">
+    <div class="skeleton__avatar"></div>
+    <div class="skeleton__info">
+      <div class="skeleton__title"></div>
+      <div class="skeleton__meta"></div>
+    </div>
+  </div>
+  <div class="skeleton__content">
+    <div class="skeleton__text"></div>
+    <div class="skeleton__text"></div>
+    <div class="skeleton__text"></div>
+  </div>
+</div>
+
+<!-- Multiple items skeleton -->
+<div
+  *ngIf="count > 1"
+  class="skeleton-container"
+  [ngClass]="'skeleton-container--' + type"
+>
+  <div *ngFor="let item of skeletonItems" class="skeleton-item">
+    <div
+      class="skeleton"
+      [ngClass]="'skeleton--' + type"
+      [ngStyle]="skeletonStyles"
+    ></div>
+  </div>
+</div>

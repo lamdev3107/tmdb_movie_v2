@@ -1,0 +1,141 @@
+@import "./variables";
+.gem-icon {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  display: inline-block;
+  background-color: $text-secondary;
+  mask-size: contain !important;
+  mask-repeat: no-repeat !important;
+  mask-position: center center !important;
+  -webkit-mask-repeat: no-repeat !important;
+  -webkit-mask-position: center center !important;
+  -webkit-mask-size: contain !important;
+}
+
+.gem-male {
+  @extend .gem-icon;
+  //mask: url('../icons/icon-male.svg');
+}
+
+.gem-female {
+  @extend .gem-icon;
+  //mask: url('../icons/icon-female.svg');
+}
+
+.gem-update-history {
+  @extend .gem-icon;
+  //mask: url('../icons/icon-history-update.svg');
+}
+
+.gem-volatility-history {
+  @extend .gem-icon;
+  //mask: url('../icons/icon-volatility-history.svg');
+}
+
+.gem-menu-rm {
+  @extend .gem-icon;
+  //mask: url('../icons/icon-menu-rm.svg');
+}
+
+.gem-toggle-sidebar {
+  @extend .gem-icon;
+  //mask: url('../icons/icon-toggle-sidebar.svg');
+}
+
+.gem-arrows-down {
+  @extend .gem-icon;
+  //mask: url('../icons/icon-arrows-down.svg');
+}
+
+.gem-assign-customer {
+  @extend .gem-icon;
+  //mask: url('../icons/icon-assign.svg');
+}
+
+.gem-row-action {
+  @extend .gem-icon;
+  //mask: url('../icons/icon-row-action.svg');
+}
+
+.gem-toggle-right-side {
+  @extend .gem-icon;
+  //mask: url('../icons/icon-toggle-right-side.svg');
+}
+
+.gem-toggle-theme {
+  @extend .gem-icon;
+  //mask: url('../icons/icon-toggle-sidebar.svg');
+}
+
+.gem-incoming-call {
+  @extend .gem-icon;
+  //mask: url('../icons/icon-incoming-call.svg');
+}
+
+.gem-outgoing-call {
+  @extend .gem-icon;
+  //mask: url('../icons/icon-outgoing-call.svg');
+}
+
+.gem-view-detail {
+  @extend .gem-icon;
+  //mask: url('../icons/icon-view-detail.svg');
+}
+
+.gem-menu-chart-synthesis {
+  @extend .gem-icon;
+  //mask: url('../icons/icon-menu-chart-synthesis.svg');
+}
+
+.gem-menu-gemmmerce {
+  @extend .gem-icon;
+  //mask: url('../icons/icon-menu-commerce.svg');
+}
+
+.gem-menu-customer-individual {
+  @extend .gem-icon;
+  //mask: url('../icons/icon-menu-customer-individual.svg');
+}
+
+.gem-menu-opportunity {
+  @extend .gem-icon;
+  //mask: url('../icons/icon-menu-opportunity.svg');
+}
+
+.gem-menu-campaign {
+  @extend .gem-icon;
+  //mask: url('../icons/icon-menu-campaign.svg');
+}
+
+.gem-menu-activity {
+  @extend .gem-icon;
+  //mask: url('../icons/icon-menu-activity.svg');
+}
+
+.gem-toggle-language-vi {
+  @extend .gem-icon;
+  //background-image: url(../icons/icon-vi.svg);
+  background-color: transparent;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+
+.gem-toggle-language-en {
+  @extend .gem-icon;
+  //background-image: url(../icons/icon-vi.svg);
+  background-color: transparent;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+
+.gem-file-view {
+  @extend .gem-icon;
+  //background-image: url(../icons/file-view.svg);
+  background-color: transparent;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}

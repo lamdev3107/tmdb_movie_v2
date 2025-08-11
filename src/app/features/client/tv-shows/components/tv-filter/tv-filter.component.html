@@ -1,0 +1,103 @@
+<div class="movie-filter">
+  <div class="filter-section">
+    <h4 class="filter-section__title">Sort</h4>
+    <div class="filter-item">
+      <p class="filter-item__title">Sort Result By</p>
+      <app-select
+        [optionList]="sortByOptions"
+        [selectedOptionValue]="sortBy"
+        (onSelectChange)="sortBy = $event"
+        [searchable]="true"
+      ></app-select>
+    </div>
+  </div>
+  <div class="filter-section">
+    <h4 class="filter-section__title">Filters</h4>
+
+    <div class="filter-item">
+      <h4 class="filter-item__title">Air Dates</h4>
+      <div class="checkbox-select">
+        <input
+          id="searchAllEpisodes"
+          class="checkbox-select__input"
+          type="checkbox"
+          [(ngModel)]="isSearchAllEpisodes"
+        />
+        <label class="checkbox-select__label" for="searchAllEpisodes"
+          >Search all episodes?</label
+        >
+      </div>
+
+      <div *ngIf="!isSearchAllEpisodes" class="checkbox-select">
+        <input
+          id="searchAllFirstAirDates"
+          class="checkbox-select__input"
+          type="checkbox"
+          [(ngModel)]="isSearchFirstAirDate"
+        />
+        <label class="checkbox-select__label" for="isSearchFirstAirDate"
+          >Search first air dates?</label
+        >
+      </div>
+
+      <div class="movie-release-date">
+        <div class="movie-release-date__item">
+          <p class="movie-release-date__item-title">From</p>
+          <input
+            type="date"
+            name="dateFrom"
+            [(ngModel)]="dateFrom"
+            class="movie-release-date__item-input"
+          />
+        </div>
+        <div class="movie-release-date__item">
+          <p class="movie-release-date__item-title">To</p>
+          <input
+            type="date"
+            name="dateTo"
+            [(ngModel)]="dateTo"
+            class="movie-release-date__item-input"
+          />
+        </div>
+      </div>
+    </div>
+
+    <div class="filter-item">
+      <h4 class="filter-item__title">Genres</h4>
+      <app-toggle-select-box-list
+        [list]="tvShowGenres"
+        (onChangeSelectList)="onChangeSelectGenreList($event)"
+      ></app-toggle-select-box-list>
+    </div>
+
+    <div class="filter-item">
+      <app-tooltip
+        [text]="'Filter items based on their original language.'"
+        position="top"
+        [delay]="200"
+      >
+        <p class="filter-item__title">Language</p>
+      </app-tooltip>
+      <app-select
+        [optionList]="languageOptions"
+        [selectedOptionValue]="language"
+        (onSelectChange)="language = $event"
+        [searchable]="true"
+      ></app-select>
+    </div>
+
+    <div class="filter-item">
+      <h4 class="filter-item__title">Keywords</h4>
+      <app-input-keyword (keywordsChange)="onKeywordsChange($event)">
+      </app-input-keyword>
+    </div>
+  </div>
+
+  <app-button
+    class="movies-page__sidebar-button"
+    [size]="'full-width'"
+    (click)="onFilterClick()"
+  >
+    Filter
+  </app-button>
+</div>

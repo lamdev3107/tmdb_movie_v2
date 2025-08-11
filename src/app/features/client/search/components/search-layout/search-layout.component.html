@@ -1,0 +1,250 @@
+<div class="search-layout">
+  <div class="search-container" #searchContainer>
+    <form class="search-input" (submit)="onSearch()">
+      <input
+        type="text"
+        class="search-input__input"
+        #searchInput
+        [(ngModel)]="searchQuery"
+        (input)="onInput($event)"
+        (focus)="onFocus()"
+        placeholder="Search for a movie, tv show, person..."
+      />
+      <button class="search-input__button">
+        <svg
+          *ngIf="searchInput.value; else searchIconTpl"
+          (mousedown)="clearInput()"
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          class="search-input__icon"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M6 18L18 6M6 6l12 12"
+          />
+        </svg>
+        <ng-template #searchIconTpl>
+          <svg
+            #searchIcon
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            (click)="onSearch()"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="search-input__icon"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
+            />
+          </svg>
+        </ng-template>
+      </button>
+    </form>
+
+    <ng-container *ngIf="isShowResult">
+      <div class="search-results" *ngIf="isShowTrending">
+        <ng-container *ngIf="trendingResults$ | async as trendingResults">
+          <div
+            class="search-results__loading"
+            *ngIf="trendingResults.loading; else trendingResultsContent"
+          >
+            <div class="search-results__loading">
+              <app-loading></app-loading>
+            </div>
+          </div>
+          <ng-template #trendingResultsContent>
+            <div
+              class="search-results__trending"
+              *ngIf="trendingResults.data && trendingResults.data.length > 0"
+            >
+              <p class="search-results__trending-title">Trending</p>
+              <div
+                class="search-results__item"
+                *ngFor="let item of trendingResults.data || []"
+                (click)="
+                  onClickItem({
+                    media_type: 'movie',
+                    query: item.title
+                  })
+                "
+              >
+                <img
+                  [src]="'assets/icons/film.svg'"
+                  class="search-results__item-media-type"
+                />
+
+                <p class="search-results__item-title">
+                  {{ item.title }}
+                </p>
+              </div>
+            </div>
+          </ng-template>
+        </ng-container>
+      </div>
+
+      <div class="search-results" *ngIf="!isShowTrending">
+        <ng-container *ngIf="suggestion$ | async as suggestions">
+          <ng-container *ngIf="suggestions.loading; else resultsContent">
+            <div class="search-results__loading">
+              <app-loading></app-loading>
+            </div>
+          </ng-container>
+
+          <ng-template #resultsContent>
+            <!-- movie suggestion -->
+            <ng-container
+              *ngIf="
+                suggestions.suggestions.movie &&
+                suggestions.suggestions.movie.results.length > 0
+              "
+            >
+              <div
+                class="search-results__item"
+                (click)="
+                  onClickItem({
+                    media_type: 'movie',
+                    query: getItemTitle(
+                      suggestions.suggestions.movie.results[0]
+                    )
+                  })
+                "
+              >
+                <img
+                  [src]="'assets/icons/film.svg'"
+                  class="search-results__item-media-type"
+                />
+
+                <p class="search-results__item-title">
+                  {{ getItemTitle(suggestions.suggestions.movie.results[0]) }}
+                  <span class="search-results__item-title-sub"> in Movie </span>
+                </p>
+              </div>
+            </ng-container>
+
+            <!-- tv suggestion -->
+            <ng-container
+              *ngIf="
+                suggestions.suggestions.tv &&
+                suggestions.suggestions.tv.results.length > 0
+              "
+            >
+              <div
+                class="search-results__item"
+                (click)="
+                  onClickItem({
+                    media_type: 'tv',
+                    query: getItemTitle(suggestions.suggestions.tv.results[0])
+                  })
+                "
+              >
+                <img
+                  [src]="'assets/icons/tv.svg'"
+                  class="search-results__item-media-type"
+                />
+
+                <p class="search-results__item-title">
+                  {{ getItemTitle(suggestions.suggestions.tv.results[0]) }}
+                  <span class="search-results__item-title-sub"> in TV </span>
+                </p>
+              </div>
+            </ng-container>
+
+            <!-- person suggestion -->
+            <ng-container
+              *ngIf="
+                suggestions.suggestions.person &&
+                suggestions.suggestions.person.results.length > 0
+              "
+            >
+              <div
+                class="search-results__item"
+                (click)="
+                  onClickItem({
+                    media_type: 'person',
+                    query: getItemTitle(
+                      suggestions.suggestions.person.results[0]
+                    )
+                  })
+                "
+              >
+                <img
+                  [src]="'assets/icons/user-solid.svg'"
+                  class="search-results__item-media-type"
+                />
+
+                <p class="search-results__item-title">
+                  {{ getItemTitle(suggestions.suggestions.person.results[0]) }}
+                  <span class="search-results__item-title-sub">
+                    in Person
+                  </span>
+                </p>
+              </div>
+            </ng-container>
+
+            <!-- multi suggestion -->
+            <ng-container
+              *ngIf="
+                suggestions.suggestions.multi &&
+                  suggestions.suggestions.multi.results.length > 0;
+                else notFound
+              "
+            >
+              <div
+                class="search-results__item"
+                *ngFor="
+                  let item of suggestions.suggestions.multi.results.slice(0, 8)
+                "
+                (click)="
+                  onClickItem({
+                    media_type: getMediaType(item),
+                    query: getItemTitle(item)
+                  })
+                "
+              >
+                <p class="search-results__item-title">
+                  {{ getItemTitle(item) }}
+                </p>
+              </div>
+            </ng-container>
+            <ng-template #notFound>
+              <div class="search-results__not-found">No results found</div>
+            </ng-template>
+          </ng-template>
+        </ng-container>
+      </div>
+    </ng-container>
+  </div>
+
+  <!-- Search Results Layout with Tabs -->
+  <div class="search-results-layout">
+    <div class="search-results-layout__container">
+      <div class="search-results-layout__sidebar">
+        <div class="search-results-layout__sidebar-title">Search Results</div>
+        <ng-container *ngIf="suggestion$ | async as suggestions">
+          <ul>
+            <li
+              *ngFor="let tab of searchTabs"
+              [class.active]="activeTabId === tab.id"
+              (click)="onTabChange(tab.id)"
+              class="search-results-layout__sidebar-item"
+            >
+              {{ tab.label }}
+            </li>
+          </ul>
+        </ng-container>
+      </div>
+      <div class="search-results-layout__content">
+        <router-outlet></router-outlet>
+      </div>
+    </div>
+  </div>
+</div>

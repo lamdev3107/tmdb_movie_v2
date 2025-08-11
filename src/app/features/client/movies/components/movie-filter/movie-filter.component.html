@@ -1,0 +1,128 @@
+<form class="movie-filter">
+  <div class="filter-section">
+    <h4 class="filter-section__title">Sort</h4>
+    <div class="filter-item">
+      <p class="filter-item__title">Sort Result By</p>
+      <app-select
+        [optionList]="sortByOptions"
+        [selectedOptionValue]="sortBy"
+        (onSelectChange)="sortBy = $event"
+        [searchable]="true"
+      ></app-select>
+    </div>
+  </div>
+  <div class="filter-section">
+    <h4 class="filter-section__title">Filters</h4>
+    <!-- <app-input-radio-group
+      [options]="categoryOptions"
+      [defaultValue]="categoryValue"
+      [inline]="true"
+      (onChangeValue)="categoryValue = $event"
+    ></app-input-radio-group> -->
+
+    <div class="filter-item">
+      <h4 class="filter-item__title">Release Date</h4>
+      <div class="checkbox-select">
+        <input
+          id="searchAllReleases"
+          name="isSearchAllReleases"
+          class="checkbox-select__input"
+          type="checkbox"
+          [(ngModel)]="isSearchAllReleases"
+          (ngModelChange)="onSearchAllReleasesChange()"
+        />
+        <label class="checkbox-select__label" for="searchAllReleases"
+          >Search all releases?</label
+        >
+      </div>
+
+      <div *ngIf="!isSearchAllReleases" class="checkbox-select">
+        <input
+          id="searchAllCountries"
+          name="isSearchAllCountries"
+          class="checkbox-select__input"
+          type="checkbox"
+          [(ngModel)]="isSearchAllCountries"
+        />
+        <label class="checkbox-select__label" for="searchAllCountries"
+          >Search all countries?</label
+        >
+      </div>
+
+      <ng-container *ngIf="!isSearchAllReleases && !isSearchAllCountries">
+        <app-select
+          [optionList]="countryOptions"
+          [selectedOptionValue]="region"
+          (onSelectChange)="handleSelectCountry($event)"
+          [searchable]="true"
+        ></app-select>
+      </ng-container>
+
+      <ng-container *ngIf="!isSearchAllReleases">
+        <app-toggle-select-box-list
+          [list]="releaseTypesOptions"
+          (onChangeSelectList)="onChangeSelectReleaseType($event)"
+        ></app-toggle-select-box-list>
+      </ng-container>
+
+      <div class="movie-release-date">
+        <div class="movie-release-date__item">
+          <p class="movie-release-date__item-title">From</p>
+          <input
+            type="date"
+            name="dateFrom"
+            [(ngModel)]="dateFrom"
+            class="movie-release-date__item-input"
+          />
+        </div>
+        <div class="movie-release-date__item">
+          <p class="movie-release-date__item-title">To</p>
+          <input
+            type="date"
+            name="dateTo"
+            [(ngModel)]="dateTo"
+            class="movie-release-date__item-input"
+          />
+        </div>
+      </div>
+    </div>
+
+    <div class="filter-item">
+      <h4 class="filter-item__title">Genres</h4>
+      <app-toggle-select-box-list
+        [list]="movieGenres"
+        (onChangeSelectList)="onChangeSelectGenreList($event)"
+      ></app-toggle-select-box-list>
+    </div>
+
+    <div class="filter-item">
+      <app-tooltip
+        [text]="'Filter items based on their original language.'"
+        position="top"
+        [delay]="200"
+      >
+        <p class="filter-item__title">Language</p>
+      </app-tooltip>
+      <app-select
+        [optionList]="languageOptions"
+        [selectedOptionValue]="language"
+        (onSelectChange)="language = $event"
+        [searchable]="true"
+      ></app-select>
+    </div>
+
+    <div class="filter-item">
+      <h4 class="filter-item__title">Keywords</h4>
+      <app-input-keyword (keywordsChange)="onKeywordsChange($event)">
+      </app-input-keyword>
+    </div>
+  </div>
+
+  <app-button
+    class="movies-page__sidebar-button"
+    [size]="'full-width'"
+    (click)="onFilterClick()"
+  >
+    Filter
+  </app-button>
+</form>

@@ -1,0 +1,259 @@
+<ng-container *ngIf="personState$ | async as personState">
+  <!-- Loading Skeleton -->
+  <ng-container *ngIf="personState.loading; else content">
+    <div class="person-detail">
+      <div class="sidebar">
+        <!-- Skeleton poster -->
+        <div class="sidebar__poster">
+          <app-skeleton width="300px" height="450px"></app-skeleton>
+        </div>
+      </div>
+
+      <!-- Skeleton content -->
+      <div class="main-content">
+        <div class="bio">
+          <app-skeleton width="300px" height="36px" class="mb-2"></app-skeleton>
+          <h2 class="bio__biography-text">Biography</h2>
+          <app-skeleton width="95%" height="100px"></app-skeleton>
+
+          <!-- Skeleton known for -->
+          <div class="bio__known-for">
+            <h2 class="bio__known-for-text">Known For</h2>
+            <div class="bio__known-for-content">
+              <app-skeleton
+                width="100px"
+                height="150px"
+                *ngFor="let i of [1, 2, 3, 4]"
+              ></app-skeleton>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+  <!-- Real Content -->
+  <ng-template #content>
+    <ng-container *ngIf="personState?.data">
+      <div class="person-detail">
+        <!-- Sidebar  -->
+        <div class="sidebar">
+          <!-- Poster  -->
+          <ng-container>
+            <div
+              class="sidebar__poster"
+              *ngIf="personState?.data?.profile_path; else noPoster"
+            >
+              <img
+                class="sidebar__poster-image"
+                [src]="personState?.data?.profile_path | imageUrl : 500 : false"
+                [alt]="personState?.data?.name"
+                loading="lazy"
+              />
+            </div>
+            <ng-template #noPoster>
+              <div class="sidebar__poster sidebar__poster--no-image">
+                <img
+                  class="sidebar__poster-image--no-image"
+                  src="assets/icons/picture.svg"
+                  alt="No poster"
+                  loading="lazy"
+                />
+              </div>
+            </ng-template>
+          </ng-container>
+
+          <div class="sidebar-info">
+            <div class="sidebar-item">
+              <h2 class="sidebar-item__title">Pages</h2>
+              <div *ngIf="personState?.data?.homepage === ''">
+                <p class="sidebar-item__content">No homepage</p>
+              </div>
+              <app-tooltip
+                [text]="'Visit HomePage'"
+                position="top"
+                [delay]="200"
+                *ngIf="personState?.data?.homepage !== ''"
+              >
+                <a
+                  [href]="personState?.data?.homepage"
+                  target="_blank"
+                  class="sidebar-item__page"
+                >
+                  <svg
+                    class="person-page__icon"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                    class="size-6"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244"
+                    />
+                  </svg>
+                </a>
+              </app-tooltip>
+            </div>
+
+            <!-- Know For Department -->
+            <div class="sidebar-item">
+              <h3 class="sidebar-item__title">Known For</h3>
+              <p class="sidebar-item__content">
+                {{ personState?.data?.known_for_department }}
+              </p>
+            </div>
+
+            <!-- Gender -->
+            <div class="sidebar-item">
+              <h3 class="sidebar-item__title">Gender</h3>
+              <p class="sidebar-item__content">
+                {{ renderGender(personState?.data?.gender) }}
+              </p>
+            </div>
+
+            <!-- Birth Day -->
+            <div class="sidebar-item">
+              <h3 class="sidebar-item__title">Birth Day</h3>
+              <p class="sidebar-item__content">
+                {{ personState?.data?.birthday | date : "dd/MM/yyyy" }}
+                ({{ calculateAge(personState?.data?.birthday) }} years old)
+              </p>
+            </div>
+
+            <!-- Place of Birth -->
+            <div class="sidebar-item">
+              <h3 class="sidebar-item__title">Place of Birth</h3>
+              <p class="sidebar-item__content">
+                {{ personState?.data?.place_of_birth }}
+              </p>
+            </div>
+
+            <!-- Also Known As -->
+            <div class="sidebar-item">
+              <h3 class="sidebar-item__title">Also Known As</h3>
+              <p
+                class="sidebar-item__content"
+                *ngFor="let name of personState?.data?.also_known_as"
+              >
+                {{ name }}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Content -->
+        <div class="main-content">
+          <div class="bio">
+            <!-- Name -->
+            <h1 class="bio__name">
+              {{ personState?.data?.name || "-------" }}
+            </h1>
+
+            <!-- Biography -->
+            <div class="bio__biography">
+              <h2 class="bio__biography-text">Biography</h2>
+              <p class="bio__biography-content">
+                <ng-container *ngIf="personState?.data?.biography; else noBio">
+                  <span>
+                    {{
+                      showFullBio
+                        ? personState?.data?.biography
+                        : (personState?.data?.biography | slice : 0 : 600)
+                    }}
+                    <span
+                      *ngIf="
+                        !showFullBio &&
+                        (personState?.data?.biography?.length ?? 0) > 600
+                      "
+                      >...</span
+                    >
+                  </span>
+                  <button
+                    *ngIf="(personState?.data?.biography?.length ?? 0) > 600"
+                    class="read-more-btn"
+                    (click)="showFullBio = !showFullBio"
+                  >
+                    {{ showFullBio ? "Read Less" : "Read More" }}
+                  </button>
+                </ng-container>
+                <ng-template #noBio> No biography available </ng-template>
+              </p>
+            </div>
+
+            <!-- Known For -->
+            <div class="bio__known-for">
+              <h2 class="bio__known-for-text">Known For</h2>
+              <ng-container *ngIf="knownForState$ | async as knownForState">
+                <div
+                  class="bio__known-for-content"
+                  *ngIf="
+                    knownForState?.data?.cast?.length ||
+                    knownForState?.data?.crew?.length
+                  "
+                >
+                  <div
+                    class="bio__known-for-item"
+                    *ngFor="let item of knownForState?.data?.cast"
+                  >
+                    <img
+                      class="bio__known-for-item-image"
+                      [src]="item.poster_path | imageUrl : 500 : false"
+                      [alt]="item.title || item.name"
+                      loading="lazy"
+                    />
+                    <a
+                      [href]="renderKnowForLink(item)"
+                      class="bio__known-for-item-title"
+                    >
+                      {{ item?.title || item?.name }}
+                    </a>
+                  </div>
+                </div>
+              </ng-container>
+            </div>
+          </div>
+
+          <ng-container *ngIf="creditState$ | async as creditState">
+            <div class="credit">
+              <h2 class="credit__title">Acting Credits</h2>
+              <div class="credit__content">
+                <ng-container
+                  *ngFor="
+                    let item of creditState?.data?.castJobs;
+                    let i = index
+                  "
+                >
+                  <div class="credit__item">
+                    <div class="credit__item-header">
+                      <span class="credit__item-year">
+                        {{ renderCastJob(item).date?.slice(0, 4) || "—" }}
+                      </span>
+                      <span class="credit__item-dot">&#9675;</span>
+                      <div class="credit__item-info">
+                        <a
+                          [routerLink]="renderCastLink(item)"
+                          class="credit__item-title"
+                        >
+                          {{ renderCastJob(item).title }}
+                        </a>
+                        <ng-container *ngIf="item.character">
+                          <span class="credit__item-character">
+                            as {{ item.character }}
+                          </span>
+                        </ng-container>
+                      </div>
+                    </div>
+                  </div>
+                </ng-container>
+              </div>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </ng-container>
+  </ng-template>
+</ng-container>

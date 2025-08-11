@@ -1,0 +1,94 @@
+@use "../../../../../assets/styles/variables" as *;
+@use "../../../../../assets/styles/mixins" as *;
+@use "../../../../../assets/styles/base" as *;
+
+.login-page {
+  min-height: calc(100vh - 80px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 16px;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 420px;
+  background: $black-15;
+  border: 1px solid $black-20;
+  border-radius: 16px;
+  padding: 28px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.login-title {
+  @include font-base(3.2rem, $semi-bold, $white);
+  margin: 0 0 2.4rem;
+  text-align: center;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  &__label {
+    @include font-base(1.4rem, $semi-bold, $white);
+  }
+  &__required {
+    color: $red-50;
+  }
+}
+
+.error-text {
+  @include font-base(1.2rem, $regular, $red-50);
+}
+
+.password-row {
+  position: relative;
+}
+
+.toggle-eye {
+  position: absolute;
+  right: 1.6rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 24px;
+  display: grid;
+  place-items: center;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  &:hover .toggle-eye-icon {
+    color: $grey-75;
+  }
+  &-icon {
+    color: $grey-60;
+    width: 24px;
+    height: 24px;
+  }
+}
+
+.form-extra {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 4px;
+}
+
+.signup-row {
+  margin-top: 16px;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.8);
+  text-align: center;
+}
+
+.signup-row .link {
+  margin-left: 6px;
+}

@@ -1,0 +1,193 @@
+@use "../../../../../../assets/styles/variables.scss" as *;
+@use "../../../../../../assets/styles/base.scss" as *;
+@use "../../../../../../assets/styles/mixins.scss" as *;
+
+.account-layout {
+  margin-top: 8rem;
+  @include mq-md {
+    margin-top: 9rem;
+  }
+}
+// Header Section
+.account-header {
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+  background-color: $black-10;
+  position: relative;
+  overflow: hidden;
+  &__content {
+    @extend .container;
+  }
+}
+
+.account-profile {
+  display: flex;
+  align-items: center;
+  gap: 3.6rem;
+}
+
+.account-avatar {
+  flex-shrink: 0;
+  width: 15rem;
+  height: 15rem;
+}
+
+.avatar-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.avatar-circle {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #8b5cf6, #a855f7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatar-letter {
+  @include font-base(3.6rem, $bold, $white);
+  text-transform: uppercase;
+}
+
+.account-info {
+  flex: 1;
+}
+
+.account-username {
+  @include font-base(3rem, $bold, $white);
+  margin: 0 0 0.5rem 0;
+}
+
+.account-membership {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 1.4rem;
+  margin: 0 0 1.5rem 0;
+}
+
+.account-container {
+  @extend .container;
+  margin-top: 2rem;
+}
+// Navigation Section
+.account-navigation {
+  padding: 2rem;
+  border-radius: 1.6rem;
+}
+
+.tab-content {
+  padding: 2rem 0;
+}
+
+.tab-panel {
+  min-height: 400px;
+}
+
+// Watchlist Content
+.watchlist-content {
+  .watchlist-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+  }
+
+  .watchlist-title {
+    font-size: 2.4rem;
+    font-weight: $bold;
+    color: $grey-70;
+    margin: 0;
+  }
+
+  .action-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 4px;
+
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.05);
+    }
+  }
+}
+
+.watchlist-sub-tabs {
+  margin-top: 1rem;
+}
+
+.sub-tab-content {
+  margin-top: 1rem;
+}
+
+.sub-tab-panel {
+  min-height: 300px;
+}
+
+// Watchlist Filters
+.watchlist-filters {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid $black-20;
+}
+
+.filter-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.filter-label {
+  font-size: 1.4rem;
+  color: $black-20;
+}
+
+.filter-select {
+  padding: 0.5rem 1rem;
+  border: 1px solid $black-20;
+  border-radius: 4px;
+  background: $white;
+  font-size: 1.4rem;
+  color: $grey-70;
+
+  &:focus {
+    outline: none;
+    border-color: $primary;
+  }
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .account-profile {
+    flex-direction: column;
+    text-align: center;
+    gap: 1rem;
+  }
+
+  .account-scores {
+    justify-content: center;
+  }
+
+  .watchlist-item {
+    flex-direction: column;
+  }
+
+  .item-thumbnail {
+    align-self: center;
+  }
+
+  .watchlist-filters {
+    flex-direction: column;
+    align-items: flex-end;
+  }
+
+  .item-actions {
+    justify-content: center;
+  }
+}

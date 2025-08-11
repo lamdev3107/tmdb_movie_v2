@@ -1,0 +1,289 @@
+<app-movie-detail-layout>
+  <div class="hero-section">
+    <app-tv-detail-hero [tvShow]="tvShow"></app-tv-detail-hero>
+  </div>
+  <div class="main-content">
+    <div class="detail-cast detail-section">
+      <h2 class="detail-section__title">Top Billed Cast</h2>
+      <div class="cast-container">
+        <div class="cast-container">
+          <div
+            class="cast-list"
+            *ngIf="(loadingService.loading$ | async) && castList.length === 0"
+          >
+            <app-skeleton
+              type="cast-item"
+              [count]="8"
+              class="skeleton-container--cast-item"
+            ></app-skeleton>
+          </div>
+
+          <div class="cast-list" *ngIf="castList && castList.length > 0">
+            <app-person-card
+              *ngFor="let cast of castList"
+              [cast]="cast"
+            ></app-person-card>
+          </div>
+          <a
+            class="more-btn"
+            [routerLink]="['/tv_shows/details', tvShow?.id, 'casts']"
+          >
+            Full Cast And Crew
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              class="more-btn__icon"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M13.5 4.5L21 12M21 12L13.5 19.5M21 12H3"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Social content -->
+    <div class="detail-social detail-section">
+      <h2 class="detail-section__title">Social</h2>
+      <app-tab
+        [tabs]="socialTab"
+        [activeTabId]="activeScocialTabId"
+        (tabChange)="onSocialTabChange($event)"
+      >
+        <div class="reviews" *ngIf="activeScocialTabId == 'reviews'">
+          <app-review-card *ngIf="review" [review]="review"></app-review-card>
+          <div *ngIf="review">
+            <a
+              class="more-btn"
+              [routerLink]="['/tv_shows/details', tvShow?.id, 'reviews']"
+            >
+              Read All Reviews
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                class="more-btn__icon"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M13.5 4.5L21 12M21 12L13.5 19.5M21 12H3"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </a>
+          </div>
+          <p *ngIf="!review" class="no-data-text">
+            No reviews have been added.
+          </p>
+        </div>
+      </app-tab>
+    </div>
+
+    <!-- Media content -->
+    <div class="detail-media detail-section">
+      <h2 class="detail-section__title">Media</h2>
+      <app-tab
+        [tabs]="mediaTabs"
+        [activeTabId]="activeTabId"
+        (tabChange)="onMediaTabChange($event)"
+      >
+        <!-- Videos -->
+        <div class="video-list-container" *ngIf="activeTabId == 'videos'">
+          <div class="video-list">
+            <p *ngIf="videos.length === 0" class="no-data-text">
+              No videos have been added.
+            </p>
+            <ng-container *ngIf="videos.length > 0">
+              <div class="video-item" *ngFor="let video of videos">
+                <iframe
+                  class="video-item__iframe"
+                  [src]="video.key | safeYoutubeUrl"
+                  frameborder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                ></iframe>
+              </div>
+            </ng-container>
+          </div>
+          <a class="more-btn" [routerLink]="['./videos']">
+            View all video
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              class="more-btn__icon"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M13.5 4.5L21 12M21 12L13.5 19.5M21 12H3"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </a>
+        </div>
+
+        <!-- Posters -->
+        <div class="posters-list-container" *ngIf="activeTabId == 'posters'">
+          <div class="poster-list">
+            <p *ngIf="posters.length === 0" class="no-data-text">
+              No poster have been added.
+            </p>
+            <ng-container *ngIf="posters.length > 0">
+              <div class="poster-item" *ngFor="let poster of posters">
+                <ng-container *ngIf="!(loadingService.loading$ | async)">
+                  <img
+                    [src]="poster.file_path | imageUrl : 500 : false"
+                    alt="poster"
+                    loading="lazy"
+                  />
+                </ng-container>
+              </div>
+              <ng-container
+                *ngIf="
+                  (loadingService.loading$ | async) && posters.length === 0
+                "
+              >
+                <ng-container *ngFor="let i of [1, 2, 3, 4, 5]">
+                  <app-skeleton
+                    [width]="'100%'"
+                    [height]="'100%'"
+                    [aspectRatio]="'3/2'"
+                  ></app-skeleton>
+                </ng-container>
+              </ng-container>
+            </ng-container>
+          </div>
+          <a class="more-btn" [routerLink]="['./videos']">
+            View all posters
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              class="more-btn__icon"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M13.5 4.5L21 12M21 12L13.5 19.5M21 12H3"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </a>
+        </div>
+
+        <!-- Backdrops -->
+        <div
+          class="backdrops-list-container"
+          *ngIf="activeTabId === 'backdrops'"
+        >
+          <div class="backdrop-list">
+            <p
+              *ngIf="
+                backdrops.length === 0 && !(loadingService.loading$ | async)
+              "
+              class="no-data-text"
+            >
+              No backdrops have been added.
+            </p>
+            <!-- <ng-container *ngIf="backdrops.length > 0"> -->
+            <div class="backdrop-item" *ngFor="let backdrop of backdrops">
+              <ng-container *ngIf="!(loadingService.loading$ | async)">
+                <img
+                  [src]="backdrop.file_path | imageUrl : 500 : false"
+                  alt="backdrop"
+                  loading="lazy"
+                />
+              </ng-container>
+              <ng-container *ngIf="loadingService.loading$ | async">
+                <app-skeleton [height]="'100%'" [width]="'100%'"></app-skeleton>
+              </ng-container>
+            </div>
+            <!-- </ng-container> -->
+          </div>
+          <a class="more-btn" [routerLink]="['./videos']">
+            View all backdrops
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              class="more-btn__icon"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M13.5 4.5L21 12M21 12L13.5 19.5M21 12H3"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </a>
+        </div>
+      </app-tab>
+    </div>
+
+    <!-- Recommendations content -->
+    <div class="detail-recommendations detail-section">
+      <h2 class="detail-section__title">Recommendations</h2>
+      <div class="recommendations-list">
+        <ng-container *ngIf="recommendations.length > 0">
+          <div
+            class="recommendations-item"
+            *ngFor="let recommendation of recommendations"
+          >
+            <a routerLink="/tv_shows/details/{{ recommendation.id }}">
+              <img
+                [src]="
+                  recommendation.backdrop_path
+                    ? (recommendation.backdrop_path | imageUrl : 500 : false)
+                    : (recommendation.poster_path | imageUrl : 500 : false)
+                "
+                [alt]="recommendation.name"
+                class="recommendations-item__img"
+                loading="lazy"
+              />
+            </a>
+            <div class="recommendations-item__info">
+              <a routerLink="/tv_shows/details/{{ recommendation.id }}">
+                <p class="recommendations-item__info-title">
+                  {{ recommendation.name }}
+                </p>
+              </a>
+              <p class="recommendations-item__info-rating">
+                {{ recommendation.vote_average | convertPercent }}
+              </p>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+      <p *ngIf="recommendations.length === 0" class="no-data-text">
+        No recommendations have been added.
+      </p>
+    </div>
+  </div>
+  <div class="sidebar detail-section">
+    <app-tv-detail-sidebar
+      [tvShow]="tvShow"
+      [keywords]="keywords"
+    ></app-tv-detail-sidebar>
+  </div>
+</app-movie-detail-layout>

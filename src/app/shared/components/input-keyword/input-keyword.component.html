@@ -1,0 +1,22 @@
+<div class="keyword-input">
+  <div class="keyword-container">
+    <div class="selected-keyword-list">
+      <span *ngFor="let keyword of selectedKeywords" class="keyword-chip">
+        {{ keyword.name }}
+        <button (click)="removeKeyword(keyword.id)">×</button>
+      </span>
+    </div>
+    <input
+      type="text"
+      class="input-text"
+      [formControl]="keywordControl"
+      placeholder="Search keyword..."
+    />
+  </div>
+
+  <ul class="suggestions" *ngIf="suggestions.length > 0">
+    <li *ngFor="let s of suggestions" (click)="addKeyword(s)">
+      {{ s.name }}
+    </li>
+  </ul>
+</div>

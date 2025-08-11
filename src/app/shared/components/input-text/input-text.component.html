@@ -1,0 +1,27 @@
+<div [class]="containerClasses">
+  <label *ngIf="label" [for]="id || name" class="input-text__label">
+    {{ label }}
+    <span *ngIf="required" class="input-text__required">*</span>
+  </label>
+
+  <div class="input-text__wrapper">
+    <input
+      [type]="type"
+      [id]="id || name"
+      [name]="name"
+      [placeholder]="placeholder"
+      [required]="required"
+      [readonly]="readonly"
+      [disabled]="disabled"
+      [attr.maxlength]="maxLength"
+      [attr.minlength]="minLength"
+      [pattern]="pattern"
+      [autocomplete]="autocomplete"
+      [value]="value"
+      [class]="inputClasses"
+      (input)="onInput($event)"
+      (focus)="onFocus($event)"
+      (blur)="onBlur($event)"
+    />
+  </div>
+</div>

@@ -1,0 +1,141 @@
+@use "../../../../assets/styles/mixins" as *;
+@use "../../../../assets/styles/variables" as *;
+
+.tooltip-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip-content {
+  position: absolute;
+  z-index: 1000;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  line-height: 1.4;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transform: scale(0.8);
+  transition: all 0.2s ease;
+  background: $black-15;
+  color: $white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.tooltip-wrapper--visible .tooltip-content {
+  opacity: 1;
+  transform: scale(1);
+}
+
+// Position styles
+.tooltip--top {
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%) scale(0.8);
+
+  .tooltip-wrapper--visible & {
+    transform: translateX(-50%) scale(1);
+  }
+}
+
+.tooltip--bottom {
+  top: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%) scale(0.8);
+
+  .tooltip-wrapper--visible & {
+    transform: translateX(-50%) scale(1);
+  }
+}
+
+.tooltip--left {
+  right: calc(100% + 8px);
+  top: 50%;
+  transform: translateY(-50%) scale(0.8);
+
+  .tooltip-wrapper--visible & {
+    transform: translateY(-50%) scale(1);
+  }
+}
+
+.tooltip--right {
+  left: calc(100% + 8px);
+  top: 50%;
+  transform: translateY(-50%) scale(0.8);
+
+  .tooltip-wrapper--visible & {
+    transform: translateY(-50%) scale(1);
+  }
+}
+
+// Arrow styles
+.tooltip-arrow {
+  position: absolute;
+  width: 0;
+  height: 0;
+
+  &--top {
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 6px solid;
+    border-top-color: $black-15;
+
+    .tooltip--light & {
+      border-top-color: $white;
+      border-top-width: 5px;
+      border-left-width: 5px;
+      border-right-width: 5px;
+      border-top-color: $white;
+      border-bottom: 1px solid $black-20;
+    }
+  }
+
+  &--bottom {
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-bottom: 6px solid;
+    border-bottom-color: $black-15;
+  }
+
+  &--left {
+    left: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    border-top: 6px solid transparent;
+    border-bottom: 6px solid transparent;
+    border-left: 6px solid;
+    border-left-color: $black-15;
+  }
+
+  &--right {
+    right: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    border-top: 6px solid transparent;
+    border-bottom: 6px solid transparent;
+    border-right: 6px solid;
+    border-right-color: $black-15;
+  }
+}
+
+// Responsive adjustments
+@include mq-md {
+  .tooltip-content {
+    font-size: 1.4rem;
+    padding: 0.75rem 1rem;
+  }
+}
+
+// Accessibility
+@media (prefers-reduced-motion: reduce) {
+  .tooltip-content {
+    transition: none;
+  }
+}
