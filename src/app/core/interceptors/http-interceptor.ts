@@ -10,6 +10,7 @@ import {
 import { catchError, Observable, tap, throwError, timeout } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { ToastService } from '@core/services/toast.service';
+import { AuthService } from '@core/services/auth.service';
 
 export const DEFAULT_TIMEOUT = 30000;
 
@@ -18,23 +19,40 @@ export class CustomHttpInterceptor implements HttpInterceptor {
   constructor(
     private injector: Injector,
     private router: Router,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private authService: AuthService
   ) {}
 
+  private addTokenToRequest(request: HttpRequest<any>): HttpRequest<any> {
+    const token = this.authService.getToken();
+    if (request.url.includes('/login')) {
+      return request;
+    }
+    if (token) {
+      return request.clone({
+        setHeaders: {
+          Authorization: `Bearer ${token}`,
+          'x-api-key': 'reqres-free-v1',
+        },
+      });
+    }
+    return request;
+  }
   intercept(
     req: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    const apiUrl = environment.apiUrl + req.url;
+    const apiUrl = req.url;
 
-    const clonedRequest = req.clone({
-      url: apiUrl,
-      setHeaders: {
-        Authorization: `Bearer ${environment.apiKey}`,
-      },
-    });
+    // const clonedRequest = req.clone({
+    //   url: apiUrl,
+    //   setHeaders: {
+    //     Authorization: `Bearer ${environment.apiKey}`,
+    //   },
+    // });
+    const authRequest = this.addTokenToRequest(req);
 
-    return next.handle(clonedRequest).pipe(
+    return next.handle(authRequest).pipe(
       timeout(DEFAULT_TIMEOUT),
       tap({
         next: (event) => {

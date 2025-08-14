@@ -1,5 +1,5 @@
-<div [class]="containerClasses">
-  <label *ngIf="label" [for]="id || name" class="input-text__label">
+<div class="input-text-container">
+  <label *ngIf="label" [for]="id" class="form-filed__label">
     {{ label }}
     <span *ngIf="required" class="input-text__required">*</span>
   </label>
@@ -7,21 +7,46 @@
   <div class="input-text__wrapper">
     <input
       [type]="type"
-      [id]="id || name"
-      [name]="name"
+      [id]="id"
       [placeholder]="placeholder"
       [required]="required"
-      [readonly]="readonly"
       [disabled]="disabled"
-      [attr.maxlength]="maxLength"
-      [attr.minlength]="minLength"
-      [pattern]="pattern"
-      [autocomplete]="autocomplete"
       [value]="value"
-      [class]="inputClasses"
-      (input)="onInput($event)"
-      (focus)="onFocus($event)"
-      (blur)="onBlur($event)"
+      class="input-text"
+      [ngClass]="{
+        'input-text--is-invalid':
+          formControl?.invalid && (formControl?.dirty || formControl?.touched)
+      }"
+      (input)="onInputChange($event)"
+      (blur)="onTouched()"
     />
   </div>
+  <ng-container *ngIf="formControl?.invalid && formControl?.touched">
+    <div class="input-text__error" *ngIf="formControl?.errors?.['required']">
+      {{ label || "Trường này" }} không được để trống.
+    </div>
+    <div class="input-text__error" *ngIf="formControl?.errors?.['email']">
+      Địa chỉ email không hợp lệ.
+    </div>
+    <div class="input-text__error" *ngIf="formControl?.errors?.['minlength']">
+      Phải có ít nhất {{ formControl.errors?.['minlength'].requiredLength }} ký
+      tự.
+    </div>
+    <div class="input-text__error" *ngIf="formControl?.errors?.['maxlength']">
+      Không được vượt quá
+      {{ formControl.errors?.['maxlength'].requiredLength }} ký tự.
+    </div>
+    <div class="input-text__error" *ngIf="formControl?.errors?.['pattern']">
+      {{ label }} không hợp lệ.
+    </div>
+  </ng-container>
+  <!-- <div *ngIf="shouldShowErrors()" class="input-text__error">
+    <span class="input-text__error-text">{{ getErrorMessage() }}</span>
+  </div>
+
+  <div *ngIf="maxLength && value" class="input-text__char-count">
+    <span class="input-text__char-count-text">
+      {{ value.length }}/{{ maxLength }}
+    </span>
+  </div> -->
 </div>

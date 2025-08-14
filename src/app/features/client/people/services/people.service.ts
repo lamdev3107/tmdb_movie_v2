@@ -7,6 +7,7 @@ import {
   PeopleResponse,
   PersonDetail,
 } from '../models/person.model';
+import { environment } from '@environments/environment';
 
 export interface queryListMovie {
   language: string;
@@ -17,7 +18,7 @@ export interface queryListMovie {
   providedIn: 'root',
 })
 export class PeopleService {
-  private baseUrl = 'person';
+  private baseUrl = environment.apiUrl + 'person';
   constructor(private http: HttpClient) {}
 
   getPopularPeople(

@@ -9,13 +9,14 @@ import {
   Observable,
 } from 'rxjs';
 import { SearchResponse } from '../models/search.model';
+import { environment } from '@environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SearchService {
   private searchSubject = new BehaviorSubject<string>('');
-
+  private baseUrl = environment.apiUrl;
   constructor(private http: HttpClient) {
     // Khi search thay đổi → trigger search keyword API
     this.searchSubject
@@ -34,7 +35,7 @@ export class SearchService {
 
   searchMulti(query: string, page: number = 1): Observable<SearchResponse> {
     return this.http
-      .get<SearchResponse>(`search/multi`, {
+      .get<SearchResponse>(`${this.baseUrl}search/multi`, {
         params: {
           query,
           page,
@@ -49,7 +50,7 @@ export class SearchService {
 
   searchMovie(query: string, page: number = 1): Observable<SearchResponse> {
     return this.http
-      .get<SearchResponse>(`search/movie`, {
+      .get<SearchResponse>(`${this.baseUrl}search/movie`, {
         params: {
           query,
           page,
@@ -64,7 +65,7 @@ export class SearchService {
 
   searchTV(query: string, page: number = 1): Observable<SearchResponse> {
     return this.http
-      .get<SearchResponse>(`search/tv`, {
+      .get<SearchResponse>(`${this.baseUrl}search/tv`, {
         params: {
           query,
           page,
@@ -79,7 +80,7 @@ export class SearchService {
 
   searchPerson(query: string, page: number = 1): Observable<SearchResponse> {
     return this.http
-      .get<SearchResponse>(`search/person`, {
+      .get<SearchResponse>(`${this.baseUrl}search/person`, {
         params: {
           query,
           page,

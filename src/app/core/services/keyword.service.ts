@@ -8,11 +8,12 @@ import {
   switchMap,
   map,
 } from 'rxjs/operators';
+import { environment } from '@environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class KeywordService {
   private searchSubject = new BehaviorSubject<string>('');
-
+  private baseUrl = environment.apiUrl;
   constructor(private http: HttpClient) {
     // Khi search thay đổi → trigger search keyword API
     this.searchSubject
@@ -27,7 +28,7 @@ export class KeywordService {
   }
 
   searchKeyword(query: string): Observable<any> {
-    return this.http.get(`search/keyword`, {
+    return this.http.get(`${this.baseUrl}search/keyword`, {
       params: {
         query,
       },

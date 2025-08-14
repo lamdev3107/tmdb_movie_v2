@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { environment } from '@environments/environment';
 import { Observable } from 'rxjs';
 
 export interface Country {
@@ -16,7 +17,7 @@ export interface Language {
   providedIn: 'root',
 })
 export class ConfigurationService {
-  private baseUrl = 'configuration';
+  private baseUrl = environment.apiUrl + 'configuration';
   constructor(private http: HttpClient) {}
 
   getCountries(): Observable<Country[]> {

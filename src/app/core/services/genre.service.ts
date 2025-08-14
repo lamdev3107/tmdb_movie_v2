@@ -2,12 +2,13 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { GenreListResponse } from '../models/genre.model';
+import { environment } from '@environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class GenreService {
-  private baseUrl = 'genre';
+  private baseUrl = environment.apiUrl + 'genre';
 
   constructor(private http: HttpClient) {}
 

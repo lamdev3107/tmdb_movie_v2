@@ -13,6 +13,7 @@ import { ImagesResponse } from '../models/images.model';
 import { Video, VideoResponse } from '../models/video.model';
 import { Account, AccountStates } from '@core/models/account.model';
 import { ReviewResponse } from '@core/models/review.model';
+import { environment } from '@environments/environment';
 
 export interface queryListMovie {
   language: string;
@@ -35,7 +36,7 @@ export enum queryListMovieEnum {
   providedIn: 'root',
 })
 export class MovieService {
-  private baseUrl = 'movie';
+  private baseUrl = environment.apiUrl + 'movie';
   private params = {
     language: queryListMovieEnum.language,
     page: queryListMovieEnum.page,
@@ -70,9 +71,12 @@ export class MovieService {
   getTrendingMovies(
     time_window: string = 'day'
   ): Observable<ListMovieResponse> {
-    return this.http.get<ListMovieResponse>(`trending/movie/${time_window}`, {
-      params: this.params,
-    });
+    return this.http.get<ListMovieResponse>(
+      `${environment.apiUrl}trending/movie/${time_window}`,
+      {
+        params: this.params,
+      }
+    );
   }
 
   // Load trailer từ popular hoặc now_playing

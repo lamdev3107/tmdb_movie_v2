@@ -14,6 +14,7 @@ import { Keyword } from '../movies/models/keyword.model';
 import { TrailerItem } from '../movies/models/movie.model';
 import { ImagesResponse } from '../movies/models/images.model';
 import { Video, VideoResponse } from '../movies/models/video.model';
+import { environment } from '@environments/environment';
 
 export interface queryListTVShow {
   language: string;
@@ -36,7 +37,7 @@ export enum queryListTVShowEnum {
   providedIn: 'root',
 })
 export class TVShowService {
-  private baseUrl = 'tv';
+  private baseUrl = environment.apiUrl + 'tv';
   private params = {
     language: queryListTVShowEnum.language,
     page: queryListTVShowEnum.page,
@@ -63,9 +64,12 @@ export class TVShowService {
   getTrendingMovies(
     time_window: string = 'day'
   ): Observable<ListTVShowResponse> {
-    return this.http.get<ListTVShowResponse>(`trending/tv/${time_window}`, {
-      params: this.params,
-    });
+    return this.http.get<ListTVShowResponse>(
+      `${environment.apiUrl}trending/tv/${time_window}`,
+      {
+        params: this.params,
+      }
+    );
   }
 
   // Hàm lấy danh sách credits dành

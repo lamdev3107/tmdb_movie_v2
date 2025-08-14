@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AuthService } from '@core/services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -11,13 +12,19 @@ export class LoginComponent implements OnInit {
   isLoading = false;
   isPasswordVisible = false;
 
-  constructor(private formBuilder: FormBuilder) {}
+  constructor(
+    private formBuilder: FormBuilder,
+    private authService: AuthService
+  ) {}
 
   ngOnInit(): void {
     this.form = this.formBuilder.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
+      username: ['', [Validators.required, Validators.minLength(3)]],
+      password: ['', [Validators.required, Validators.minLength(3)]],
     });
+
+    // Debug: Log form status changes
+    this.form.statusChanges.subscribe((status) => {});
   }
 
   togglePasswordVisibility(): void {
@@ -25,25 +32,26 @@ export class LoginComponent implements OnInit {
   }
 
   submit(): void {
-    alert('dfasdf');
     if (this.form.invalid || this.isLoading) {
       this.form.markAllAsTouched();
+
       return;
     }
+    console.log('form', this.form.value);
     this.isLoading = true;
-    // TODO: Gọi service đăng nhập khi backend sẵn sàng
-    setTimeout(() => {
-      this.isLoading = false;
-    }, 1000);
-  }
-
-  get emailInvalid(): boolean {
-    const control = this.form.get('email');
-    return !!control && control.touched && control.invalid;
-  }
-
-  get passwordInvalid(): boolean {
-    const control = this.form.get('password');
-    return !!control && control.touched && control.invalid;
+    this.authService.login(this.form.value).subscribe({
+      next: (response) => {
+        console.log('Cehck response', response);
+        this.isLoading = false;
+        //  this.authService.saveToken(response.token);
+        //  this.isLoading = false;
+        //  this.error = '';
+        //  this.router.navigate(['users']);
+      },
+      error: (error) => {
+        console.log('Chefkc errror', error);
+        this.isLoading = false;
+      },
+    });
   }
 }
