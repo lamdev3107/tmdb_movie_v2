@@ -1,0 +1,95 @@
+@use "../../../../assets/styles/variables" as *;
+@use "../../../../assets/styles/mixins" as *;
+@use "../../../../assets/styles/base" as *;
+
+.keyword-input {
+  position: relative;
+}
+.keyword-container {
+  display: flex;
+  flex-wrap: wrap;
+  border-radius: 6px;
+}
+
+.input-text {
+  width: 100%;
+  padding: 0 1.2rem;
+  border: 1px solid $black-30;
+  border-radius: 0.8rem;
+  font-size: 1.4rem;
+  font-family: inherit;
+  background-color: $black-20;
+  color: $white;
+  min-height: 4rem;
+  transition: all 0.2s ease-in-out;
+  outline: none;
+  box-sizing: border-box;
+
+  &::placeholder {
+    @include font-base(1.4, $regular, $grey-65);
+  }
+  // Focus state
+  &:focus {
+    border-color: $grey-70;
+  }
+}
+
+.selected-keyword-list {
+  margin-top: 0.8rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.keyword-chip {
+  background: $black-08;
+  border: 1px solid $black-15;
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  display: flex;
+  align-items: center;
+  @include font-base(1.3rem, $regular, $grey-70);
+
+  button {
+    background: transparent;
+    border: none;
+    @include font-base(1.3rem, $regular, $grey-70);
+    i {
+      font-size: 1.2rem;
+    }
+    &:hover {
+      color: $white;
+    }
+  }
+}
+
+.select-option {
+  position: absolute;
+  left: 0;
+  z-index: 40;
+  right: 0;
+  top: calc(100% + 0.2rem);
+  list-style: none;
+  max-height: 200px;
+  overflow-y: auto;
+  margin-top: 5px;
+  padding: 0;
+  border: 1px solid $black-30;
+  border-radius: 6px;
+  background: $black-20;
+
+  &.empty {
+    color: $grey-70;
+    text-align: center;
+    padding: 8px 10px;
+  }
+
+  li {
+    padding: 8px 10px;
+    color: $grey-70;
+    cursor: pointer;
+    &:hover {
+      background: $black-15;
+    }
+  }
+}

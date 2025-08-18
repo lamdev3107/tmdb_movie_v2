@@ -1,0 +1,116 @@
+<div class="people-list-container">
+  <!-- Header -->
+  <div class="people-list-header">
+    <div class="search-bar">
+      <input
+        type="text"
+        class="form-input"
+        placeholder="Enter keyword to search..."
+        [(ngModel)]="searchQuery"
+        (ngModelChange)="onSearchQueryChange($event)"
+        style="width: 300px; margin-right: 1rem"
+      />
+      <button
+        class="action-btn"
+        (click)="onSearchQueryChange(searchQuery)"
+        style="vertical-align: middle"
+      >
+        <i class="material-icons">search</i>
+      </button>
+    </div>
+    <div class="header-actions">
+      <button
+        class="action-btn add-btn action-btn--success"
+        (click)="handleClickAddBtn()"
+      >
+        <i class="material-icons">add</i>
+        Add New Movie
+      </button>
+    </div>
+  </div>
+
+  <!-- Table Container -->
+  <div class="table-container">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Title</th>
+          <th>Tagline</th>
+          <th>Poster</th>
+          <th>Runtime</th>
+          <th>Release Date</th>
+          <th>Genres</th>
+          <th>Status</th>
+          <th>Budget</th>
+          <th>Revenue</th>
+          <!-- <th>Companies</th> -->
+          <th class="actions-column">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let movie of movies; trackBy: trackByMovieId">
+          <td class="id-column">{{ movie.id }}</td>
+          <td class="name-column">{{ movie.title }}</td>
+          <td class="name-column">{{ movie.tagline }}</td>
+          <td class="profile-column">
+            <div class="profile-image">
+              <img
+                [src]="movie.posterPath"
+                alt="Poster"
+                style="border-radius: 8px; object-fit: cover"
+              />
+            </div>
+          </td>
+          <td class="gender-column">
+            {{ movie?.runtime | formatTime }}
+          </td>
+          <td class="career-column">
+            {{ movie.releaseDate | date : "dd/MM/yyyy" }}
+          </td>
+
+          <td class="birth-date-column">
+            {{ renderMovieGenres(movie.genres) }}
+          </td>
+          <td class="place-birth-column">{{ movie.status }}</td>
+          <td class="death-date-column">{{ movie.budget | currency }}</td>
+          <td class="death-date-column">{{ movie.revenue | currency }}</td>
+
+          <td class="actions-column">
+            <button
+              class="action-btn action-btn--warning"
+              style="margin-right: 0.5rem"
+              title="Chỉnh sửa"
+              (click)="handleClickEditBtn(movie.id)"
+            >
+              <i class="material-icons">edit</i>
+            </button>
+            <button
+              class="action-btn action-btn--danger"
+              title="Xóa"
+              (click)="deleteMovie(movie.id)"
+            >
+              <i class="material-icons">delete</i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading-container">
+    <app-loading></app-loading>
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="!loading && movies.length === 0" class="empty-state">
+    <p>No data found.</p>
+  </div>
+
+  <app-pagination
+    [totalPages]="totalPages"
+    [currentPage]="currentPage"
+    (pageChange)="onPageChange($event)"
+  ></app-pagination>
+</div>

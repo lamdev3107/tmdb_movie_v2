@@ -1,0 +1,168 @@
+<div class="genre-list-container row gx-5">
+  <div class="col-12 col-lg-4 mb-3">
+    <div class="genre-form">
+      <h3 class="genre-form__title">
+        {{ editingCompany ? "Edit Company" : "Create New Company" }}
+      </h3>
+      <form
+        [formGroup]="companyForm"
+        class="d-flex flex-column gap-3"
+        (ngSubmit)="onSubmit()"
+      >
+        <!-- Name -->
+        <div class="form-field">
+          <label for="name" class="field-label">
+            <span class="required">*</span>
+            Name
+          </label>
+          <input
+            id="name"
+            type="text"
+            formControlName="name"
+            class="form-input"
+            placeholder="Enter genre name..."
+            [class.error]="
+              companyForm.get('name')?.invalid &&
+              companyForm.get('name')?.touched
+            "
+          />
+          <div
+            class="error-message"
+            *ngIf="
+              companyForm.get('name')?.invalid &&
+              companyForm.get('name')?.touched
+            "
+          >
+            {{ getErrorMessage("name") }}
+          </div>
+        </div>
+        <div class="form-field">
+          <label for="profile" class="field-label">
+            <span class="required">*</span>
+            Logo Image
+          </label>
+          <ng-container *ngIf="!previewUrl">
+            <div class="file-upload-container">
+              <input
+                id="profile"
+                type="file"
+                (change)="onFileSelected($event)"
+                accept="image/*"
+                class="file-input"
+              />
+              <label for="profile" class="file-upload-label">
+                <i class="material-icons">upload</i>
+                Upload Logo Image
+              </label>
+            </div>
+          </ng-container>
+
+          <!-- Preview profile -->
+          <div class="image-preview" *ngIf="previewUrl">
+            <img
+              [src]="previewUrl"
+              alt="Profile Preview"
+              class="preview-image"
+            />
+            <div class="file-info">
+              <span class="file-name">{{
+                selectedFile?.name || "Profile Image"
+              }}</span>
+              <button
+                type="button"
+                class="remove-file px-2 py-2"
+                (click)="removeFile()"
+              >
+                <i class="material-icons">close</i>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <!-- Buttons -->
+          <div class="form-actions">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              (click)="handleClickCancelBtn()"
+              *ngIf="editingCompany"
+            >
+              Cancel
+            </button>
+
+            <button type="submit" class="btn btn-primary">
+              <span *ngIf="!isSubmitting">{{
+                editingCompany ? "Update" : "Create"
+              }}</span>
+              <span *ngIf="isSubmitting">Processing...</span>
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="col-12 col-lg-8">
+    <!-- Table Container -->
+    <div class="table-container">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Logo</th>
+            <th class="actions-column">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let company of companies; trackBy: trackByCompanyId">
+            <td class="id-column" style="width: 60px">{{ company.id }}</td>
+            <td class="name-column">{{ company.name }}</td>
+            <td class="profile-column" style="width: 250px">
+              <div class="profile-image">
+                <img
+                  [src]="company.logoPath"
+                  alt="Logo"
+                  style="border-radius: 8px; object-fit: cover"
+                />
+              </div>
+            </td>
+            <td class="actions-column" style="width: 100px">
+              <button
+                class="action-btn action-btn--warning"
+                style="margin-right: 0.5rem"
+                title="Chỉnh sửa"
+                (click)="handleClickEditBtn(company)"
+              >
+                <i class="material-icons">edit</i>
+              </button>
+              <button
+                class="action-btn action-btn--danger"
+                title="Xóa"
+                (click)="deleteCompany(company.id)"
+              >
+                <i class="material-icons">delete</i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Loading State -->
+    <div *ngIf="loading" class="loading-container">
+      <app-loading></app-loading>
+    </div>
+
+    <!-- Empty State -->
+    <div *ngIf="!loading && companies.length === 0" class="empty-state">
+      <p>No data found.</p>
+    </div>
+
+    <app-pagination
+      [totalPages]="totalPages"
+      [currentPage]="currentPage"
+      (pageChange)="onPageChange($event)"
+    ></app-pagination>
+  </div>
+</div>
+s

@@ -1,0 +1,30 @@
+<div class="keyword-input">
+  <div class="keyword-container">
+    <input
+      type="text"
+      class="input-text"
+      [(ngModel)]="query"
+      (focus)="onFocus()"
+      (input)="onQueryChange()"
+      placeholder="Search keyword..."
+    />
+  </div>
+
+  <ul class="select-option" *ngIf="options.length > 0 && isOpen">
+    <li *ngFor="let option of options" (click)="selectOption(option)">
+      {{ option.label }}
+    </li>
+  </ul>
+
+  <div class="select-option empty" *ngIf="options.length === 0 && isOpen">
+    Không có tùy chọn nào
+  </div>
+</div>
+<div class="selected-keyword-list" *ngIf="selectedOptions.length > 0">
+  <span *ngFor="let option of selectedOptions" class="keyword-chip">
+    {{ option.label }}
+    <button (click)="removeOption(option.value)">
+      <i class="material-icons">close</i>
+    </button>
+  </span>
+</div>

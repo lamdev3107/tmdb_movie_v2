@@ -1,0 +1,110 @@
+<div class="genre-list-container row gx-4">
+  <div class="col-12 col-lg-5 mb-3">
+    <div class="genre-form">
+      <h3 class="genre-form__title">
+        {{ editingGenre ? "Edit Genre" : "Create New Genre" }}
+      </h3>
+      <form [formGroup]="genreForm" (ngSubmit)="onSubmit()">
+        <!-- Name -->
+        <div class="form-field">
+          <label for="name" class="field-label">
+            <span class="required">*</span>
+            Name
+          </label>
+          <input
+            id="name"
+            type="text"
+            formControlName="name"
+            class="form-input"
+            placeholder="Enter genre name..."
+            [class.error]="
+              genreForm.get('name')?.invalid && genreForm.get('name')?.touched
+            "
+          />
+          <div
+            class="error-message"
+            *ngIf="
+              genreForm.get('name')?.invalid && genreForm.get('name')?.touched
+            "
+          >
+            {{ getErrorMessage("name") }}
+          </div>
+        </div>
+        <div class="row">
+          <!-- Buttons -->
+          <div class="form-actions">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              (click)="handleClickCancelBtn()"
+              *ngIf="editingGenre"
+            >
+              Cancel
+            </button>
+
+            <button type="submit" class="btn btn-primary">
+              <span *ngIf="!isSubmitting">{{
+                editingGenre ? "Update" : "Create"
+              }}</span>
+              <span *ngIf="isSubmitting">Processing...</span>
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="col-12 col-lg-7">
+    <!-- Table Container -->
+    <div class="table-container">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th class="actions-column">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let genre of genres; trackBy: trackByGenreId">
+            <td class="id-column">{{ genre.id }}</td>
+            <td class="name-column">{{ genre.name }}</td>
+            <td class="actions-column">
+              <button
+                class="action-btn action-btn--warning"
+                style="margin-right: 0.5rem"
+                title="Chỉnh sửa"
+                (click)="handleClickEditBtn(genre)"
+              >
+                <i class="material-icons">edit</i>
+              </button>
+              <button
+                class="action-btn action-btn--danger"
+                title="Xóa"
+                (click)="deleteGenre(genre.id)"
+              >
+                <i class="material-icons">delete</i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Loading State -->
+    <div *ngIf="loading" class="loading-container">
+      <app-loading></app-loading>
+    </div>
+
+    <!-- Empty State -->
+    <div *ngIf="!loading && genres.length === 0" class="empty-state">
+      <p>No data found.</p>
+    </div>
+
+    <app-pagination
+      [totalPages]="totalPages"
+      [currentPage]="currentPage"
+      (pageChange)="onPageChange($event)"
+    ></app-pagination>
+  </div>
+</div>
+s

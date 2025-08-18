@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { AuthService } from '@core/services/auth.service';
 
 @Component({
@@ -14,7 +15,8 @@ export class LoginComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -22,9 +24,18 @@ export class LoginComponent implements OnInit {
       username: ['', [Validators.required, Validators.minLength(3)]],
       password: ['', [Validators.required, Validators.minLength(3)]],
     });
+    console.log('Check token', this.authService.getToken());
 
     // Debug: Log form status changes
-    this.form.statusChanges.subscribe((status) => {});
+    // this.form.statusChanges.subscribe((status) => {});
+    if (this.authService.getToken()) {
+      const credential = this.authService.getCredential();
+      if (credential.role === 'ADMIN') {
+        this.router.navigate(['admin', 'people']);
+      } else {
+        this.router.navigate(['']);
+      }
+    }
   }
 
   togglePasswordVisibility(): void {
@@ -37,16 +48,19 @@ export class LoginComponent implements OnInit {
 
       return;
     }
-    console.log('form', this.form.value);
     this.isLoading = true;
     this.authService.login(this.form.value).subscribe({
       next: (response) => {
-        console.log('Cehck response', response);
         this.isLoading = false;
-        //  this.authService.saveToken(response.token);
-        //  this.isLoading = false;
-        //  this.error = '';
-        //  this.router.navigate(['users']);
+        const credential = response.data.infoResponse;
+        this.authService.setCredential(credential);
+        this.authService.saveToken(response.data.accessToken);
+        this.isLoading = false;
+        if (credential.role === 'ADMIN') {
+          this.router.navigate(['admin', 'people']);
+        } else {
+          this.router.navigate(['']);
+        }
       },
       error: (error) => {
         console.log('Chefkc errror', error);

@@ -1,0 +1,115 @@
+<div class="people-list-container">
+  <!-- Header -->
+  <div class="people-list-header">
+    <div class="search-bar">
+      <input
+        type="text"
+        class="form-input"
+        placeholder="Enter keyword to search..."
+        [(ngModel)]="searchQuery"
+        (ngModelChange)="onSearchQueryChange($event)"
+        style="width: 300px; margin-right: 1rem"
+      />
+      <button
+        class="action-btn"
+        (click)="onSearchQueryChange(searchQuery)"
+        style="vertical-align: middle"
+      >
+        <i class="material-icons">search</i>
+      </button>
+    </div>
+    <div class="header-actions">
+      <button
+        class="action-btn add-btn action-btn--success"
+        (click)="handleClickAddBtn()"
+      >
+        <i class="material-icons">add</i>
+        Add New Celebrity
+      </button>
+    </div>
+  </div>
+
+  <!-- Table Container -->
+  <div class="table-container">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Full Name</th>
+          <th>Profile picture</th>
+          <th>Gender</th>
+          <th>Career</th>
+          <th>Birth Date</th>
+          <th>Place of Birth</th>
+          <th>Death Date</th>
+          <th class="actions-column">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let person of people; trackBy: trackByPersonId">
+          <td class="id-column">{{ person.id }}</td>
+          <td class="name-column">{{ person.name }}</td>
+
+          <td class="profile-column">
+            <div class="profile-image">
+              <img
+                [src]="person.profilePath"
+                alt="Ảnh đại diện"
+                style="border-radius: 8px; object-fit: cover"
+              />
+            </div>
+          </td>
+          <td class="gender-column">
+            <span
+              class="gender-badge"
+              [class]="'gender-' + person.gender.toLowerCase()"
+            >
+              {{ getGenderLabel(person.gender) }}
+            </span>
+          </td>
+          <td class="career-column">{{ person.career }}</td>
+
+          <td class="birth-date-column">
+            {{ person.birthDate | date : "dd/MM/yyyy" }}
+          </td>
+          <td class="place-birth-column">{{ person.placeOfBirth }}</td>
+          <td class="death-date-column">{{ person.deathDate || "-" }}</td>
+
+          <td class="actions-column">
+            <button
+              class="action-btn action-btn--warning"
+              style="margin-right: 0.5rem"
+              title="Chỉnh sửa"
+              (click)="handleClickEditBtn(person.id)"
+            >
+              <i class="material-icons">edit</i>
+            </button>
+            <button
+              class="action-btn action-btn--danger"
+              title="Xóa"
+              (click)="deletePerson(person.id)"
+            >
+              <i class="material-icons">delete</i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading-container">
+    <app-loading></app-loading>
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="!loading && people.length === 0" class="empty-state">
+    <p>No data found.</p>
+  </div>
+
+  <app-pagination
+    [totalPages]="totalPages"
+    [currentPage]="currentPage"
+    (pageChange)="onPageChange($event)"
+  ></app-pagination>
+</div>

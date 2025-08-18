@@ -1,0 +1,252 @@
+@use "../../../../../assets/styles/variables" as *;
+@use "../../../../../assets/styles/mixins" as *;
+@use "../../../../../assets/styles/base" as *;
+
+.admin-layout {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+  overflow-x: hidden;
+  background-color: $black-10;
+}
+
+.admin-main {
+  flex: 1;
+  width: calc(100vw - 280px);
+  margin-left: 280px;
+  transition: margin-left 0.3s ease;
+  overflow-x: hidden;
+  &.sidebar-collapsed {
+    margin-left: 80px;
+  }
+}
+
+.admin-header {
+  background: $black-15;
+  padding: 0 24px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  position: fixed;
+  width: calc(100% - 280px);
+  top: 0;
+  z-index: 100;
+
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+
+    .menu-toggle {
+      background: none;
+      border: none;
+      color: $grey-60;
+      cursor: pointer;
+      padding: 8px;
+      border-radius: 8px;
+      transition: all 0.2s ease;
+
+      &:hover {
+        background: $black-20;
+        color: #333;
+      }
+
+      i {
+        font-size: 24px;
+      }
+    }
+
+    .page-title {
+      font-size: 20px;
+      font-weight: 600;
+      color: $grey-84;
+      margin: 0;
+    }
+  }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+
+      .avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        overflow: hidden;
+        border: 2px solid rgba(255, 255, 255, 0.2);
+
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+      }
+
+      .user-details {
+        display: flex;
+        flex-direction: column;
+
+        .user-name {
+          font-size: 14px;
+          font-weight: 600;
+          color: white;
+        }
+
+        .user-role {
+          font-size: 12px;
+          color: rgba(255, 255, 255, 0.7);
+        }
+      }
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+
+      .action-btn {
+        background: none;
+        border: none;
+        color: $grey-70;
+        cursor: pointer;
+        padding: 12px;
+        border-radius: 8px;
+        position: relative;
+        transition: all 0.2s ease;
+
+        &:hover {
+          background: $black-20;
+          color: $grey-70;
+        }
+
+        i {
+          font-size: 20px;
+        }
+
+        .notification-badge {
+          position: absolute;
+          top: 8px;
+          right: 8px;
+          background: #e74c3c;
+          color: white;
+          font-size: 10px;
+          padding: 2px 6px;
+          border-radius: 10px;
+          min-width: 16px;
+          text-align: center;
+        }
+      }
+    }
+  }
+}
+
+.admin-content {
+  margin-top: 64px;
+  padding: 20px;
+
+  .content-wrapper {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    min-height: calc(100vh - 140px);
+    padding: 24px;
+  }
+}
+
+// Responsive design
+// @media (max-width: 1024px) {
+//   .admin-main {
+//     margin-left: 0;
+//   }
+
+//   .admin-layout {
+//     .admin-sidebar {
+//       transform: translateX(-100%);
+//       transition: transform 0.3s ease;
+
+//       &.show {
+//         transform: translateX(0);
+//       }
+//     }
+//   }
+// }
+
+// @media (max-width: 768px) {
+//   .admin-header {
+//     padding: 0 16px;
+//     height: 60px;
+
+//     .header-left {
+//       gap: 16px;
+
+//       .page-title {
+//         font-size: 20px;
+//       }
+//     }
+
+//     .header-right {
+//       .header-actions {
+//         gap: 8px;
+
+//         .action-btn {
+//           padding: 10px;
+
+//           i {
+//             font-size: 18px;
+//           }
+//         }
+//       }
+//     }
+//   }
+
+//   .admin-content {
+//     padding: 16px;
+
+//     .content-wrapper {
+//       padding: 16px;
+//       min-height: calc(100vh - 120px);
+//     }
+//   }
+// }
+
+// Sidebar collapsed state
+.admin-layout.sidebar-collapsed {
+  .admin-sidebar {
+    width: 80px;
+
+    .logo-text,
+    .nav-label,
+    .user-details {
+      display: none;
+    }
+
+    .nav-link {
+      justify-content: center;
+
+      i {
+        margin: 0;
+      }
+    }
+
+    .user-info {
+      justify-content: center;
+
+      .avatar {
+        width: 32px;
+        height: 32px;
+      }
+    }
+  }
+
+  .admin-main {
+    margin-left: 80px;
+  }
+}

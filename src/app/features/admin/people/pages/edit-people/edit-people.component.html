@@ -1,0 +1,21 @@
+<div class="header" *ngIf="!isLoading">
+  <a routerLink="/admin/people">
+    <i class="material-icons">arrow_back</i>
+    Celebrity List
+  </a>
+  <span>/</span>
+  <h1>Edit Celebrity: {{ personData?.name }}</h1>
+</div>
+
+<div *ngIf="isLoading" class="loading-container">
+  <div class="spinner-border text-primary" role="status">
+    <span class="visually-hidden">Loading...</span>
+  </div>
+</div>
+
+<app-person-form
+  *ngIf="!isLoading && personData"
+  [personData]="personData"
+  [isEditMode]="true"
+>
+</app-person-form>

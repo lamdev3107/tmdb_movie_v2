@@ -1,0 +1,48 @@
+@use "../../../../../../assets/styles/base.scss" as *;
+@use "../../../../../../assets/styles/variables.scss" as *;
+@use "../../../../../../assets/styles/mixins.scss" as *;
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin-bottom: 2rem;
+  span {
+    @include font-base(1.5rem, $semi-bold, $grey-70);
+    margin: 0 1rem;
+  }
+  a {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    @include font-base(1.5rem, $semi-bold, $grey-70);
+    &:hover {
+      color: $white;
+    }
+    i {
+      font-size: 1.5rem;
+    }
+  }
+  h1 {
+    @include font-base(1.5rem, $semi-bold, $white);
+  }
+
+  span {
+    color: #bdc3c7;
+    font-size: 1.2rem;
+  }
+
+  h1 {
+    color: #ffffff;
+    margin: 0;
+    font-size: 2rem;
+    font-weight: 600;
+  }
+}
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+}

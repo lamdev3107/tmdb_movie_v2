@@ -1,0 +1,424 @@
+@use "../../../../../../assets/styles/base.scss" as *;
+@use "../../../../../../assets/styles/variables.scss" as *;
+@use "../../../../../../assets/styles/mixins.scss" as *;
+
+.form-section {
+  max-width: 1400px;
+  padding: 2rem;
+  background: $black-15;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  max-width: 1400px;
+  margin: 0 auto;
+  &__title {
+    @include font-base(2rem, $semi-bold, $white);
+  }
+
+  .form-field {
+    .field-label {
+      display: block;
+      @include font-base(1.5rem, $semi-bold, $grey-70);
+      margin-bottom: 0.5rem;
+
+      .required {
+        color: #e74c3c;
+        margin-right: 0.25rem;
+      }
+    }
+
+    .form-input,
+    .form-select,
+    .form-textarea {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1px solid $black-20;
+      border-radius: 8px;
+      @include font-base(1.5rem, $regular, $grey-70);
+      transition: all 0.3s ease;
+      background: $black-20;
+
+      &:focus {
+        outline: none;
+        border-color: $grey-65;
+      }
+
+      &.error {
+        border-color: #e74c3c;
+        box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1);
+      }
+
+      &::placeholder {
+        color: #bdc3c7;
+      }
+    }
+
+    .form-textarea {
+      resize: vertical;
+      min-height: 120px;
+      font-family: inherit;
+    }
+
+    .error-message {
+      color: #e74c3c;
+      font-size: 0.875rem;
+      margin-top: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      @include font-base(1.5rem, $regular, $red);
+    }
+  }
+
+  .file-upload-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    height: 250px;
+
+    .file-input {
+      position: absolute;
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .file-upload-label {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      height: 100%;
+      width: 100%;
+      padding: 0.75rem 1.5rem;
+      background: $black-20;
+      border: 2px dashed $grey-65;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      color: $grey-70;
+      font-weight: 500;
+
+      &:hover {
+        background: $black-25;
+        border-color: $grey-60;
+        color: $white;
+      }
+
+      .upload-icon {
+        width: 20px;
+        height: 20px;
+        fill: currentColor;
+      }
+    }
+  }
+
+  .image-preview {
+    margin-top: 1rem;
+    position: relative;
+    border: 1px solid $black-20;
+    border-radius: 8px;
+    overflow: hidden;
+    height: 250px;
+    width: 100%;
+
+    .preview-image {
+      height: 100%;
+      width: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
+    .file-info {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.75rem 1rem;
+      background: $black-20;
+      border-top: 1px solid $black-20;
+
+      .file-name {
+        font-size: 0.875rem;
+        color: $grey-70;
+        font-weight: 500;
+      }
+
+      .remove-file {
+        background: #e74c3c;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 24px;
+        height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        font-size: 1rem;
+        font-weight: bold;
+        transition: background 0.3s ease;
+
+        &:hover {
+          background: #c0392b;
+        }
+      }
+    }
+  }
+
+  // Cast section styles
+  .cast-container {
+    .cast-member {
+      border-radius: 8px;
+      padding: 1rem;
+      .cast-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 1rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid $black-25;
+
+        h4 {
+          @include font-base(1.4rem, $semi-bold, $white);
+          margin: 0;
+        }
+
+        .remove-cast-btn {
+          background: #e74c3c;
+          color: white;
+          border: none;
+          border-radius: 50%;
+          width: 28px;
+          height: 28px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          font-size: 1.2rem;
+          font-weight: bold;
+          transition: background 0.3s ease;
+
+          &:hover {
+            background: #c0392b;
+          }
+        }
+      }
+
+      .cast-fields {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+
+        .cast-field {
+          label {
+            display: block;
+            @include font-base(1.3rem, $medium, $grey-70);
+            margin-bottom: 0.5rem;
+          }
+
+          .form-input {
+            @include font-base(1.4rem, $regular, $grey-70);
+          }
+        }
+      }
+    }
+  }
+
+  .add-cast-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    background: $green;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: $grey-70;
+    font-weight: 500;
+    float: right;
+    margin-right: 0.8rem;
+    @include font-base(1.4rem, $medium, $white);
+
+    &.disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      &:hover {
+        opacity: 0.6;
+      }
+    }
+
+    &:hover {
+      opacity: 0.8;
+    }
+
+    i {
+      font-size: 1.2rem;
+    }
+  }
+}
+.form-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  padding-top: 2rem;
+  border-top: 2px solid $black-20;
+
+  .btn {
+    padding: 0.75rem 2rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 120px;
+    @include font-base(1.4rem, $semi-bold, $white);
+
+    &.btn-primary {
+      background: $blue;
+
+      &:hover:not(:disabled) {
+        opacity: 10;
+      }
+
+      &:disabled {
+        background: $grey-60;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+      }
+    }
+
+    &.btn-secondary {
+      background: $grey-60;
+
+      &:hover {
+        background: $grey-70;
+      }
+    }
+  }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .create-people-container {
+    padding: 1rem;
+    margin: 1rem;
+  }
+
+  .header {
+    h1 {
+      font-size: 2rem;
+    }
+  }
+
+  .create-form {
+    .form-grid {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+
+    .cast-fields {
+      grid-template-columns: 1fr !important;
+    }
+
+    .form-actions {
+      flex-direction: column;
+
+      .btn {
+        width: 100%;
+      }
+    }
+  }
+}
+
+// Date input container styles
+.date-input-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+
+  .date-input {
+    padding-right: 3rem; // Tạo khoảng trống cho icon
+  }
+
+  .calendar-icon {
+    position: absolute;
+    right: 1rem;
+    color: $grey-70;
+    cursor: pointer;
+    font-size: 1.2rem;
+    transition: color 0.3s ease;
+    pointer-events: auto;
+
+    &:hover {
+      color: $white;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .create-people-container {
+    padding: 0.75rem;
+    margin: 0.5rem;
+  }
+
+  .header {
+    h1 {
+      font-size: 1.75rem;
+    }
+  }
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 1.4rem;
+  @include mq-md {
+    font-size: 1.4rem;
+  }
+
+  th,
+  td {
+    padding: 1.4rem;
+    text-align: left;
+    border-bottom: 1px solid $black-30;
+    vertical-align: middle;
+    white-space: nowrap;
+    color: $grey-70;
+  }
+
+  th {
+    background-color: $black-15;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    position: sticky;
+    @include font-base(1.5rem, $bold, $white);
+    top: 0;
+    z-index: 10;
+
+    @include mq-md {
+      font-size: 1.4rem;
+    }
+  }
+
+  tbody tr {
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: $black-20;
+    }
+
+    &.selected {
+      background-color: $black-25;
+    }
+  }
+  tbody td {
+    width: fit-content;
+  }
+}

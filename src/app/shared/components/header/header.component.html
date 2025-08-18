@@ -64,6 +64,14 @@
             </a> -->
             <a
               class="header__user-menu-item-link"
+              routerLink="/account/lists"
+              (click)="onClickCloseMenuBurger()"
+            >
+              <img src="assets/icons/heart-white.svg" alt="User" />
+              <span>My Lists</span>
+            </a>
+            <a
+              class="header__user-menu-item-link"
               routerLink="/account/watchlist"
               (click)="onClickCloseMenuBurger()"
             >

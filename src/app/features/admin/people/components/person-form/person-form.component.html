@@ -1,0 +1,280 @@
+<form
+  [formGroup]="personForm"
+  (ngSubmit)="onSubmit()"
+  class="d-flex flex-column gap-3"
+>
+  <div class="row gap-4 form-section">
+    <h3 class="form-section__title">Person Information</h3>
+    <div class="row g-3">
+      <!-- Profile Image -->
+      <div class="col-12 col-lg-4 col-xl-4">
+        <div class="form-field">
+          <label for="profile" class="field-label">
+            <span class="required">*</span>
+            Profile Image
+          </label>
+          <ng-container *ngIf="!previewUrl">
+            <div class="file-upload-container">
+              <input
+                id="profile"
+                type="file"
+                (change)="onFileSelected($event)"
+                accept="image/*"
+                class="file-input"
+              />
+              <label for="profile" class="file-upload-label">
+                <i class="material-icons">upload</i>
+                Upload Profile Image
+              </label>
+            </div>
+          </ng-container>
+
+          <!-- Preview profile -->
+          <div class="image-preview" *ngIf="previewUrl">
+            <img
+              [src]="previewUrl"
+              alt="Profile Preview"
+              class="preview-image"
+            />
+            <div class="file-info">
+              <span class="file-name">{{
+                selectedFile?.name || "Profile Image"
+              }}</span>
+              <button
+                type="button"
+                class="remove-file px-2 py-2"
+                (click)="removeFile()"
+              >
+                <i class="material-icons">close</i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Info -->
+      <div class="col-12 col-lg-8 row gap-4">
+        <div class="row g-4">
+          <!-- Name -->
+          <div class="form-field col-12 col-lg-6">
+            <label for="name" class="field-label">
+              <span class="required">*</span>
+              Name
+            </label>
+            <input
+              id="name"
+              type="text"
+              formControlName="name"
+              class="form-input"
+              placeholder="Enter person name"
+              [class.error]="
+                personForm.get('name')?.invalid &&
+                personForm.get('name')?.touched
+              "
+            />
+            <div
+              class="error-message"
+              *ngIf="
+                personForm.get('name')?.invalid &&
+                personForm.get('name')?.touched
+              "
+            >
+              {{ getErrorMessage("name") }}
+            </div>
+          </div>
+
+          <!-- Career -->
+          <div class="form-field col-12 col-lg-6">
+            <label for="career" class="field-label">
+              <span class="required">*</span>
+              Career
+            </label>
+
+            <select
+              id="career"
+              formControlName="career"
+              class="form-select"
+              [class.error]="
+                personForm.get('career')?.invalid &&
+                personForm.get('career')?.touched
+              "
+            >
+              <option
+                *ngFor="let option of jobOptions"
+                [value]="option.value"
+                [selected]="option.value == personData?.career?.toUpperCase()"
+              >
+                {{ option.label }}
+              </option>
+            </select>
+            <div
+              class="error-message"
+              *ngIf="
+                personForm.get('career')?.invalid &&
+                personForm.get('career')?.touched
+              "
+            >
+              {{ getErrorMessage("career") }}
+            </div>
+          </div>
+        </div>
+
+        <div class="row g-4">
+          <!-- Birth Date -->
+          <div class="form-field col-12 col-lg-6">
+            <label for="birthDate" class="field-label">
+              <span class="required">*</span>
+              Birth Date
+            </label>
+            <div class="date-input-container">
+              <input
+                id="birthDate"
+                type="date"
+                formControlName="birthDate"
+                class="form-input date-input"
+                [class.error]="
+                  personForm.get('birthDate')?.invalid &&
+                  personForm.get('birthDate')?.touched
+                "
+              />
+            </div>
+            <div
+              class="error-message"
+              *ngIf="
+                personForm.get('birthDate')?.invalid &&
+                personForm.get('birthDate')?.touched
+              "
+            >
+              {{ getErrorMessage("birthDate") }}
+            </div>
+          </div>
+
+          <!-- Death Date -->
+          <div class="form-field col-12 col-lg-6">
+            <label for="deathDate" class="field-label"> Death Date </label>
+            <div class="date-input-container">
+              <input
+                id="deathDate"
+                type="date"
+                formControlName="deathDate"
+                class="form-input date-input"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="row g-4">
+          <!-- Place of Birth -->
+          <div class="form-field col-12 col-lg-6">
+            <label for="placeOfBirth" class="field-label">
+              <span class="required">*</span>
+              Place of Birth
+            </label>
+            <input
+              id="placeOfBirth"
+              type="text"
+              formControlName="placeOfBirth"
+              class="form-input"
+              placeholder="Enter place of birth"
+              [class.error]="
+                personForm.get('placeOfBirth')?.invalid &&
+                personForm.get('placeOfBirth')?.touched
+              "
+            />
+            <div
+              class="error-message"
+              *ngIf="
+                personForm.get('placeOfBirth')?.invalid &&
+                personForm.get('placeOfBirth')?.touched
+              "
+            >
+              {{ getErrorMessage("placeOfBirth") }}
+            </div>
+          </div>
+
+          <!-- Gender -->
+          <div class="form-field col-12 col-lg-6">
+            <label for="gender" class="field-label">
+              <span class="required">*</span>
+              Gender
+            </label>
+            <select
+              id="gender"
+              formControlName="gender"
+              class="form-select"
+              [class.error]="
+                personForm.get('gender')?.invalid &&
+                personForm.get('gender')?.touched
+              "
+            >
+              <option
+                *ngFor="let option of genderOptions"
+                [value]="option.value"
+              >
+                {{ option.label }}
+              </option>
+            </select>
+            <div
+              class="error-message"
+              *ngIf="
+                personForm.get('gender')?.invalid &&
+                personForm.get('gender')?.touched
+              "
+            >
+              {{ getErrorMessage("gender") }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <!-- Biography -->
+      <div class="form-field full-width">
+        <label for="biography" class="field-label">
+          <span class="required">*</span>
+          Biography
+        </label>
+        <textarea
+          id="biography"
+          formControlName="biography"
+          class="form-textarea"
+          placeholder="Enter biography"
+          rows="6"
+          [class.error]="
+            personForm.get('biography')?.invalid &&
+            personForm.get('biography')?.touched
+          "
+        ></textarea>
+        <div
+          class="error-message"
+          *ngIf="
+            personForm.get('biography')?.invalid &&
+            personForm.get('biography')?.touched
+          "
+        >
+          {{ getErrorMessage("biography") }}
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <!-- Buttons -->
+      <div class="form-actions">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          routerLink="/admin/people"
+        >
+          Cancel
+        </button>
+
+        <button type="submit" class="btn btn-primary">
+          <span *ngIf="!isSubmitting">{{
+            isEditMode ? "Update" : "Create"
+          }}</span>
+          <span *ngIf="isSubmitting">Processing...</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</form>

@@ -1,0 +1,15 @@
+<div class="d-flex align-items-center gap-2 breadcrumb">
+  <a routerLink="/admin/movies">
+    <i class="material-icons">arrow_back</i>
+    Films List
+  </a>
+  <span>/</span>
+  <h1>Edit Movie</h1>
+</div>
+
+<div *ngIf="isLoading" class="d-flex justify-content-center p-5">
+  <app-loading></app-loading>
+</div>
+
+<app-movie-form *ngIf="!isLoading" [isEditMode]="true" [movieData]="movieData">
+</app-movie-form>

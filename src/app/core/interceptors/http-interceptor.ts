@@ -26,17 +26,21 @@ export class CustomHttpInterceptor implements HttpInterceptor {
   private addTokenToRequest(request: HttpRequest<any>): HttpRequest<any> {
     const token = this.authService.getToken();
     if (request.url.includes('/login')) {
-      return request;
+      return request.clone({
+        withCredentials: true,
+      });
     }
     if (token) {
       return request.clone({
         setHeaders: {
           Authorization: `Bearer ${token}`,
-          'x-api-key': 'reqres-free-v1',
         },
+        withCredentials: true,
       });
     }
-    return request;
+    return request.clone({
+      withCredentials: true,
+    });
   }
   intercept(
     req: HttpRequest<any>,
@@ -44,12 +48,12 @@ export class CustomHttpInterceptor implements HttpInterceptor {
   ): Observable<HttpEvent<any>> {
     const apiUrl = req.url;
 
-    // const clonedRequest = req.clone({
-    //   url: apiUrl,
-    //   setHeaders: {
-    //     Authorization: `Bearer ${environment.apiKey}`,
-    //   },
-    // });
+    const clonedRequest = req.clone({
+      url: apiUrl,
+      setHeaders: {
+        Authorization: `Bearer ${environment.apiKey}`,
+      },
+    });
     const authRequest = this.addTokenToRequest(req);
 
     return next.handle(authRequest).pipe(

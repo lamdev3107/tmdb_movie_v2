@@ -5,7 +5,7 @@
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
-  padding: 0;
+  // padding: 0;
   margin: 0;
 }
 html {
@@ -20,7 +20,9 @@ body {
   min-height: 100%;
   background-color: $black-08;
 }
-
+ul {
+  padding-left: 0 !important;
+}
 //DOM Native element style
 a {
   text-decoration: none;
@@ -86,6 +88,44 @@ button {
   }
   @include mix.mq-xl {
     max-width: 1440px; // Large desktop
+  }
+}
+.action-btn {
+  background: none;
+  border: none;
+  color: $grey-70;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 4px;
+  &--danger {
+    background-color: $red;
+    color: $white;
+
+    &:hover {
+      opacity: 0.9;
+    }
+  }
+  &--success {
+    background-color: $green;
+    color: $white;
+    &:hover {
+      opacity: 0.9;
+    }
+  }
+  &--info {
+    background-color: $blue;
+    color: $white;
+    &:hover {
+      opacity: 0.9;
+    }
+  }
+  &--warning {
+    background: $yellow;
+    color: $white;
+
+    &:hover {
+      opacity: 0.9;
+    }
   }
 }
 .section {

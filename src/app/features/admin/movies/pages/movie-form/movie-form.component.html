@@ -1,0 +1,642 @@
+<form
+  [formGroup]="movieForm"
+  (ngSubmit)="onSubmit()"
+  class="d-flex flex-column gap-3"
+>
+  <div class="row gap-4 form-section">
+    <h3 class="form-section__title">Movie Information</h3>
+    <div class="row g-4">
+      <!-- Image  -->
+      <div class="col-12 col-lg-4 col-xl-4">
+        <div class="form-field">
+          <label for="poster" class="field-label">
+            <span class="required">*</span>
+            Poster
+          </label>
+          <ng-container *ngIf="!posterPreviewUrl">
+            <div class="file-upload-container">
+              <input
+                id="poster"
+                type="file"
+                (change)="onPosterSelected($event)"
+                accept="image/*"
+                class="file-input"
+              />
+              <label for="poster" class="file-upload-label">
+                <i class="material-icons">upload</i>
+                Upload Poster Image
+              </label>
+            </div>
+          </ng-container>
+
+          <!-- Preview poster -->
+          <div class="image-preview" *ngIf="posterPreviewUrl">
+            <img
+              [src]="posterPreviewUrl"
+              alt="Poster Preview"
+              class="preview-image"
+            />
+            <div class="file-info">
+              <span class="file-name">{{ selectedPoster?.name }}</span>
+              <button
+                type="button"
+                class="remove-file px-2 py-2"
+                (click)="removePoster()"
+              >
+                <i class="material-icons">close</i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Backdrop -->
+        <div class="form-field mt-5">
+          <label for="backdrop" class="field-label">
+            <span class="required">*</span>
+            Backdrop
+          </label>
+          <div class="file-upload-container" *ngIf="!backdropPreviewUrl">
+            <input
+              id="backdrop"
+              type="file"
+              (change)="onBackdropSelected($event)"
+              accept="image/*"
+              class="file-input"
+            />
+            <label for="backdrop" class="file-upload-label">
+              <i class="material-icons">upload</i>
+              Upload Backdrop Image
+            </label>
+          </div>
+
+          <!-- Preview backdrop -->
+          <div class="image-preview" *ngIf="backdropPreviewUrl">
+            <img
+              [src]="backdropPreviewUrl"
+              alt="Backdrop Preview"
+              class="preview-image"
+            />
+            <div class="file-info">
+              <span class="file-name">{{ selectedBackdrop?.name }}</span>
+              <button
+                type="button"
+                class="remove-file px-2 py-2"
+                (click)="removeBackdrop()"
+              >
+                <i class="material-icons">close</i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Info  -->
+      <div class="form-grid col-12 row gap-3 col-lg-8">
+        <div class="row g-4 gap-3 gap-xl-0">
+          <!-- Tiêu đề -->
+          <div class="form-field col-12 col-xl-6">
+            <label for="title" class="field-label">
+              <span class="required">*</span>
+              Title
+            </label>
+            <input
+              id="title"
+              type="text"
+              formControlName="title"
+              class="form-input"
+              placeholder="Enter title..."
+              [class.error]="
+                movieForm.get('title')?.invalid &&
+                movieForm.get('title')?.touched
+              "
+            />
+            <div
+              class="error-message"
+              *ngIf="
+                movieForm.get('title')?.invalid &&
+                movieForm.get('title')?.touched
+              "
+            >
+              {{ getErrorMessage("title") }}
+            </div>
+          </div>
+
+          <!-- Tiêu đề gốc -->
+          <div class="form-field col-12 col-xl-6">
+            <label for="originalTitle" class="field-label">
+              <span class="required">*</span>
+              Original Title
+            </label>
+            <input
+              id="originalTitle"
+              type="text"
+              formControlName="originalTitle"
+              class="form-input"
+              placeholder="Enter original title..."
+              [class.error]="
+                movieForm.get('originalTitle')?.invalid &&
+                movieForm.get('originalTitle')?.touched
+              "
+            />
+            <div
+              class="error-message"
+              *ngIf="
+                movieForm.get('originalTitle')?.invalid &&
+                movieForm.get('originalTitle')?.touched
+              "
+            >
+              {{ getErrorMessage("originalTitle") }}
+            </div>
+          </div>
+        </div>
+
+        <div class="row g-4 gap-3 gap-xl-0">
+          <!-- Ngày phát hành -->
+          <div class="col-12 col-xl-6 form-field">
+            <label for="releaseDate" class="field-label">
+              <span class="required">*</span>
+              Release Date
+            </label>
+            <input
+              id="releaseDate"
+              type="date"
+              formControlName="releaseDate"
+              class="form-input"
+              [class.error]="
+                movieForm.get('releaseDate')?.invalid &&
+                movieForm.get('releaseDate')?.touched
+              "
+            />
+            <div
+              class="error-message"
+              *ngIf="
+                movieForm.get('releaseDate')?.invalid &&
+                movieForm.get('releaseDate')?.touched
+              "
+            >
+              {{ getErrorMessage("releaseDate") }}
+            </div>
+          </div>
+
+          <!-- Thời lượng -->
+          <div class="col-12 col-xl-6 form-field">
+            <label for="runtime" class="field-label">
+              <span class="required">*</span>
+              Runtime (minutes)
+            </label>
+            <input
+              id="runtime"
+              type="number"
+              min="0"
+              formControlName="runtime"
+              class="form-input"
+              placeholder="Enter runtime..."
+              [class.error]="
+                movieForm.get('runtime')?.invalid &&
+                movieForm.get('runtime')?.touched
+              "
+            />
+            <div
+              class="error-message"
+              *ngIf="
+                movieForm.get('runtime')?.invalid &&
+                movieForm.get('runtime')?.touched
+              "
+            >
+              {{ getErrorMessage("runtime") }}
+            </div>
+          </div>
+        </div>
+
+        <!-- Vote  -->
+        <div class="row g-4 gap-3 gap-xl-0">
+          <!-- Ngân sách -->
+          <div class="col-12 col-xl-6 form-field">
+            <label for="budget" class="field-label"> Vote Average </label>
+            <input
+              id="budget"
+              type="number"
+              formControlName="voteAverage"
+              class="form-input"
+              placeholder="Enter vote average"
+              [class.error]="
+                movieForm.get('voteAverage')?.invalid &&
+                movieForm.get('voteAverage')?.touched
+              "
+            />
+            <div
+              class="error-message"
+              *ngIf="
+                movieForm.get('budget')?.invalid &&
+                movieForm.get('budget')?.touched
+              "
+            >
+              {{ getErrorMessage("budget") }}
+            </div>
+          </div>
+
+          <!-- Doanh thu -->
+          <div class="col-12 col-xl-6 form-field">
+            <label for="voteCount" class="field-label"> Vote Count </label>
+            <input
+              id="voteCount"
+              type="number"
+              formControlName="voteCount"
+              class="form-input"
+              placeholder="Enter voteCount..."
+            />
+            <div
+              class="error-message"
+              *ngIf="
+                movieForm.get('voteCount')?.invalid &&
+                movieForm.get('voteCount')?.touched
+              "
+            >
+              {{ getErrorMessage("voteCount") }}
+            </div>
+          </div>
+        </div>
+
+        <div class="row g-4 gap-3 gap-xl-0">
+          <!-- Ngân sách -->
+          <div class="col-12 col-xl-6 form-field">
+            <label for="budget" class="field-label"> Budget ($) </label>
+            <input
+              id="budget"
+              type="number"
+              formControlName="budget"
+              class="form-input"
+              placeholder="Enter budget"
+              [class.error]="
+                movieForm.get('budget')?.invalid &&
+                movieForm.get('budget')?.touched
+              "
+            />
+            <div
+              class="error-message"
+              *ngIf="
+                movieForm.get('budget')?.invalid &&
+                movieForm.get('budget')?.touched
+              "
+            >
+              {{ getErrorMessage("budget") }}
+            </div>
+          </div>
+
+          <!-- Doanh thu -->
+          <div class="col-12 col-xl-6 form-field">
+            <label for="revenue" class="field-label"> Revenue ($) </label>
+            <input
+              id="revenue"
+              type="number"
+              formControlName="revenue"
+              class="form-input"
+              placeholder="Enter revenue..."
+              [class.error]="
+                movieForm.get('revenue')?.invalid &&
+                movieForm.get('revenue')?.touched
+              "
+            />
+            <div
+              class="error-message"
+              *ngIf="
+                movieForm.get('revenue')?.invalid &&
+                movieForm.get('revenue')?.touched
+              "
+            >
+              {{ getErrorMessage("revenue") }}
+            </div>
+          </div>
+        </div>
+
+        <div class="row g-4 gap-3 gap-xl-0">
+          <!-- Tagline -->
+          <div class="col-12 col-xl-6 form-field">
+            <label for="tagline" class="field-label"> Tagline </label>
+            <input
+              id="tagline"
+              type="text"
+              formControlName="tagline"
+              class="form-input"
+              placeholder="Enter tagline..."
+            />
+          </div>
+
+          <!-- Trạng thái -->
+          <div class="col-12 col-xl-6 form-field">
+            <label for="status" class="field-label">
+              <span class="required">*</span>
+              Status
+            </label>
+            <select
+              id="status"
+              formControlName="status"
+              class="form-select"
+              [class.error]="
+                movieForm.get('status')?.invalid &&
+                movieForm.get('status')?.touched
+              "
+            >
+              <option
+                *ngFor="let option of statusOptions"
+                [value]="option.value"
+              >
+                {{ option.label }}
+              </option>
+            </select>
+            <div
+              class="error-message"
+              *ngIf="
+                movieForm.get('status')?.invalid &&
+                movieForm.get('status')?.touched
+              "
+            >
+              {{ getErrorMessage("status") }}
+            </div>
+          </div>
+        </div>
+
+        <div class="row g-4 gap-3 gap-xl-0">
+          <!-- URL trailer -->
+          <div class="col-12 col-xl-6 form-field">
+            <label for="trailerUrl" class="field-label"> Trailer URL </label>
+            <input
+              id="trailerUrl"
+              type="url"
+              formControlName="trailerUrl"
+              class="form-input"
+              placeholder="Enter trailer URL..."
+              [class.error]="
+                movieForm.get('trailerUrl')?.invalid &&
+                movieForm.get('trailerUrl')?.touched
+              "
+            />
+            <div
+              class="error-message"
+              *ngIf="
+                movieForm.get('trailerUrl')?.invalid &&
+                movieForm.get('trailerUrl')?.touched
+              "
+            >
+              {{ getErrorMessage("trailerUrl") }}
+            </div>
+          </div>
+          <!-- URL trang chủ -->
+          <div class="col-12 col-xl-6 form-field">
+            <label for="homepageUrl" class="field-label"> Page URL </label>
+            <input
+              id="homepageUrl"
+              type="url"
+              formControlName="homepageUrl"
+              class="form-input"
+              placeholder="Enter homepage URL..."
+            />
+          </div>
+        </div>
+
+        <div class="row g-4 gap-3 gap-xl-0">
+          <!-- Quốc gia -->
+          <div class="col-12 col-xl-6 form-field">
+            <label for="countryIds" class="field-label">
+              Released Countries
+            </label>
+            <app-input-chip-list
+              [options]="countryOptions"
+              formControlName="countryIds"
+              (onInputChange)="handleQueryCountryChange($event)"
+            ></app-input-chip-list>
+          </div>
+
+          <!-- Ngôn ngữ -->
+          <div class="col-12 col-xl-6 form-field">
+            <label for="languageIds" class="field-label">
+              Spoken Languages
+            </label>
+            <app-input-chip-list
+              [options]="languageOptions"
+              formControlName="languageIds"
+              (onInputChange)="handleQueryLanguageChange($event)"
+            ></app-input-chip-list>
+          </div>
+        </div>
+
+        <div class="row g-4 gap-3 gap-xl-0">
+          <!-- Thể loại -->
+          <div class="col-12 col-xl-6 form-field">
+            <label for="genreIds" class="field-label"> Genres </label>
+            <app-input-chip-list
+              [options]="genreOptions"
+              formControlName="genreIds"
+              (onInputChange)="handleQueryGenreChange($event)"
+            ></app-input-chip-list>
+          </div>
+          <!-- Công ty sản xuất -->
+          <div class="col-12 col-xl-6 form-field">
+            <label for="companyIds" class="field-label">
+              Production Companies
+            </label>
+            <app-input-chip-list
+              [options]="companyOptions"
+              formControlName="companyIds"
+              (onInputChange)="handleQueryLanguageChange($event)"
+            ></app-input-chip-list>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <!-- Tóm tắt -->
+      <div class="form-field full-width">
+        <label for="overview" class="field-label">
+          <span class="required">*</span>
+          Overview
+        </label>
+        <textarea
+          id="overview"
+          formControlName="overview"
+          class="form-textarea"
+          placeholder="Enter overview..."
+          rows="6"
+          [class.error]="
+            movieForm.get('overview')?.invalid &&
+            movieForm.get('overview')?.touched
+          "
+        ></textarea>
+        <div
+          class="error-message"
+          *ngIf="
+            movieForm.get('overview')?.invalid &&
+            movieForm.get('overview')?.touched
+          "
+        >
+          {{ getErrorMessage("overview") }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Persons  -->
+  <div class="col-12 form-section">
+    <h3 class="form-section__title">Cast & Crew</h3>
+    <!-- Cast -->
+    <div class="form-field full-width">
+      <div class="cast-container">
+        <div [formGroup]="castForm" class="cast-member">
+          <div class="cast-fields">
+            <div class="cast-field">
+              <label for="personId">Name*</label>
+              <app-input-search
+                id="personId"
+                [options]="personOptions"
+                formControlName="person"
+                (onInputChange)="handleQueryPersonChange($event)"
+              ></app-input-search>
+            </div>
+
+            <div class="cast-field">
+              <label for="job">Job</label>
+              <select
+                id="job"
+                formControlName="job"
+                class="form-select"
+                [class.error]="
+                  castForm.get('job')?.invalid && castForm.get('job')?.touched
+                "
+              >
+                <option
+                  *ngFor="let option of jobOptions"
+                  [value]="option.value"
+                >
+                  {{ option.label }}
+                </option>
+              </select>
+            </div>
+
+            <div
+              class="cast-field"
+              *ngIf="castForm.get('job')?.value === jobOptions[0].value"
+            >
+              <label for="character">Character</label>
+              <input
+                id="character"
+                type="text"
+                formControlName="character"
+                class="form-input"
+                placeholder="Enter character..."
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-actions d-flex align-items-center gap-2">
+        <button
+          type="button"
+          class="btn btn-secondary d-flex align-items-center gap-2"
+          (click)="cancelEditCastMember()"
+          *ngIf="editingCastIndex !== null"
+        >
+          <i class="material-icons">cancel</i>
+          Cancel
+        </button>
+        <button
+          type="button"
+          [ngClass]="{
+            'd-flex align-items-center gap-2': true,
+            'btn btn-warning text-white': true,
+            disabled: isDisabledAddMember()
+          }"
+          (click)="editMember()"
+          [disabled]="isDisabledAddMember()"
+          *ngIf="editingCastIndex !== null"
+        >
+          <i class="material-icons">edit</i>
+          Update member
+        </button>
+        <button
+          type="button"
+          [ngClass]="{ 'add-cast-btn': true, disabled: isDisabledAddMember() }"
+          (click)="addCastMember()"
+          [disabled]="isDisabledAddMember()"
+          *ngIf="editingCastIndex === null"
+        >
+          <i class="material-icons">add</i>
+          Add member
+        </button>
+      </div>
+    </div>
+
+    <div class="cast-crew-table mt-4">
+      <table class="table" style="margin-top: 1rem">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Member</th>
+            <th>Job</th>
+            <th>Character</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let castMember of castArray; let i = index">
+            <td>{{ castMember.id }}</td>
+            <td>
+              {{ castMember.name }}
+            </td>
+            <td>
+              {{ castMember.job }}
+            </td>
+            <td>
+              {{ castMember.character || "-" }}
+            </td>
+            <td>
+              <div class="action-buttons d-flex gap-2">
+                <button
+                  type="button"
+                  class="btn btn-warning text-white btn-sm"
+                  (click)="handleClickEditCastMember(i)"
+                  title="Sửa thành viên"
+                >
+                  <i class="material-icons">edit</i>
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-danger btn-sm"
+                  (click)="removeCastMember(i)"
+                  title="Xóa thành viên"
+                >
+                  <i class="material-icons">delete</i>
+                </button>
+              </div>
+            </td>
+          </tr>
+          <tr *ngIf="castArray.length === 0">
+            <td colspan="5" class="text-center">No member added</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="row">
+    <!-- Buttons -->
+    <div class="form-actions">
+      <button
+        type="button"
+        class="btn btn-secondary"
+        routerLink="/admin/movies"
+      >
+        Hủy
+      </button>
+      <!-- [disabled]="isSubmitting || movieForm.invalid" -->
+
+      <button type="submit" class="btn btn-primary">
+        <span *ngIf="!isSubmitting">{{
+          isEditMode ? "Update Movie" : "Create Movie"
+        }}</span>
+        <span *ngIf="isSubmitting">Processing...</span>
+      </button>
+    </div>
+  </div>
+</form>

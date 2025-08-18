@@ -37,7 +37,6 @@ export class InputKeywordComponent implements OnInit {
       )
       .subscribe((res) => {
         this.suggestions = res.results;
-        console.log('check res', this.suggestions);
       });
   }
 

@@ -29,6 +29,9 @@ import { ToastComponent } from './toast/toast.component';
 import { ToastContainerComponent } from './toast-container/toast-container.component';
 import { ActionMenuComponent } from './action-menu/action-menu.component';
 import { WatchlistCardComponent } from './watchlist-card/watchlist-card.component';
+import { ClientLayoutComponent } from './client-layout/client-layout.component';
+import { InputChipListComponent } from './input-chip-list/input-chip-list.component';
+import { InputSearchComponent } from './input-search/input-search.component';
 
 export const components = [
   LoadingComponent,
@@ -37,7 +40,6 @@ export const components = [
   HeaderComponent,
   FooterComponent,
   InputRadioGroupComponent,
-  CardComponent,
   CardComponent,
   ReviewCardComponent,
   UserScoreComponent,
@@ -64,4 +66,7 @@ export const components = [
   ToastContainerComponent,
   ActionMenuComponent,
   WatchlistCardComponent,
+  ClientLayoutComponent,
+  InputChipListComponent,
+  InputSearchComponent,
 ];

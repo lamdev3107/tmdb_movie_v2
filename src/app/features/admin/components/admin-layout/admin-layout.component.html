@@ -1,0 +1,38 @@
+<div class="admin-layout">
+  <app-admin-sidebar></app-admin-sidebar>
+
+  <div class="admin-main">
+    <header class="admin-header">
+      <div class="header-left">
+        <!-- <button class="menu-toggle" (click)="toggleSidebar()">
+          <i class="material-icons">menu</i>
+        </button> -->
+        <h1 class="page-title">{{ getPageTitle() }}</h1>
+      </div>
+
+      <div class="header-right">
+        <div class="user-info">
+          <div class="avatar">
+            <img src="assets/images/default-avatar.jpg" alt="Admin User" />
+          </div>
+          <div class="user-details">
+            <span class="user-name">{{ credential?.username }}</span>
+            <span class="user-role">{{ credential?.role }}</span>
+          </div>
+        </div>
+        <div class="header-actions">
+          <button class="action-btn" title="Đăng xuất" (click)="logout()">
+            <i class="material-icons">logout</i>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main class="admin-content">
+      <!-- <div class="content-wrapper">
+      </div> -->
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>
+<app-toast-container></app-toast-container>

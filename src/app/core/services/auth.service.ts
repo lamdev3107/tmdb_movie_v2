@@ -14,6 +14,16 @@ import { environment } from '@environments/environment';
 export class AuthService {
   private apiUrl = environment.backendUrl;
   private tokenSubject = new BehaviorSubject<string | null>(null);
+  private credentialSubject = new BehaviorSubject<any | null>(null);
+
+  setCredential(credential: any): void {
+    localStorage.setItem('credential', JSON.stringify(credential));
+    this.credentialSubject.next(credential);
+  }
+
+  get credential$(): Observable<any | null> {
+    return this.credentialSubject.asObservable();
+  }
 
   constructor(private http: HttpClient) {}
 
@@ -22,16 +32,28 @@ export class AuthService {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
       }),
+      withCredentials: true,
     };
     return this.http.post<SuccessResponse>(
-      `${this.apiUrl}/auth/login`,
+      `${this.apiUrl}auth/login`,
       JSON.stringify(credentials),
       httpOptions
     );
   }
-  logout(): void {
+  logout(): Observable<string> {
+    const httpOptions = {
+      withCredentials: true,
+    };
+    return this.http.post<string>(`${this.apiUrl}auth/logout`, httpOptions);
+  }
+
+  clearToken(): void {
     localStorage.removeItem('token');
     this.tokenSubject.next(null);
+  }
+  clearCredential(): void {
+    localStorage.removeItem('credential');
+    this.credentialSubject.next(null);
   }
 
   isAuthenticated(): boolean {
@@ -45,6 +67,10 @@ export class AuthService {
 
   get token$(): Observable<string | null> {
     return this.tokenSubject.asObservable();
+  }
+
+  getCredential(): any | null {
+    return JSON.parse(localStorage.getItem('credential') || '{}');
   }
 
   getToken(): string | null {

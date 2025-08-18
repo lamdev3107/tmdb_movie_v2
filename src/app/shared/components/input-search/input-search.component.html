@@ -1,0 +1,22 @@
+<div class="keyword-input">
+  <div class="keyword-container">
+    <input
+      type="text"
+      class="input-text"
+      [(ngModel)]="query"
+      (focus)="onFocus()"
+      (input)="onQueryChange()"
+      [placeholder]="placeholder"
+    />
+  </div>
+
+  <ul class="select-option" *ngIf="options.length > 0 && isOpen">
+    <li *ngFor="let option of options" (click)="selectOption(option)">
+      {{ option.label }}
+    </li>
+  </ul>
+
+  <div class="select-option empty" *ngIf="options.length === 0 && isOpen">
+    Không có tùy chọn nào
+  </div>
+</div>
