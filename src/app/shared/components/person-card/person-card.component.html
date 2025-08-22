@@ -8,23 +8,25 @@
   <a
     *ngIf="!isLoading"
     class="cast-item__photo"
-    routerLink="/people/{{ cast.id }}"
+    routerLink="/people/{{ cast.personDTO.id }}"
   >
     <img
       class="cast-item__photo-img"
       [src]="
-        cast.profile_path
-          ? (cast.profile_path | imageUrl : 500 : false)
+        cast.personDTO.profilePath
+          ? cast.personDTO.profilePath
           : 'assets/images/default-avatar.jpg'
       "
-      [alt]="cast.name"
+      [alt]="cast.personDTO.name"
       loading="lazy"
     />
   </a>
   <div class="cast-item__info">
-    <a routerLink="/people/{{ cast.id }}" class="cast-item__info-name">{{
-      cast.name
-    }}</a>
-    <p class="cast-item__info-character">{{ cast.character }}</p>
+    <a
+      routerLink="/people/{{ cast.personDTO.id }}"
+      class="cast-item__info-name"
+      >{{ cast.personDTO.name }}</a
+    >
+    <p class="cast-item__info-character">{{ cast.characterName }}</p>
   </div>
 </div>

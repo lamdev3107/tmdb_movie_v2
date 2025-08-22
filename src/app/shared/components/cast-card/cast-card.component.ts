@@ -1,5 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Cast, Crew } from '@features/client/movies/models/credit.model';
+import {
+  Cast,
+  Crew,
+  MovieCast,
+} from '@features/client/movies/models/credit.model';
 
 @Component({
   selector: 'app-cast-card',
@@ -7,14 +11,12 @@ import { Cast, Crew } from '@features/client/movies/models/credit.model';
   styleUrls: ['./cast-card.component.scss'],
 })
 export class CastCardComponent implements OnInit {
-  @Input() cast: Cast | null = null;
-  @Input() crew: Crew | null = null;
-
+  @Input() cast: MovieCast | null = null;
+  @Input() isCrew = false;
   constructor() {}
 
   getCastId() {
-    if (this.cast) return this.cast?.id;
-    return this.crew?.id;
+    return this.cast?.personDTO?.id;
   }
   ngOnInit(): void {}
 }

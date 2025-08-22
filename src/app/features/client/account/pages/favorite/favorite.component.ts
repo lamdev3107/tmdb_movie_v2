@@ -1,6 +1,6 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AccountService } from '@core/services/account.service';
-import { TabItem } from '@shared/components/tab/tab.component';
+import { AuthService } from '@core/services/auth.service';
 
 @Component({
   selector: 'app-favorite',
@@ -8,29 +8,34 @@ import { TabItem } from '@shared/components/tab/tab.component';
   styleUrls: ['./favorite.component.scss'],
 })
 export class FavoriteComponent implements OnInit {
-  // Favorite sub-tabs
-  favoriteSubTabs: TabItem[] = [
-    { id: 'movies', label: 'Movies ' },
-    { id: 'tv', label: 'TV ' },
-  ];
-
-  favoriteMovies$ = this.accountService.getFavoriteMovies();
-  favoriteTv$ = this.accountService.getFavoriteTV();
-
-  activeFavoriteTab: string = 'movies';
+  credential: any | null = null;
+  favoriteMovies?: any[] = [];
+  isLoading = false;
 
   constructor(
     private accountService: AccountService,
-    private cdr: ChangeDetectorRef
+    private authService: AuthService
   ) {}
 
-  ngOnInit(): void {}
-
-  handleRemoveFromFavorite() {
-    this.favoriteMovies$ = this.accountService.getFavoriteMovies();
-    this.favoriteTv$ = this.accountService.getFavoriteTV();
+  ngOnInit(): void {
+    this.credential = this.authService.getCredential();
+    this.loadFavoriteMovies();
   }
-  onFavoriteTabChange(tabId: string): void {
-    this.activeFavoriteTab = tabId;
+  loadFavoriteMovies() {
+    this.isLoading = true;
+    this.accountService.getFavoriteMovies().subscribe({
+      next: (res) => {
+        this.favoriteMovies = res.results;
+      },
+      error: (err) => {
+        console.log(err);
+      },
+      complete: () => {
+        this.isLoading = false;
+      },
+    });
+  }
+  handleRemoveFromFavorite() {
+    this.loadFavoriteMovies();
   }
 }

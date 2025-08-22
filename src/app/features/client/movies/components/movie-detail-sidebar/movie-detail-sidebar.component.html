@@ -2,20 +2,20 @@
   <!--links-->
   <div class="movie-detail-sidebar-item">
     <h2 class="movie-detail-sidebar-item__title">Pages</h2>
-    <div *ngIf="movie?.homepage === ''">
-      <p class="movie-detail-sidebar-item__content">No homepage</p>
+    <div *ngIf="movie?.homepageUrl === ''">
+      <p class="movie-detail-sidebar-item__content">No homepageUrl</p>
     </div>
     <app-tooltip
       [text]="'Visit HomePage'"
       position="top"
       [delay]="200"
-      *ngIf="movie?.homepage !== ''"
+      *ngIf="movie?.homepageUrl !== ''"
     >
       <a
-        [href]="movie?.homepage"
+        [href]="movie?.homepageUrl"
         target="_blank"
         class="movie-page"
-        *ngIf="movie?.homepage"
+        *ngIf="movie?.homepageUrl"
       >
         <svg
           class="movie-page__icon"
@@ -43,9 +43,14 @@
   </div>
 
   <div class="movie-detail-sidebar-item">
-    <h3 class="movie-detail-sidebar-item__title">Original Language</h3>
+    <h3 class="movie-detail-sidebar-item__title">Production Company</h3>
+    <p class="movie-detail-sidebar-item__content">{{ productionCompany }}</p>
+  </div>
+
+  <div class="movie-detail-sidebar-item">
+    <h3 class="movie-detail-sidebar-item__title">Speaking Language</h3>
     <p class="movie-detail-sidebar-item__content">
-      {{ movie?.original_language | uppercase }}
+      {{ languages }}
     </p>
   </div>
 
@@ -64,20 +69,19 @@
   </div>
 
   <!--Keywords-->
-  <div class="movie-detail-sidebar-item">
-    <h3 class="movie-detail-sidebar-item__title">Keywords</h3>
+  <!-- <div class="movie-detail-sidebar-item">
+    <h3 class="movie-detail-sidebar-item__title">Genres</h3>
     <div class="movie-keywords">
-      <div *ngIf="keywords?.length === 0">
+      <div *ngIf="!movie?.genres || movie?.genres?.length === 0">
         <p class="movie-detail-sidebar-item__content">
-          No keywords have been added.
+          No genres have been added.
         </p>
       </div>
-      <ng-container *ngIf="keywords && keywords.length > 0">
-        <div class="movie-keywords__item" *ngFor="let keyword of keywords">
-          {{ keyword.name }}
+      <ng-container *ngIf="movie?.genres?.length && movie.genres.length > 0">
+        <div class="movie-keywords__item" *ngFor="let genre of movie.genres">
+          {{ genre.name }}
         </div>
       </ng-container>
-      <!-- Sidebar content -->
     </div>
-  </div>
+  </div> -->
 </div>

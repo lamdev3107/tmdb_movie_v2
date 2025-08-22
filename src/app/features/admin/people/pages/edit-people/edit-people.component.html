@@ -4,13 +4,11 @@
     Celebrity List
   </a>
   <span>/</span>
-  <h1>Edit Celebrity: {{ personData?.name }}</h1>
+  <h1 class="header__title">Edit Celebrity: {{ personData?.name }}</h1>
 </div>
 
 <div *ngIf="isLoading" class="loading-container">
-  <div class="spinner-border text-primary" role="status">
-    <span class="visually-hidden">Loading...</span>
-  </div>
+  <app-loading [isOverlay]="true"></app-loading>
 </div>
 
 <app-person-form

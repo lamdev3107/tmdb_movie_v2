@@ -1,8 +1,8 @@
 <div class="watchlist-item">
   <a [routerLink]="renderLink()" class="item-thumbnail">
     <img
-      [src]="data.poster_path | imageUrl : 500 : false"
-      alt="28 Years Later"
+      [src]="data.posterPath"
+      alt="data?.title"
       class="item-thumbnail__image"
     />
     <div class="item-thumbnail__score"></div>
@@ -11,7 +11,7 @@
     <div class="content-header">
       <app-user-score
         [size]="'small'"
-        [score]="data.vote_average"
+        [score]="data.voteAverage"
       ></app-user-score>
       <div class="content-header__text">
         <a [routerLink]="renderLink()" class="content-header__text-title">{{
@@ -27,34 +27,38 @@
       {{ data.overview }}
     </p>
     <div class="item-actions">
-      <!-- <button class="action-btn">
+      <button class="action-btn" (click)="handleRating()">
         <img
           src="assets/icons/star-solid.svg"
           alt="star"
           class="action-btn__icon"
         />
-        Rate it!
-      </button> -->
-      <ng-container *ngIf="currentRoute === 'watchlist'">
+        {{
+          accountStates?.isRated
+            ? "Your Rating: " + accountStates?.ratingScore + "%"
+            : "Rate it!"
+        }}
+      </button>
+      <ng-container *ngIf="currentRoute === 'rating'">
         <button class="action-btn" (click)="handleToggleFavorite()">
           <img
             src="assets/icons/heart-solid.svg"
             alt="heart"
             class="action-btn__icon"
-            *ngIf="accountStates?.favorite"
+            *ngIf="accountStates?.inFavourite"
           />
           <img
             src="assets/icons/heart-white.svg"
             alt="heart"
             class="action-btn__icon"
-            *ngIf="!accountStates?.favorite"
+            *ngIf="!accountStates?.inFavourite"
           />
 
           Favorite
         </button>
       </ng-container>
 
-      <ng-container *ngIf="currentRoute === 'favorite'">
+      <!-- <ng-container *ngIf="currentRoute === 'favorite'">
         <button class="action-btn" (click)="handleToggleWatchlist()">
           <img
             src="assets/icons/bookmark-active.svg"
@@ -72,12 +76,14 @@
 
           Watchlist
         </button>
-      </ng-container>
+      </ng-container> -->
 
-      <button class="action-btn" (click)="handleRemoveFromlist()">
-        <img src="assets/icons/x.svg" alt="x" class="action-btn__icon" />
-        Remove
-      </button>
+      <ng-container *ngIf="currentRoute !== 'rating'">
+        <button class="action-btn" (click)="handleRemoveFromlist()">
+          <img src="assets/icons/x.svg" alt="x" class="action-btn__icon" />
+          Remove
+        </button>
+      </ng-container>
     </div>
   </div>
 </div>

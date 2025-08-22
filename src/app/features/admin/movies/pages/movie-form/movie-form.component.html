@@ -498,12 +498,14 @@
               <label for="job">Job</label>
               <select
                 id="job"
+                placeholder="Chọn công việc"
                 formControlName="job"
                 class="form-select"
                 [class.error]="
                   castForm.get('job')?.invalid && castForm.get('job')?.touched
                 "
               >
+                <option value="" disabled selected>Chọn công việc</option>
                 <option
                   *ngFor="let option of jobOptions"
                   [value]="option.value"
@@ -640,3 +642,6 @@
     </div>
   </div>
 </form>
+<ng-container *ngIf="isSubmitting">
+  <app-loading [isOverlay]="true"></app-loading>
+</ng-container>

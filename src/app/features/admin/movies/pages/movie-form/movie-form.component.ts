@@ -11,10 +11,10 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { CountryService } from '@core/services/country.service';
 import { Country } from '@core/models/country.model';
 import { LanguageService } from '@core/services/languague.service';
-import { Language } from '@core/models/language.model';
+import { Language, LanguageResponseData } from '@core/models/language.model';
 import { CompanyService } from '@core/services/company.service';
 import { GenreService } from '@core/services/genre.service';
-import { Company } from '@core/models/company.model';
+import { Company, CompanyResponseData } from '@core/models/company.model';
 import { Genre } from '@core/models/genre.model';
 import { PeopleService } from '@features/admin/people/services/people.service';
 import {
@@ -141,8 +141,10 @@ export class MovieFormComponent implements OnInit, OnChanges {
   }
   loadCompanies(page: number = 1, size: number = 30, keyword: string = '') {
     this.companyService.getCompanies(page, size, keyword).subscribe({
-      next: (res: any) => {
-        this.companyOptions = res.map((item: Company) => {
+      next: (res: CompanyResponseData) => {
+        const companies = res.results;
+
+        this.companyOptions = companies.map((item: Company) => {
           return {
             value: item.id,
             label: item.name,
@@ -153,8 +155,10 @@ export class MovieFormComponent implements OnInit, OnChanges {
   }
   loadLanguages(page: number = 1, size: number = 30, keyword: string = '') {
     this.languageService.getLanguages(page, size, keyword).subscribe({
-      next: (res: any) => {
-        this.languageOptions = res.map((item: Language) => {
+      next: (res: LanguageResponseData) => {
+        const languages = res.results;
+
+        this.languageOptions = languages.map((item: Language) => {
           return {
             value: item.id,
             label: item.name,
@@ -215,7 +219,6 @@ export class MovieFormComponent implements OnInit, OnChanges {
   }
 
   isDisabledAddMember() {
-    // console.log('Check form', this.castForm.value);
     return this.castForm.invalid;
   }
 
@@ -245,7 +248,6 @@ export class MovieFormComponent implements OnInit, OnChanges {
       job: this.castForm.value.job,
       character: this.castForm.value.character,
     };
-    console.log('check edited', this.castArray[this.editingCastIndex!]);
 
     this.castForm.reset();
     this.editingCastIndex = null;
@@ -389,6 +391,17 @@ export class MovieFormComponent implements OnInit, OnChanges {
   }
 
   onSubmit(): void {
+    // Kiểm tra các trường invalid
+    if (this.movieForm.invalid) {
+      this.movieForm.markAllAsTouched();
+      // Log ra các trường invalid
+      const invalidControls = Object.keys(this.movieForm.controls).filter(
+        (key) => this.movieForm.get(key)?.invalid
+      );
+      console.log('Các trường invalid:', invalidControls);
+      // Hiển thị thông báo lỗi hoặc dừng submit
+      return;
+    }
     if (this.movieForm.valid) {
       // Kiểm tra giá trị của form
       this.isSubmitting = true;
@@ -412,6 +425,8 @@ export class MovieFormComponent implements OnInit, OnChanges {
       if (this.movieForm.value.backdrop) {
         formData.append('backdrop', this.movieForm.value.backdrop);
       }
+      console.log('Check companyIds', this.movieForm.value.countryIds);
+
       formData.append(
         'countryIds',
         this.movieForm.value.countryIds.map((item: SelectOption) => item.value)

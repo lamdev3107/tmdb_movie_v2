@@ -5,8 +5,8 @@
         crossorigin="anonymous"
         class="cast-page-header__image"
         [src]="
-          movie?.poster_path
-            ? (movie?.poster_path | imageUrl : 500 : false)
+          movie?.posterPath
+            ? movie?.posterPath
             : 'assets/images/default-avatar.jpg'
         "
         loading="lazy"
@@ -19,9 +19,9 @@
             class="cast-page-header__content-title"
             >{{ movie?.title }}</a
           >
-          <p *ngIf="movie?.release_date" class="cast-page-header__content-year">
+          <p *ngIf="movie?.releaseDate" class="cast-page-header__content-year">
             (
-            {{ movie?.release_date | date : "yyyy" }} )
+            {{ movie?.releaseDate | date : "yyyy" }} )
           </p>
         </div>
         <a
@@ -71,31 +71,21 @@
     <div class="cast-page-credits">
       <h2 *ngIf="crew.length > 0" class="cast-page-credits__title">
         Crew ({{ crew.length }})
-        <div class="cast-page-credits__crew">
-          <ng-container *ngIf="loadingService.loading$ | async; else crewList">
-            <ng-container *ngFor="let i of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]">
-              <app-skeleton [width]="'100%'" [height]="'66px'"></app-skeleton>
-            </ng-container>
-          </ng-container>
-          <ng-template #crewList>
-            <ng-container
-              *ngFor="let department of crewByDepartment | keyvalue"
-            >
-              <div class="cast-page-credits__crew-department">
-                <h3 class="cast-page-credits__crew-title">
-                  {{ department.key }}
-                </h3>
-                <div class="cast-page-credits__list">
-                  <app-cast-card
-                    *ngFor="let crewMember of department.value"
-                    [crew]="crewMember"
-                  ></app-cast-card>
-                </div>
-              </div>
-            </ng-container>
-          </ng-template>
-        </div>
       </h2>
+      <div class="cast-page-credits__list">
+        <ng-container *ngIf="loadingService.loading$ | async; else crewList">
+          <ng-container *ngFor="let i of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]">
+            <app-skeleton [width]="'100%'" [height]="'66px'"></app-skeleton>
+          </ng-container>
+        </ng-container>
+        <ng-template #crewList>
+          <app-cast-card
+            *ngFor="let crew of crew"
+            [cast]="crew"
+            [isCrew]="true"
+          ></app-cast-card>
+        </ng-template>
+      </div>
     </div>
   </div>
 </div>

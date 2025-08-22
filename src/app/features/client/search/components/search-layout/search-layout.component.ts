@@ -8,7 +8,10 @@ import {
 } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Movie } from '@features/client/movies/models/movie.model';
-import { MovieService } from '@features/client/movies/services/movie.service';
+import {
+  MovieCategoryEnum,
+  MovieService,
+} from '@features/client/movies/services/movie.service';
 import { Person } from '@features/client/people/models/person.model';
 import { SearchResponse } from '@features/client/search/models/search.model';
 import { SearchService } from '@features/client/search/services/search.service';
@@ -33,10 +36,9 @@ interface ApiState<T> {
 interface SearchResults {
   loading: boolean;
   suggestions: {
-    multi: SearchResponse | null;
-    movie: SearchResponse | null;
-    tv: SearchResponse | null;
-    person: SearchResponse | null;
+    multi: any | null;
+    movies: any | null;
+    persons: any | null;
   };
 }
 @Component({
@@ -48,7 +50,7 @@ export class SearchLayoutComponent implements OnInit {
   @ViewChild('searchInput') searchInput!: ElementRef<HTMLInputElement>;
   @ViewChild('searchContainer') searchContainer!: ElementRef<HTMLElement>;
   searchQuery!: string;
-  suggestion$!: Observable<SearchResults>;
+  suggestion$!: Observable<any>;
   trendingResults$!: Observable<ApiState<Movie[]>>;
 
   isShowTrending = false;
@@ -58,7 +60,6 @@ export class SearchLayoutComponent implements OnInit {
 
   searchTabs: TabItem[] = [
     { id: 'movie', label: 'Movies' },
-    { id: 'tv', label: 'TV Shows' },
     { id: 'person', label: 'People' },
   ];
 
@@ -78,11 +79,7 @@ export class SearchLayoutComponent implements OnInit {
     this.route.url.subscribe((segments) => {
       if (segments.length > 0) {
         const currentRoute = segments[0].path;
-        if (
-          currentRoute === 'movie' ||
-          currentRoute === 'tv' ||
-          currentRoute === 'person'
-        ) {
+        if (currentRoute === 'movie' || currentRoute === 'person') {
           this.activeTabId = currentRoute;
         }
       }
@@ -97,38 +94,31 @@ export class SearchLayoutComponent implements OnInit {
           return of({
             loading: false,
             suggestions: {
+              movies: null,
               multi: null,
-              movie: null,
-              tv: null,
-              person: null,
+              persons: null,
             },
           } as SearchResults);
         }
-        return combineLatest([
-          this.searchService.searchMulti(query),
-          this.searchService.searchMovie(query),
-          this.searchService.searchTV(query),
-          this.searchService.searchPerson(query),
-        ]).pipe(
-          map(
-            ([multi, movie, tv, person]) =>
-              ({
-                loading: false,
-                suggestions: {
-                  multi: multi,
-                  movie: movie,
-                  tv: tv,
-                  person: person,
-                },
-              } as SearchResults)
-          ),
+        return this.movieService.searchGeneral(query, 1, 10).pipe(
+          map((res) => {
+            const multiData = res.data.movies.results
+              .slice(0, 4)
+              .concat(res.data.persons.results.slice(0, 4));
+            return {
+              loading: false,
+              suggestions: {
+                movies: res.data.movies,
+                persons: res.data.persons,
+                multi: multiData,
+              },
+            } as SearchResults;
+          }),
           startWith({
             loading: true,
             suggestions: {
-              multi: null,
-              movie: null,
-              tv: null,
-              person: null,
+              movies: null,
+              persons: null,
             },
           } as SearchResults)
         );
@@ -148,10 +138,17 @@ export class SearchLayoutComponent implements OnInit {
     const { media_type, query } = queryObj;
     this.querySubject.next(query);
     this.searchInput.nativeElement.value = query;
-    this.router.navigate([`search/${media_type}`], {
-      queryParams: { query },
-      state: { data: query },
-    });
+    if (media_type === 'person') {
+      this.router.navigate([`search/person`], {
+        queryParams: { query },
+        state: { data: query },
+      });
+    } else {
+      this.router.navigate([`search/movie`], {
+        queryParams: { query },
+        state: { data: query },
+      });
+    }
     this.activeTabId = media_type;
     this.isShowResult = false;
   }
@@ -167,10 +164,12 @@ export class SearchLayoutComponent implements OnInit {
   }
 
   settingTrengdingData() {
-    this.trendingResults$ = this.movieService.getTrendingMovies().pipe(
-      map((res) => ({ loading: false, data: res.results.slice(0, 8) })),
-      startWith({ loading: true } as ApiState<any[]>)
-    );
+    this.trendingResults$ = this.movieService
+      .getMoviesByCategory(MovieCategoryEnum.POPULAR, 8)
+      .pipe(
+        map((res) => ({ loading: false, data: res.data })),
+        startWith({ loading: true } as ApiState<any[]>)
+      );
   }
 
   onInput(event: Event) {
@@ -190,6 +189,10 @@ export class SearchLayoutComponent implements OnInit {
     if (this.searchInput) {
       this.searchInput.nativeElement.value = '';
       this.searchInput.nativeElement.dispatchEvent(new Event('input'));
+      this.router.navigate([`search/${this.activeTabId}`], {
+        queryParams: { query: '' },
+        state: { data: '' },
+      });
     }
   }
 
@@ -227,7 +230,7 @@ export class SearchLayoutComponent implements OnInit {
   }
 
   getMediaType(item: any): string {
-    return item.media_type || 'movie';
+    return item.name ? 'person' : 'movie';
   }
 
   @HostListener('document:click', ['$event'])

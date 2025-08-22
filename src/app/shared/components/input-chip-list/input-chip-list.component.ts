@@ -84,12 +84,12 @@ export class InputChipListComponent implements OnInit {
     this.onInputChange.emit(this.query);
   }
 
-  selectOption(option: any) {
+  selectOption(option: SelectOption) {
     if (!this.selectedOptions.some((k) => k.value === option.value)) {
-      this.selectedOptions.push(option);
+      this.selectedOptions = [...this.selectedOptions, option];
     }
     this.isOpen = false;
-    this.onChange(option);
+    this.onChange(this.selectedOptions);
     this.query = '';
     this.onTouched(); // đánh dấu touched
   }

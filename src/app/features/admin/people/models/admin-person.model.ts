@@ -32,6 +32,13 @@ export const jobOptions = [
   { value: 'Writer', label: 'Writer' },
   { value: 'Editor', label: 'Editor' },
   { value: 'Camera', label: 'Camera' },
+  { value: 'Sound', label: 'Sound' },
+  { value: 'Music', label: 'Music' },
+  { value: 'Art', label: 'Art' },
+  { value: 'Costume Design  ', label: 'Costume' },
+  { value: 'Makeup', label: 'Makeup' },
+  { value: 'Special Effects', label: 'Special Effects' },
+  { value: 'Other', label: 'Other' },
 ];
 
 export const genderOptions = [

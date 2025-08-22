@@ -1,9 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { AccountStates } from '@core/models/account.model';
 import { CardType } from '@core/utils/enums';
+import { AdminPerson } from '@features/admin/people/models/admin-person.model';
 import { Cast } from '@features/client/movies/models/credit.model';
 import { Movie } from '@features/client/movies/models/movie.model';
-import { Person } from '@features/client/people/models/person.model';
-import { TVShow } from '@features/client/tv-shows/models/tv-show.model';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -28,28 +28,32 @@ export class CardComponent implements OnInit {
   // Expose enum to template
   CardType = CardType;
 
+  // showRatingModal = false;
+  // accountStates: AccountStates | null = null;
+  // handleRating(data: { data: Movie; accountStates: AccountStates }) {
+  //   this.showRatingModal = true;
+  //   this.accountStates = data.accountStates;
+  // }
+  // handleCloseRatingModal() {
+  //   this.showRatingModal = false;
+  // }
+
   constructor() {}
 
   getPosterPath() {
     switch (this.type) {
       case CardType.MOVIE:
-        if ((this.data as Movie).poster_path) {
+        if ((this.data as Movie).posterPath) {
           this.hasImage = true;
-          return this.imageBaseUrl + (this.data as Movie).poster_path;
+          return (this.data as Movie).posterPath;
         }
         this.hasImage = false;
         return 'assets/icons/picture.svg';
-      case CardType.TV_SHOW:
-        if ((this.data as TVShow).poster_path) {
-          this.hasImage = true;
-          return this.imageBaseUrl + (this.data as TVShow).poster_path;
-        }
-        this.hasImage = false;
-        return 'assets/icons/picture.svg';
+
       case CardType.CAST:
-        if ((this.data as Cast).profile_path) {
+        if ((this.data as AdminPerson).profilePath) {
           this.hasImage = true;
-          return this.imageBaseUrl + (this.data as Cast).profile_path;
+          return (this.data as AdminPerson).profilePath;
         }
         this.hasImage = false;
         return 'assets/icons/picture.svg';
@@ -62,9 +66,7 @@ export class CardComponent implements OnInit {
   renderScore() {
     switch (this.type) {
       case CardType.MOVIE:
-        return (this.data as Movie).vote_average;
-      case CardType.TV_SHOW:
-        return (this.data as TVShow).vote_average;
+        return (this.data as Movie).voteAverage;
       default:
         return 0;
     }
@@ -73,9 +75,7 @@ export class CardComponent implements OnInit {
   renderDate() {
     switch (this.type) {
       case CardType.MOVIE:
-        return (this.data as Movie).release_date;
-      case CardType.TV_SHOW:
-        return (this.data as TVShow).first_air_date;
+        return (this.data as Movie).releaseDate;
       default:
         return '';
     }
@@ -85,8 +85,6 @@ export class CardComponent implements OnInit {
     switch (this.type) {
       case CardType.MOVIE:
         return (this.data as Movie).title;
-      case CardType.TV_SHOW:
-        return (this.data as TVShow).name;
       case CardType.CAST:
         return (this.data as Cast).name;
 
@@ -96,26 +94,19 @@ export class CardComponent implements OnInit {
   }
   renderKnownForText(): string {
     if (
-      !(this.data as Person).known_for ||
-      (this.data as Person).known_for.length === 0
+      (this.data as AdminPerson).career &&
+      (this.data as AdminPerson).career === ''
     ) {
       return 'Unknown';
     }
-    return (this.data as Person).known_for
-      .map((data: any) => {
-        if (data.name) return data.name;
-        return data.title;
-      })
-      .join(', ');
+    return (this.data as AdminPerson).career;
   }
   renderLink() {
     switch (this.type) {
       case CardType.MOVIE:
-        return this.moviePath + String((this.data as Movie).id);
-      case CardType.TV_SHOW:
-        return this.tvPath + String((this.data as TVShow).id);
+        return this.moviePath + String((this.data as AdminPerson).id);
       case CardType.CAST:
-        return this.castPath + String((this.data as Cast).id);
+        return this.castPath + String((this.data as AdminPerson).id);
       default:
         return '';
     }

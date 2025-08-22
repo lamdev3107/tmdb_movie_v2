@@ -7,6 +7,5 @@ export enum NotifyMessageType {
 
 export enum CardType {
   MOVIE = 'movie',
-  TV_SHOW = 'tv_show',
   CAST = 'cast',
 }

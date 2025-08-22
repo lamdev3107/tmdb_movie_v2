@@ -8,8 +8,8 @@
       <app-search-card [item]="movie" [type]="activeTabId"></app-search-card>
     </div>
     <app-pagination
-      [totalPages]="data.total_pages"
-      [currentPage]="data.page"
+      [totalPages]="data.metaInfo.totalPages"
+      [currentPage]="data.metaInfo.page"
       (pageChange)="onPageChange($event)"
     ></app-pagination>
   </div>

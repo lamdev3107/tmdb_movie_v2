@@ -24,7 +24,6 @@ export class LoginComponent implements OnInit {
       username: ['', [Validators.required, Validators.minLength(3)]],
       password: ['', [Validators.required, Validators.minLength(3)]],
     });
-    console.log('Check token', this.authService.getToken());
 
     // Debug: Log form status changes
     // this.form.statusChanges.subscribe((status) => {});

@@ -47,6 +47,30 @@ export class AuthService {
     return this.http.post<string>(`${this.apiUrl}auth/logout`, httpOptions);
   }
 
+  register(credentials: LoginResquest): Observable<SuccessResponse> {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+      }),
+      withCredentials: true,
+    };
+    return this.http.post<SuccessResponse>(
+      `${this.apiUrl}auth/register`,
+      JSON.stringify(credentials),
+      httpOptions
+    );
+  }
+
+  getUserInfo(): Observable<SuccessResponse> {
+    const httpOptions = {
+      withCredentials: true,
+    };
+    return this.http.get<SuccessResponse>(
+      `${this.apiUrl}auth/account`,
+      httpOptions
+    );
+  }
+
   clearToken(): void {
     localStorage.removeItem('token');
     this.tokenSubject.next(null);

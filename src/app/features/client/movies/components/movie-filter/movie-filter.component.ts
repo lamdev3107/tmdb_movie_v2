@@ -1,11 +1,13 @@
-import {
-  ConfigurationService,
-  Country,
-  Language,
-} from '../../../../../core/services/configuration.service';
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
-import { GenreListResponse } from '@core/models/genre.model';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Country } from '@core/models/country.model';
+import { Genre } from '@core/models/genre.model';
+import { Language, LanguageResponseData } from '@core/models/language.model';
+import { CountryService } from '@core/services/country.service';
 import { GenreService } from '@core/services/genre.service';
+import { LanguageService } from '@core/services/languague.service';
+import { ToastService } from '@core/services/toast.service';
+import { RangeValue } from '@shared/components/input-range/input-range.component';
 import { SelectOption } from '@shared/components/select/select.component';
 import { ToggleSelectBox } from '@shared/components/toggle-select-box-list/toggle-select-box-list.component';
 
@@ -15,117 +17,172 @@ import { ToggleSelectBox } from '@shared/components/toggle-select-box-list/toggl
   styleUrls: ['./movie-filter.component.scss'],
 })
 export class MovieFilterComponent implements OnInit {
-  releaseTypesOptions = [
-    { value: 1, label: 'Premiere' },
-    { value: 2, label: 'Theatrical (limited)' },
-    { value: 3, label: 'Theatrical' },
-    { value: 4, label: 'Digital' },
-    { value: 5, label: 'Physical' },
-    { value: 6, label: 'TV' },
-  ];
   sortByOptions: SelectOption[] = [
     {
-      value: 'popularity.desc',
-      label: 'Popularity Descending',
-    },
-    {
-      value: 'popularity.asc',
-      label: 'Popularity Ascending',
-    },
-    {
-      value: 'vote_average.desc',
-      label: 'Rating Descending',
-    },
-    {
-      value: 'vote_average.asc',
-      label: 'Rating Ascending',
-    },
-    {
-      value: 'release_date.desc',
+      value: 'releaseDate.desc',
       label: 'Release Date Descending',
     },
     {
-      value: 'release_date.asc',
+      value: 'releaseDate.asc',
       label: 'Release Date Ascending',
+    },
+    {
+      value: 'title.desc',
+      label: 'Title Descending',
+    },
+    {
+      value: 'title.asc',
+      label: 'Title Ascending',
+    },
+    {
+      value: 'voteaverage.desc',
+      label: 'Rating Descending',
+    },
+    {
+      value: 'voteaverage.asc',
+      label: 'Rating Ascending',
     },
   ];
 
-  // Template-driven form properties
-  sortBy: string = 'popularity.desc';
-  categoryValue: string = 'popular';
-  region: string = '';
-  language: string = 'en';
-  genres: any[] = [];
-  releaseTypes: any[] = [1, 2, 3, 4, 5, 6];
+  movieForm: FormGroup;
+
   dateFrom: string = '';
   dateTo: string = '';
   isSearchAllReleases: boolean = true;
   isSearchAllCountries: boolean = false;
   selectedKeywords: number[] = [];
 
-  movieGenres: ToggleSelectBox[] = [];
   countryOptions: SelectOption[] = [];
   languageOptions: SelectOption[] = [];
+  genreOptions: SelectOption[] = [];
 
   @Input() filterObject = {};
   @Input() category = {};
   @Output() onClickFilter = new EventEmitter<any>();
 
   constructor(
+    private fb: FormBuilder,
     private genreService: GenreService,
-    private configurationService: ConfigurationService
-  ) {}
+    private languageService: LanguageService,
+    private countryService: CountryService,
+    private toastService: ToastService
+  ) {
+    this.movieForm = this.fb.group({
+      isSearchAllCountries: [true],
+      title: ['', []],
+      sortBy: ['releaseDate.desc', []],
+      countryIds: [[]],
+      languageIds: [[]],
+      genreIds: [[]],
+      fromReleaseDate: [],
+      toReleaseDate: [],
+      runtimeRange: [{ min: 0, max: 360 }],
+      ratingRange: [{ min: 0, max: 100 }],
+    });
+  }
 
   ngOnInit() {
     this.loadGenres();
     this.loadCountries();
     this.loadLanguages();
+    this.movieForm
+      .get('isSearchAllCountries')
+      ?.valueChanges.subscribe((value: boolean) => {
+        if (value) {
+          this.movieForm.get('countryIds')?.setValue([]);
+        }
+      });
   }
 
-  // Method to handle filter button click
-  onFilterClick() {
-    let formData = {
-      sort_by: this.sortBy,
-      with_origin_country: this.region,
-      with_original_language: this.language,
-      with_genres: this.genres.join(','),
-      with_release_type: this.releaseTypes,
-      with_keywords: this.selectedKeywords.join(','),
-      primary_release_date_gte: this.dateFrom,
-      primary_release_date_lte: this.dateTo,
-    };
+  onSubmit(): void {
+    let filterObject = {};
 
-    this.onClickFilter.emit(formData);
-  }
-
-  // Methods for handling custom component events
-  onChangeSelectGenreList(selectedValues: ToggleSelectBox[]) {
-    this.genres = selectedValues.map((item: any) => item.value);
-  }
-
-  onChangeSelectReleaseType(selectedValues: ToggleSelectBox[]) {
-    this.releaseTypes = selectedValues.map((item: any) => item.value);
-  }
-
-  handleSelectCountry(value: string) {
-    this.region = value;
-  }
-
-  // Method to handle isSearchAllReleases change
-  onSearchAllReleasesChange() {
-    if (this.isSearchAllReleases === false) {
-      this.isSearchAllCountries = true;
+    // Kiểm tra các trường invalid
+    if (this.movieForm.invalid) {
+      this.movieForm.markAllAsTouched();
+      // Log ra các trường invalid
+      const invalidControls = Object.keys(this.movieForm.controls).filter(
+        (key) => this.movieForm.get(key)?.invalid
+      );
+      console.log('Các trường invalid:', invalidControls);
+      // Hiển thị thông báo lỗi hoặc dừng submit
+      return;
     }
+    // Kiểm tra giá trị của form
+
+    const sortBy = this.movieForm.value.sortBy.split('.');
+    const sortDirection = sortBy[1];
+    const sortField = sortBy[0];
+    // Thêm các trường trên vào filterObject
+    filterObject = {
+      title: this.movieForm.value.title,
+      sortBy: sortField,
+      sortDirection: sortDirection,
+      countryIds: this.movieForm.value.countryIds
+        .map((item: SelectOption) => item.value)
+        .join(','),
+      languageIds: this.movieForm.value.languageIds
+        .map((item: SelectOption) => item.value)
+        .join(','),
+      genreIds: this.movieForm.value.genreIds
+        .map((item: SelectOption) => item.value)
+        .join(','),
+      fromReleaseDate: this.movieForm.value.fromReleaseDate,
+      toReleaseDate: this.movieForm.value.toReleaseDate,
+      minRuntime: this.movieForm.value.runtimeRange.min,
+      maxRuntime: this.movieForm.value.runtimeRange.max,
+      minVoteAverage: this.movieForm.value.ratingRange.min,
+      maxVoteAverage: this.movieForm.value.ratingRange.max,
+    };
+    this.onClickFilter.emit(filterObject);
   }
 
-  onKeywordsChange(keywords: number[]) {
-    this.selectedKeywords = keywords;
+  onRatingRangeChange(value: RangeValue) {
+    // console.log('Range changed:', value);
+  }
+  onRuntimeRangeChange(value: RangeValue) {
+    // console.log('Range changed:', value);
+  }
+  handleQueryLanguageChange(query: string) {
+    this.loadLanguages(1, 30, query);
+  }
+  handleQueryGenreChange(query: string) {
+    this.loadGenres(1, 30, query);
+  }
+  handleQueryCountryChange(query: string) {
+    this.loadCountries(1, 30, query);
   }
 
-  loadGenres() {
-    this.genreService.getMovieGenreList().subscribe({
-      next: (res: GenreListResponse) => {
-        this.movieGenres = res.genres.map((item) => {
+  loadLanguages(page: number = 1, size: number = 30, keyword: string = '') {
+    this.languageService.getLanguages(page, size, keyword).subscribe({
+      next: (res: LanguageResponseData) => {
+        const languages = res.results;
+
+        this.languageOptions = languages.map((item: Language) => {
+          return {
+            value: item.id,
+            label: item.name,
+          };
+        });
+      },
+    });
+  }
+  loadCountries(page: number = 1, size: number = 30, keyword: string = '') {
+    this.countryService.getCountries(page, size, keyword).subscribe({
+      next: (res: any) => {
+        this.countryOptions = res.map((item: Country) => {
+          return {
+            value: item.id,
+            label: item.name,
+          };
+        });
+      },
+    });
+  }
+  loadGenres(page: number = 1, size: number = 30, keyword: string = '') {
+    this.genreService.getGenres(page, size, keyword).subscribe({
+      next: (res: any) => {
+        this.genreOptions = res.results.map((item: Genre) => {
           return {
             value: item.id,
             label: item.name,
@@ -135,45 +192,35 @@ export class MovieFilterComponent implements OnInit {
     });
   }
 
-  loadCountries() {
-    this.configurationService.getCountries().subscribe({
-      next: (res: any) => {
-        this.countryOptions = res.map((item: Country) => {
-          return {
-            value: item.iso_3166_1,
-            label: item.english_name,
-          };
-        });
-      },
+  onClear() {
+    this.movieForm.reset({
+      isSearchAllCountries: false,
+      title: "['', []]",
+      sortBy: 'releaseDate.desc',
+      countryIds: [],
+      languageIds: [],
+      genreIds: [],
+      fromReleaseDate: [],
+      toReleaseDate: [],
+      runtimeRange: { min: 0, max: 360 },
+      ratingRange: { min: 0, max: 100 },
     });
-  }
-
-  loadLanguages() {
-    this.configurationService.getLanguages().subscribe({
-      next: (res: any) => {
-        this.languageOptions = res.map((item: Language) => {
-          return {
-            value: item.iso_639_1,
-            label: item.english_name,
-          };
-        });
-      },
-    });
+    this.onClickFilter.emit({});
   }
 
   // Method to reset form
-  resetForm() {
-    this.sortBy = 'popularity.desc';
-    this.categoryValue = 'popular';
-    this.region = 'US';
-    this.language = 'en';
-    this.genres = [];
-    this.releaseTypes = [1, 2, 3, 4, 5, 6];
-    this.selectedKeywords = [];
-    this.dateTo = '';
-    this.isSearchAllReleases = true;
-    this.isSearchAllCountries = false;
-  }
+  // resetForm() {
+  //   this.sortBy = 'popularity.desc';
+  //   this.categoryValue = 'popular';
+  //   this.region = 'US';
+  //   this.language = 'en';
+  //   this.genres = [];
+  //   this.releaseTypes = [1, 2, 3, 4, 5, 6];
+  //   this.selectedKeywords = [];
+  //   this.dateTo = '';
+  //   this.isSearchAllReleases = true;
+  //   this.isSearchAllCountries = false;
+  // }
 
   // Method to get form values
 }

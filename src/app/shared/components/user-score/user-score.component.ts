@@ -42,13 +42,13 @@ export class UserScoreComponent implements OnInit, OnChanges {
   setSize(): void {
     if (this.size === 'small') {
       this.radius = 16;
-      this.fontSize = 12;
+      this.fontSize = 11;
       this.strokeWidth = 4;
       this.padding = 10;
     }
     if (this.size === 'medium') {
       this.radius = 24;
-      this.fontSize = 16;
+      this.fontSize = 15;
       this.strokeWidth = 6;
       this.padding = 15;
     }
@@ -64,7 +64,7 @@ export class UserScoreComponent implements OnInit, OnChanges {
       return '#ef4444'; // Đỏ
     } else if (this.progressPercentage <= 60) {
       return '#f59e42'; // Cam
-    } else if (this.progressPercentage <= 70) {
+    } else if (this.progressPercentage <= 75) {
       return '#ced141'; // Vàng
     } else {
       return '#34c085'; // Xanh lá
@@ -76,7 +76,7 @@ export class UserScoreComponent implements OnInit, OnChanges {
       this.setSize();
     }
     if (changes['score']) {
-      this.score = Math.round((this.score || 0) * 10);
+      this.score = Math.round(this.score || 0);
       this.calculateProgress();
     }
   }

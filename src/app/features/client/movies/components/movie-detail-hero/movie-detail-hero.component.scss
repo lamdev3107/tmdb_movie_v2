@@ -88,12 +88,34 @@
     &-label {
       @include font-base(2rem, $bold, $grey-80, 1.5);
     }
+
+    &-button {
+      @include font-base(1.8rem, $regular, $grey-65, 1.5);
+      display: flex;
+      width: fit-content;
+      align-items: center;
+      gap: 0.5rem;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      svg {
+        width: 2.4rem;
+        height: 2.4rem;
+      }
+    }
+    &-button:hover {
+      text-decoration: underline;
+    }
   }
 
   &__actions {
     display: flex;
     gap: 2rem;
     margin-top: 0.5rem;
+    svg {
+      width: 2.4rem;
+      height: 2.4rem;
+    }
   }
 
   &__tagline {

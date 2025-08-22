@@ -42,11 +42,11 @@
           <ng-container>
             <div
               class="sidebar__poster"
-              *ngIf="personState?.data?.profile_path; else noPoster"
+              *ngIf="personState?.data?.profilePath; else noPoster"
             >
               <img
                 class="sidebar__poster-image"
-                [src]="personState?.data?.profile_path | imageUrl : 500 : false"
+                [src]="personState?.data?.profilePath"
                 [alt]="personState?.data?.name"
                 loading="lazy"
               />
@@ -64,7 +64,7 @@
           </ng-container>
 
           <div class="sidebar-info">
-            <div class="sidebar-item">
+            <!-- <div class="sidebar-item">
               <h2 class="sidebar-item__title">Pages</h2>
               <div *ngIf="personState?.data?.homepage === ''">
                 <p class="sidebar-item__content">No homepage</p>
@@ -97,13 +97,13 @@
                   </svg>
                 </a>
               </app-tooltip>
-            </div>
+            </div> -->
 
             <!-- Know For Department -->
             <div class="sidebar-item">
               <h3 class="sidebar-item__title">Known For</h3>
               <p class="sidebar-item__content">
-                {{ personState?.data?.known_for_department }}
+                {{ personState?.data?.career }}
               </p>
             </div>
 
@@ -119,8 +119,8 @@
             <div class="sidebar-item">
               <h3 class="sidebar-item__title">Birth Day</h3>
               <p class="sidebar-item__content">
-                {{ personState?.data?.birthday | date : "dd/MM/yyyy" }}
-                ({{ calculateAge(personState?.data?.birthday) }} years old)
+                {{ personState?.data?.birthDate | date : "dd/MM/yyyy" }}
+                ({{ calculateAge(personState?.data?.birthDate) }} years old)
               </p>
             </div>
 
@@ -128,18 +128,7 @@
             <div class="sidebar-item">
               <h3 class="sidebar-item__title">Place of Birth</h3>
               <p class="sidebar-item__content">
-                {{ personState?.data?.place_of_birth }}
-              </p>
-            </div>
-
-            <!-- Also Known As -->
-            <div class="sidebar-item">
-              <h3 class="sidebar-item__title">Also Known As</h3>
-              <p
-                class="sidebar-item__content"
-                *ngFor="let name of personState?.data?.also_known_as"
-              >
-                {{ name }}
+                {{ personState?.data?.placeOfBirth }}
               </p>
             </div>
           </div>
@@ -187,29 +176,23 @@
             <!-- Known For -->
             <div class="bio__known-for">
               <h2 class="bio__known-for-text">Known For</h2>
-              <ng-container *ngIf="knownForState$ | async as knownForState">
-                <div
-                  class="bio__known-for-content"
-                  *ngIf="
-                    knownForState?.data?.cast?.length ||
-                    knownForState?.data?.crew?.length
-                  "
-                >
+              <ng-container *ngIf="personMovies">
+                <div class="bio__known-for-content">
                   <div
                     class="bio__known-for-item"
-                    *ngFor="let item of knownForState?.data?.cast"
+                    *ngFor="let item of personMovies"
                   >
                     <img
                       class="bio__known-for-item-image"
-                      [src]="item.poster_path | imageUrl : 500 : false"
-                      [alt]="item.title || item.name"
+                      [src]="item.posterPath"
+                      [alt]="item.title"
                       loading="lazy"
                     />
                     <a
                       [href]="renderKnowForLink(item)"
                       class="bio__known-for-item-title"
                     >
-                      {{ item?.title || item?.name }}
+                      {{ item?.title }}
                     </a>
                   </div>
                 </div>
@@ -217,7 +200,7 @@
             </div>
           </div>
 
-          <ng-container *ngIf="creditState$ | async as creditState">
+          <!-- <ng-container *ngIf="creditState$ | async as creditState">
             <div class="credit">
               <h2 class="credit__title">Acting Credits</h2>
               <div class="credit__content">
@@ -251,7 +234,7 @@
                 </ng-container>
               </div>
             </div>
-          </ng-container>
+          </ng-container> -->
         </div>
       </div>
     </ng-container>

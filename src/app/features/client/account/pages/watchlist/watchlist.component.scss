@@ -2,9 +2,33 @@
 @use "../../../../../../assets/styles/base.scss" as *;
 @use "../../../../../../assets/styles/mixins.scss" as *;
 
+.watchlist-page {
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 3rem;
+  }
+  .add-btn {
+    background: $green;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    border: none;
+    cursor: pointer;
+    padding: 1rem 1.5rem;
+    border-radius: 4px;
+    @include font-base(1.5rem, $semi-bold, $white);
+    i {
+      font-size: 1.5rem;
+    }
+  }
+  .add-btn:hover {
+    filter: brightness(1.1);
+  }
+}
 .watchlist-title {
   @include font-base(2.4rem, $bold, $white);
-  margin-bottom: 1rem;
 }
 
 .action-button {
@@ -19,36 +43,84 @@
   }
 }
 
-.watchlist-sub-tabs {
-  margin-top: 1rem;
-}
-
-.sub-tab-content {
-  margin-top: 1rem;
-}
-
-.sub-tab-panel {
-  min-height: 300px;
-}
-
 // Watchlist Items
 .watchlist-items {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
+  border: 1px solid $black-20;
+  border-radius: 8px;
+  background: $black-10;
+  overflow: hidden;
+  transition: box-shadow 0.2s ease;
 }
 
-.watchlist-item {
+.watchlist-card {
   display: flex;
   gap: 1.5rem;
   padding: 1.5rem;
   border: 1px solid $black-20;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
   border-radius: 8px;
-  background: $white;
+  background: $black-15;
   transition: box-shadow 0.2s ease;
 
   &:hover {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    &-title {
+      @include font-base(1.6rem, $bold, $white);
+    }
+    &-title-link {
+      @include font-base(1.6rem, $bold, $white);
+      text-decoration: none;
+      &:hover {
+        color: $primary;
+        text-decoration: underline;
+      }
+    }
+    &-actions {
+      display: flex;
+      gap: 1rem;
+    }
+    i {
+      font-size: 2rem;
+      color: $white;
+    }
+    button {
+      width: 3.5rem;
+      height: 3.5rem;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .edit-btn {
+      background: $yellow;
+      border: none;
+      cursor: pointer;
+      padding: 0.5rem;
+      border-radius: 4px;
+    }
+    .delete-btn {
+      background: $red-45;
+      border: none;
+      cursor: pointer;
+      padding: 0.5rem;
+      border-radius: 4px;
+    }
+  }
+  &__body {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  &__body-content {
+    @include font-base(1.4rem, $regular, $grey-65);
   }
 }
 

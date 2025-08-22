@@ -56,36 +56,64 @@
           [class.header__user-menu--open]="isUserMenuOpen"
         >
           <div class="header__user-menu-item">
-            <!-- <a routerLink="/account" (click)="closeUserMenu()">
-              <img src="assets/icons/user-solid.svg" alt="User" />
-              <ng-container *ngIf="accountDetails$ | async as accountDetails">
-                <span>{{ accountDetails.username }}</span>
-              </ng-container>
-            </a> -->
-            <a
-              class="header__user-menu-item-link"
-              routerLink="/account/lists"
-              (click)="onClickCloseMenuBurger()"
-            >
-              <img src="assets/icons/heart-white.svg" alt="User" />
-              <span>My Lists</span>
-            </a>
-            <a
-              class="header__user-menu-item-link"
-              routerLink="/account/watchlist"
-              (click)="onClickCloseMenuBurger()"
-            >
-              <img src="assets/icons/bookmark.svg" alt="User" />
-              <span>My Watchlist</span>
-            </a>
-            <a
-              class="header__user-menu-item-link"
-              routerLink="/account/favorite"
-              (click)="onClickCloseMenuBurger()"
-            >
-              <img src="assets/icons/heart-white.svg" alt="User" />
-              <span>My Favorites</span>
-            </a>
+            <ng-container *ngIf="!credential; else guestMenu">
+              <a class="header__user-menu-item-link" routerLink="/auth/login">
+                <i class="material-icons">login</i>
+                <span>Sign In</span>
+              </a>
+              <a
+                class="header__user-menu-item-link"
+                routerLink="/auth/register"
+              >
+                <i class="material-icons">person_add</i>
+                <span>Sign Up</span>
+              </a>
+            </ng-container>
+            <ng-template #guestMenu>
+              <!-- <a
+                class="header__user-menu-item-link"
+                routerLink="/account/watchlist"
+                (click)="onClickCloseMenuBurger()"
+              >
+                <img src="assets/icons/bookmark.svg" alt="User" />
+                <span>My Watchlist</span>
+              </a> -->
+              <a
+                class="header__user-menu-item-link"
+                routerLink="/account/favorite"
+                (click)="onClickCloseMenuBurger()"
+              >
+                <img src="assets/icons/heart-white.svg" alt="User" />
+                <span>My Favorites</span>
+              </a>
+              <a
+                class="header__user-menu-item-link"
+                routerLink="/account/rating"
+                (click)="onClickCloseMenuBurger()"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  class="size-6"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+                <span>My Rated Movies</span>
+              </a>
+              <div class="header__user-menu-divider"></div>
+              <button
+                class="header__user-menu-item-link"
+                (click)="onClickLogout()"
+              >
+                <i class="material-icons">logout</i>
+                <span>Logout</span>
+              </button>
+            </ng-template>
           </div>
         </div>
       </div>

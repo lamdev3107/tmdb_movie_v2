@@ -278,3 +278,7 @@
     </div>
   </div>
 </form>
+
+<ng-container *ngIf="isSubmitting">
+  <app-loading [isOverlay]="true"></app-loading>
+</ng-container>

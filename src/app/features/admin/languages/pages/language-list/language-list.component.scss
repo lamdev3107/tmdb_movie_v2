@@ -1,0 +1,233 @@
+@use "../../../../../../assets/styles/variables" as *;
+@use "../../../../../../assets/styles/mixins" as *;
+@use "../../../../../../assets/styles/base" as *;
+
+.genre-list-container {
+  background-color: transparent;
+  max-width: calc(1000px);
+  margin: 0 auto;
+}
+
+.genre-form {
+  background-color: $black-15;
+  padding: 1.6rem;
+  border-radius: 12px;
+  .genre-form__title {
+    @include font-base(1.8rem, $bold, $white);
+    margin-bottom: 1rem;
+  }
+}
+
+.form-field {
+  .field-label {
+    display: block;
+    @include font-base(1.5rem, $semi-bold, $grey-84);
+    margin-bottom: 0.5rem;
+
+    .required {
+      color: #e74c3c;
+      margin-right: 0.25rem;
+    }
+  }
+
+  .form-input,
+  .form-select,
+  .form-textarea {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid $black-20;
+    border-radius: 8px;
+    @include font-base(1.5rem, $regular, $grey-80);
+    transition: all 0.3s ease;
+    background: $black-20;
+
+    &:focus {
+      outline: none;
+      border-color: $grey-65;
+    }
+
+    &.error {
+      border-color: #e74c3c;
+      box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1);
+    }
+
+    &::placeholder {
+      color: #bdc3c7;
+    }
+  }
+
+  .form-textarea {
+    resize: vertical;
+    min-height: 120px;
+    font-family: inherit;
+  }
+
+  .error-message {
+    color: #e74c3c;
+    font-size: 0.875rem;
+    margin-top: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    @include font-base(1.5rem, $regular, $red);
+  }
+}
+
+.form-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  margin-top: 1rem;
+  .btn {
+    padding: 0.8rem 1.6rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 120px;
+    @include font-base(1.4rem, $semi-bold, $white);
+
+    &.btn-primary {
+      background: $green;
+
+      &:hover:not(:disabled) {
+        opacity: 0.9;
+      }
+
+      &:disabled {
+        background: $grey-60;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+      }
+    }
+
+    &.btn-secondary {
+      background: $grey-60;
+
+      &:hover {
+        background: $grey-70;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(149, 165, 166, 0.3);
+      }
+    }
+  }
+}
+
+// Table style
+.people-list-header {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+
+  .search-bar {
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1.2rem;
+    border-radius: 8px;
+    border: 1px solid $black-20;
+    background-color: $black-15;
+    gap: 1rem;
+    .form-input {
+      flex: 1;
+      height: 100%;
+      border-radius: 8px;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: $grey-70;
+      font-size: 1.4rem;
+      font-weight: 400;
+      &::placeholder {
+        color: $grey-70;
+      }
+    }
+    .clear-btn {
+      background: transparent;
+      border: none;
+      display: flex;
+      align-items: center;
+      outline: none;
+      cursor: pointer;
+      color: $grey-70;
+      font-size: 1.4rem;
+      font-weight: 400;
+      &:hover {
+        color: $white;
+      }
+    }
+  }
+}
+.table-container {
+  border-radius: 12px;
+  background: $black-15;
+  width: 100%;
+  padding: 0.8rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 1.4rem;
+  @include mq-md {
+    font-size: 1.4rem;
+  }
+
+  th,
+  td {
+    padding: 1rem 1.5rem;
+    text-align: left;
+    border-bottom: 1px solid $black-30;
+    vertical-align: middle;
+    white-space: nowrap;
+    color: $grey-70;
+  }
+
+  th {
+    background-color: $black-15;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    position: sticky;
+    @include font-base(1.5rem, $bold, $white);
+    top: 0;
+    z-index: 10;
+
+    @include mq-md {
+      font-size: 1.4rem;
+    }
+  }
+
+  tbody tr {
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: $black-20;
+    }
+  }
+  tbody td {
+    width: fit-content;
+  }
+}
+
+.add-btn {
+  @include font-base(1.4rem, $bold, $white);
+  padding: 1rem 1.5rem;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: $green;
+  &:hover {
+    opacity: 0.9;
+  }
+}

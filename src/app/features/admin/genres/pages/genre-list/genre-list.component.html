@@ -1,4 +1,76 @@
 <div class="genre-list-container row gx-4">
+  <div class="col-12 col-lg-7">
+    <div class="people-list-header row">
+      <div class="search-bar">
+        <input
+          type="text"
+          class="form-input"
+          placeholder="Enter keyword to search..."
+          [(ngModel)]="searchQuery"
+          (ngModelChange)="onSearchQueryChange($event)"
+          style="width: 300px; margin-right: 1rem"
+        />
+        <button
+          class="clear-btn"
+          (click)="clearQuery()"
+          style="vertical-align: middle"
+        >
+          <i class="material-icons">close</i>
+        </button>
+      </div>
+    </div>
+    <!-- Table Container -->
+    <div class="table-container">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th class="actions-column" style="width: 100px">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let genre of genres; trackBy: trackByGenreId">
+            <td class="id-column">{{ genre.id }}</td>
+            <td class="name-column">{{ genre.name }}</td>
+            <td class="actions-column">
+              <button
+                class="action-btn action-btn--warning"
+                style="margin-right: 0.5rem"
+                title="Chỉnh sửa"
+                (click)="handleClickEditBtn(genre)"
+              >
+                <i class="material-icons">edit</i>
+              </button>
+              <button
+                class="action-btn action-btn--danger"
+                title="Xóa"
+                (click)="deleteGenre(genre.id)"
+              >
+                <i class="material-icons">delete</i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Loading State -->
+    <div *ngIf="loading" class="loading-container">
+      <app-loading></app-loading>
+    </div>
+
+    <!-- Empty State -->
+    <div *ngIf="!loading && genres.length === 0" class="empty-state">
+      <p>No data found.</p>
+    </div>
+
+    <app-pagination
+      [totalPages]="totalPages"
+      [currentPage]="currentPage"
+      (pageChange)="onPageChange($event)"
+    ></app-pagination>
+  </div>
   <div class="col-12 col-lg-5 mb-3">
     <div class="genre-form">
       <h3 class="genre-form__title">
@@ -52,59 +124,6 @@
         </div>
       </form>
     </div>
-  </div>
-  <div class="col-12 col-lg-7">
-    <!-- Table Container -->
-    <div class="table-container">
-      <table class="table">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th class="actions-column">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let genre of genres; trackBy: trackByGenreId">
-            <td class="id-column">{{ genre.id }}</td>
-            <td class="name-column">{{ genre.name }}</td>
-            <td class="actions-column">
-              <button
-                class="action-btn action-btn--warning"
-                style="margin-right: 0.5rem"
-                title="Chỉnh sửa"
-                (click)="handleClickEditBtn(genre)"
-              >
-                <i class="material-icons">edit</i>
-              </button>
-              <button
-                class="action-btn action-btn--danger"
-                title="Xóa"
-                (click)="deleteGenre(genre.id)"
-              >
-                <i class="material-icons">delete</i>
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <!-- Loading State -->
-    <div *ngIf="loading" class="loading-container">
-      <app-loading></app-loading>
-    </div>
-
-    <!-- Empty State -->
-    <div *ngIf="!loading && genres.length === 0" class="empty-state">
-      <p>No data found.</p>
-    </div>
-
-    <app-pagination
-      [totalPages]="totalPages"
-      [currentPage]="currentPage"
-      (pageChange)="onPageChange($event)"
-    ></app-pagination>
   </div>
 </div>
 s

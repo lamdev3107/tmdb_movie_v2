@@ -20,6 +20,9 @@ export class GenreListComponent implements OnInit {
   genreForm: FormGroup;
   isSubmitting = false;
 
+  searchQuery = '';
+  private debounceTimeout: any;
+
   constructor(
     private genreService: GenreService,
     private toastService: ToastService,
@@ -34,12 +37,27 @@ export class GenreListComponent implements OnInit {
     this.loadGenres();
   }
 
+  clearQuery(): void {
+    this.searchQuery = '';
+    this.onSearchQueryChange('');
+  }
+
+  onSearchQueryChange(keyword: string): void {
+    // Sử dụng debounce 500ms thì mới gọi loadPeople
+    if (this.debounceTimeout) {
+      clearTimeout(this.debounceTimeout);
+    }
+    this.searchQuery = keyword;
+    this.debounceTimeout = setTimeout(() => {
+      this.loadGenres(1, 8, this.searchQuery);
+    }, 500);
+  }
+
   loadGenres(page: number = 1, size: number = 8, keyword: string = ''): void {
     this.loading = true;
     this.genreService.getGenres(page, size, keyword).subscribe({
       next: (response: GenreResponseData) => {
         const { metaInfo, results } = response;
-        console.log('chekc response', response);
         this.genres = results;
         this.currentPage = metaInfo.page;
         this.totalPages = metaInfo.totalPages;
@@ -70,7 +88,6 @@ export class GenreListComponent implements OnInit {
   }
 
   handleClickEditBtn(genre: Genre): void {
-    console.log('Chekc genre', genre);
     this.editingGenre = genre;
     this.populateForm();
     // this.router.navigate(['/admin/people/edit', id]);

@@ -13,6 +13,27 @@ export interface Cast {
   order: number;
 }
 
+export interface MovieCast {
+  characterName: string;
+  job: string;
+  personDTO: {
+    biography: string;
+    birthdate: string;
+    career: string;
+    created_at: string;
+    created_by: string;
+    deathdate: string | null;
+    gender: string;
+    id: number;
+    name: string;
+    placeOfBirth: string;
+    profilePath: string;
+    profilePublicId: string;
+    updated_at: string;
+    updated_by: string;
+  };
+}
+
 export interface Crew {
   adult: boolean;
   gender: number;

@@ -23,14 +23,17 @@
 </div>
 <div class="section trending-movie-section">
   <div class="section-header">
-    <h2 class="section-header__title">Trending Movies</h2>
-    <app-toggle-switch
-      [options]="trendingOptions"
-      [defaultValue]="selectedTimeWindow"
-      (optionChanged)="onTrendingWindowChanged($event)"
-    ></app-toggle-switch>
+    <h2 class="section-header__title">Top Rated Movies</h2>
   </div>
-  <app-movie-carousel [type]="'movie'" [movieList]="trendingMovieList">
+  <app-movie-carousel [type]="'movie'" [movieList]="topRatedMovieList">
+  </app-movie-carousel>
+</div>
+
+<div class="section popular-tv-shows-section">
+  <div class="section-header">
+    <h2 class="section-header__title">Popular Movies</h2>
+  </div>
+  <app-movie-carousel [type]="'movie'" [movieList]="popularMovieList">
   </app-movie-carousel>
 </div>
 
@@ -38,13 +41,17 @@
   <div class="section-header">
     <h2 class="section-header__title">Latest Trailer</h2>
   </div>
-  <app-trailers-carousel [trailerList]="trailerList"> </app-trailers-carousel>
+  <app-trailers-carousel [movies]="topRatedMovieList"> </app-trailers-carousel>
 </div>
 
-<div class="section popular-tv-shows-section">
+<!-- <div class="section popular-tv-shows-section">
   <div class="section-header">
     <h2 class="section-header__title">Popular TV Shows</h2>
   </div>
   <app-movie-carousel [type]="'tv'" [tvShowList]="popularTVShowList">
   </app-movie-carousel>
-</div>
+</div> -->
+<app-loading
+  *ngIf="loadingService.loading$ | async"
+  [isOverlay]="true"
+></app-loading>

@@ -118,6 +118,56 @@
 }
 
 // Table style
+.people-list-header {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+
+  .search-bar {
+    width: 100%;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1.2rem;
+    border-radius: 8px;
+    border: 1px solid $black-20;
+    background-color: $black-15;
+    gap: 1rem;
+    .form-input {
+      flex: 1;
+      height: 100%;
+      border-radius: 8px;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: $grey-70;
+      font-size: 1.4rem;
+      font-weight: 400;
+      &::placeholder {
+        color: $grey-70;
+      }
+    }
+    .clear-btn {
+      background: transparent;
+      border: none;
+      display: flex;
+      align-items: center;
+      outline: none;
+      cursor: pointer;
+      color: $grey-70;
+      font-size: 1.4rem;
+      font-weight: 400;
+      &:hover {
+        color: $white;
+      }
+    }
+  }
+}
 .table-container {
   border-radius: 12px;
   background: $black-15;
@@ -137,7 +187,7 @@
 
   th,
   td {
-    padding: 1.4rem;
+    padding: 1rem;
     text-align: left;
     border-bottom: 1px solid $black-30;
     vertical-align: middle;

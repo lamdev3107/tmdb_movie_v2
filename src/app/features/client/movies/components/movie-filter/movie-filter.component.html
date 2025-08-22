@@ -1,98 +1,67 @@
-<form class="movie-filter">
+<form class="movie-filter" [formGroup]="movieForm">
   <div class="filter-section">
     <h4 class="filter-section__title">Sort</h4>
     <div class="filter-item">
       <p class="filter-item__title">Sort Result By</p>
-      <app-select
-        [optionList]="sortByOptions"
-        [selectedOptionValue]="sortBy"
-        (onSelectChange)="sortBy = $event"
-        [searchable]="true"
-      ></app-select>
+
+      <select id="job" formControlName="sortBy" class="form-select">
+        <option *ngFor="let option of sortByOptions" [value]="option.value">
+          {{ option.label }}
+        </option>
+      </select>
     </div>
   </div>
   <div class="filter-section">
     <h4 class="filter-section__title">Filters</h4>
-    <!-- <app-input-radio-group
-      [options]="categoryOptions"
-      [defaultValue]="categoryValue"
-      [inline]="true"
-      (onChangeValue)="categoryValue = $event"
-    ></app-input-radio-group> -->
 
     <div class="filter-item">
-      <h4 class="filter-item__title">Release Date</h4>
-      <div class="checkbox-select">
-        <input
-          id="searchAllReleases"
-          name="isSearchAllReleases"
-          class="checkbox-select__input"
-          type="checkbox"
-          [(ngModel)]="isSearchAllReleases"
-          (ngModelChange)="onSearchAllReleasesChange()"
-        />
-        <label class="checkbox-select__label" for="searchAllReleases"
-          >Search all releases?</label
-        >
-      </div>
-
-      <div *ngIf="!isSearchAllReleases" class="checkbox-select">
+      <div class="checkbox-select my-2">
         <input
           id="searchAllCountries"
           name="isSearchAllCountries"
           class="checkbox-select__input"
           type="checkbox"
-          [(ngModel)]="isSearchAllCountries"
+          formControlName="isSearchAllCountries"
         />
         <label class="checkbox-select__label" for="searchAllCountries"
-          >Search all countries?</label
+          >Search all release countries?</label
         >
       </div>
 
-      <ng-container *ngIf="!isSearchAllReleases && !isSearchAllCountries">
-        <app-select
-          [optionList]="countryOptions"
-          [selectedOptionValue]="region"
-          (onSelectChange)="handleSelectCountry($event)"
-          [searchable]="true"
-        ></app-select>
+      <ng-container *ngIf="!movieForm.get('isSearchAllCountries')?.value">
+        <app-input-chip-list
+          [options]="countryOptions"
+          formControlName="countryIds"
+          (onInputChange)="handleQueryCountryChange($event)"
+        ></app-input-chip-list>
       </ng-container>
 
-      <ng-container *ngIf="!isSearchAllReleases">
-        <app-toggle-select-box-list
-          [list]="releaseTypesOptions"
-          (onChangeSelectList)="onChangeSelectReleaseType($event)"
-        ></app-toggle-select-box-list>
-      </ng-container>
+      <div class="movie-release-date my-2">
+        <h4 class="filter-item__title">Release Date</h4>
 
-      <div class="movie-release-date">
         <div class="movie-release-date__item">
-          <p class="movie-release-date__item-title">From</p>
+          <label for="fromReleaseDate" class="movie-release-date__item-title"
+            >From</label
+          >
           <input
             type="date"
-            name="dateFrom"
-            [(ngModel)]="dateFrom"
+            id="fromReleaseDate"
+            formControlName="fromReleaseDate"
             class="movie-release-date__item-input"
           />
         </div>
         <div class="movie-release-date__item">
-          <p class="movie-release-date__item-title">To</p>
+          <label for="toReleaseDate" class="movie-release-date__item-title"
+            >To</label
+          >
           <input
             type="date"
-            name="dateTo"
-            [(ngModel)]="dateTo"
+            id="toReleaseDate"
+            formControlName="toReleaseDate"
             class="movie-release-date__item-input"
           />
         </div>
       </div>
-    </div>
-
-    <div class="filter-item">
-      <h4 class="filter-item__title">Genres</h4>
-      <app-toggle-select-box-list
-        [list]="movieGenres"
-        (onChangeSelectList)="onChangeSelectGenreList($event)"
-      ></app-toggle-select-box-list>
     </div>
 
     <div class="filter-item">
@@ -101,28 +70,64 @@
         position="top"
         [delay]="200"
       >
-        <p class="filter-item__title">Language</p>
+        <label for="languageIds" class="filter-item__title">Language</label>
       </app-tooltip>
-      <app-select
-        [optionList]="languageOptions"
-        [selectedOptionValue]="language"
-        (onSelectChange)="language = $event"
-        [searchable]="true"
-      ></app-select>
+      <app-input-chip-list
+        id="languageIds"
+        [options]="languageOptions"
+        formControlName="languageIds"
+        (onInputChange)="handleQueryLanguageChange($event)"
+      ></app-input-chip-list>
     </div>
 
     <div class="filter-item">
-      <h4 class="filter-item__title">Keywords</h4>
-      <app-input-keyword (keywordsChange)="onKeywordsChange($event)">
-      </app-input-keyword>
+      <label for="genres" class="filter-item__title">Genres</label>
+      <app-input-chip-list
+        id="genres"
+        [options]="genreOptions"
+        formControlName="genreIds"
+        (onInputChange)="handleQueryGenreChange($event)"
+      ></app-input-chip-list>
+    </div>
+
+    <div class="filter-item px-2">
+      <app-input-range
+        title="Runtime"
+        [min]="0"
+        [max]="360"
+        [step]="15"
+        formControlName="runtimeRange"
+        (valueChange)="onRuntimeRangeChange($event)"
+      >
+      </app-input-range>
+    </div>
+
+    <div class="filter-item px-2">
+      <app-input-range
+        title="Rating"
+        [min]="0"
+        [max]="100"
+        [step]="5"
+        formControlName="ratingRange"
+        (valueChange)="onRatingRangeChange($event)"
+      >
+      </app-input-range>
     </div>
   </div>
-
-  <app-button
-    class="movies-page__sidebar-button"
-    [size]="'full-width'"
-    (click)="onFilterClick()"
-  >
-    Filter
-  </app-button>
+  <div class="d-flex gap-2">
+    <button
+      type="submit"
+      class="movies-page__sidebar-button movies-page__sidebar-button--clear flex-1"
+      (click)="onClear()"
+    >
+      Clear
+    </button>
+    <button
+      type="submit"
+      class="movies-page__sidebar-button movies-page__sidebar-button--filter flex-1"
+      (click)="onSubmit()"
+    >
+      Filter
+    </button>
+  </div>
 </form>

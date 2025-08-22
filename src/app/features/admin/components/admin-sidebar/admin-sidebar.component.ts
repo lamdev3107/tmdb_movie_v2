@@ -36,9 +36,9 @@ export class AdminSidebarComponent implements OnInit {
       active: false,
     },
     {
-      label: 'Settings',
-      icon: 'settings',
-      route: '/admin/settings',
+      label: 'Language Management',
+      icon: 'language',
+      route: '/admin/languages',
       active: false,
     },
   ];

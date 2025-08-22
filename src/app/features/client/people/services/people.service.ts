@@ -8,6 +8,7 @@ import {
   PersonDetail,
 } from '../models/person.model';
 import { environment } from '@environments/environment';
+import { AdminPeopleResponseData } from '@features/admin/people/models/admin-person.model';
 
 export interface queryListMovie {
   language: string;
@@ -18,8 +19,25 @@ export interface queryListMovie {
   providedIn: 'root',
 })
 export class PeopleService {
-  private baseUrl = environment.apiUrl + 'person';
+  private baseUrl = environment.backendUrl + 'persons';
   constructor(private http: HttpClient) {}
+
+  getPeople(
+    page: number = 1,
+    size: number = 10,
+    keyword: string = '',
+    career: string = 'casting'
+  ): Observable<AdminPeopleResponseData> {
+    return this.http
+      .get<any>(
+        `${this.baseUrl}/search?page=${page}&size=${size}&keyword=${keyword}`
+      )
+      .pipe(
+        map((response: any) => {
+          return response.data;
+        })
+      );
+  }
 
   getPopularPeople(
     page: number = 1,

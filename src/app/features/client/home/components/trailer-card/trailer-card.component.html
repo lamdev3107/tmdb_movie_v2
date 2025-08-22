@@ -1,7 +1,7 @@
 <div class="trailer-card">
   <div class="trailer-thumbnail">
     <img
-      [src]="imageBaseUrl + trailer?.backdrop_path"
+      [src]="movie?.backdropPath"
       alt="Trailer thumbnail"
       loading="lazy"
       class="trailer-thumbnail__image"
@@ -37,10 +37,10 @@
   </div>
   <div class="trailer-info">
     <a
-      [routerLink]="'/movies/details/' + trailer?.id?.toString()"
+      [routerLink]="'/movies/details/' + movie?.id?.toString()"
       class="trailer-info__title"
-      >{{ trailer?.title }}</a
+      >{{ movie?.title }}</a
     >
-    <div class="trailer-info__desc">{{ trailer?.description }}</div>
+    <div class="trailer-info__desc">{{ movie?.overview?.slice(0, 100) }}</div>
   </div>
 </div>

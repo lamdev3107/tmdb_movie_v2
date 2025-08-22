@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
 import { SearchResponse } from '@features/client/search/models/search.model';
 import { Observable } from 'rxjs';
 interface SearchResults {
-  data: SearchResponse | null;
+  data: any | null;
 }
 @Component({
   selector: 'app-search-list',
@@ -19,7 +19,7 @@ interface SearchResults {
   styleUrls: ['./search-list.component.scss'],
 })
 export class SearchListComponent implements OnInit, OnChanges {
-  @Input() data!: SearchResponse;
+  @Input() data!: any;
   @Input() activeTabId!: 'movie' | 'tv' | 'person';
   @Output() onChangePage = new EventEmitter<number>();
   total_page!: number;

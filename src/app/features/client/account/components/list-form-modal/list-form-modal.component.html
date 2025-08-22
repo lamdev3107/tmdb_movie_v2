@@ -1,0 +1,89 @@
+<div *ngIf="isOpen" class="overlay">
+  <div class="rating-modal">
+    <div class="rating-modal__header">
+      <h3 class="rating-modal__header-title">
+        {{ data ? "Edit List Film" : "Create New List Film" }}
+      </h3>
+      <button class="rating-modal__header-close" (click)="close()">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="white"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="size-6"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M6 18 18 6M6 6l12 12"
+          />
+        </svg>
+      </button>
+    </div>
+
+    <div class="rating-modal__body">
+      <!-- INSERT_YOUR_CODE -->
+
+      <form (ngSubmit)="onSubmit()" [formGroup]="listForm">
+        <!-- Name  -->
+        <div class="form-field col-12 mb-4">
+          <label for="name" class="field-label">
+            <span class="required">*</span>
+            Name
+          </label>
+          <input
+            id="name"
+            type="text"
+            formControlName="name"
+            class="form-input"
+            placeholder="Enter name..."
+            [class.error]="
+              listForm.get('name')?.invalid && listForm.get('name')?.touched
+            "
+          />
+          <div
+            class="error-message"
+            *ngIf="
+              listForm.get('name')?.invalid && listForm.get('name')?.touched
+            "
+          >
+            {{ getErrorMessage("name") }}
+          </div>
+        </div>
+
+        <!-- Description  -->
+        <div class="form-field full-width">
+          <label for="description" class="field-label">
+            <span class="required">*</span>
+            Description
+          </label>
+          <textarea
+            id="description"
+            formControlName="description"
+            class="form-textarea"
+            placeholder="Enter description..."
+            rows="6"
+            [class.error]="
+              listForm.get('description')?.invalid &&
+              listForm.get('description')?.touched
+            "
+          ></textarea>
+          <div
+            class="error-message"
+            *ngIf="
+              listForm.get('description')?.invalid &&
+              listForm.get('description')?.touched
+            "
+          >
+            {{ getErrorMessage("description") }}
+          </div>
+        </div>
+
+        <button class="create-btn">
+          {{ data ? "Update List" : "Create new list" }}
+        </button>
+      </form>
+    </div>
+  </div>
+</div>

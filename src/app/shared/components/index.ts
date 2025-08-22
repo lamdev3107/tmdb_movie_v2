@@ -1,5 +1,6 @@
 import { TrailerModalComponent } from '@shared/components/trailer-modal/trailer-modal.component';
 import { ButtonComponent } from './button/button.component';
+import { RatingModalComponent } from '@shared/components/rating-modal/rating-modal.component';
 import { FooterComponent } from './footer/footer.component';
 import { HeaderComponent } from './header/header.component';
 import { InputRadioGroupComponent } from './input-radio-group/input-radio-group.component';
@@ -16,6 +17,7 @@ import { SelectComponent } from './select/select.component';
 import { CheckboxGroupComponent } from './checkbox-group/checkbox-group.component';
 import { ToggleSelectBoxListComponent } from './toggle-select-box-list/toggle-select-box-list.component';
 import { InputRangeComponent } from './input-range/input-range.component';
+import { InputRangeDemoComponent } from './input-range/input-range-demo.component';
 import { ListPageLayoutComponent } from './list-page-layout/list-page-layout.component';
 import { InputTextComponent } from './input-text/input-text.component';
 import { ScrollToTopComponent } from './scroll-to-top/scroll-to-top.component';
@@ -32,6 +34,7 @@ import { WatchlistCardComponent } from './watchlist-card/watchlist-card.componen
 import { ClientLayoutComponent } from './client-layout/client-layout.component';
 import { InputChipListComponent } from './input-chip-list/input-chip-list.component';
 import { InputSearchComponent } from './input-search/input-search.component';
+import { ListModalComponent } from '@features/components/list-modal/list-modal.component';
 
 export const components = [
   LoadingComponent,
@@ -48,10 +51,12 @@ export const components = [
   TabComponent,
   TooltipComponent,
   TrailerModalComponent,
+  RatingModalComponent,
   SelectComponent,
   CheckboxGroupComponent,
   ToggleSelectBoxListComponent,
   InputRangeComponent,
+  InputRangeDemoComponent,
   ListPageLayoutComponent,
   InputTextComponent,
   ScrollToTopComponent,
@@ -69,4 +74,5 @@ export const components = [
   ClientLayoutComponent,
   InputChipListComponent,
   InputSearchComponent,
+  ListModalComponent,
 ];

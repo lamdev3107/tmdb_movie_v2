@@ -1,0 +1,74 @@
+<div *ngIf="isOpen" class="overlay">
+  <div class="rating-modal">
+    <div class="rating-modal__header">
+      <h3 class="rating-modal__header-title">Rating</h3>
+      <button class="rating-modal__header-close" (click)="close()">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="white"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="size-6"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M6 18 18 6M6 6l12 12"
+          />
+        </svg>
+      </button>
+    </div>
+
+    <div class="rating-modal__body">
+      <div class="rating-modal__user-score">
+        <p class="rating-modal__question">
+          What do you think of
+          <span class="rating-modal__movie-title">{{
+            config?.movie?.title
+          }}</span>
+          ?
+        </p>
+        <div class="d-flex justify-content-between align-items-center">
+          <app-user-score
+            [size]="'small'"
+            [score]="config?.movie?.voteAverage ?? 0"
+          ></app-user-score>
+          <span class="rating-modal__user-score-text">User Score</span>
+        </div>
+      </div>
+
+      <div class="rating-modal__your-score">
+        Your score:
+        <span class="rating-modal__your-score-value">{{ rating }}%</span>
+      </div>
+
+      <div class="slider">
+        <input
+          type="range"
+          [min]="0"
+          [max]="100"
+          [step]="5"
+          [(ngModel)]="rating"
+          [style.background]="getTrackBackground()"
+        />
+        <div class="slider__ticks">
+          <span class="slider__tick" *ngFor="let t of ticks"></span>
+        </div>
+        <div class="slider__labels">
+          <span *ngFor="let t of ticks">{{ t }}</span>
+        </div>
+      </div>
+
+      <div class="rating-modal__actions">
+        <button class="rating-modal__clear" (click)="clearRating()">
+          Clear my rating
+          <i class="material-icons">clear</i>
+        </button>
+        <button class="rating-modal__submit" (click)="submitRating()">
+          Submit
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

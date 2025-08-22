@@ -1,37 +1,54 @@
 <div class="input-range-container">
+  <!-- Title -->
+  <div class="input-range-title" *ngIf="title">
+    {{ title }}
+    <span *ngIf="currentValue"
+      >{{ currentValue.min }} - {{ currentValue.max }}</span
+    >
+  </div>
+
+  <!-- Slider Container -->
   <div class="input-range-wrapper">
-    <div class="input-range-tooltip" *ngIf="isShowTooltip">
-      {{ tooltipText + " " + minValue + " - " + maxValue }}
+    <!-- Track -->
+    <div
+      #sliderTrack
+      class="input-range-track"
+      (click)="onTrackClick($event)"
+      [class.disabled]="disabled"
+    ></div>
+
+    <!-- Min Handle -->
+    <div
+      class="input-range-handle input-range-handle--min"
+      [style.left]="getMinHandlePosition()"
+      (mousedown)="onMinHandleMouseDown($event)"
+      (touchstart)="onMinHandleTouchStart($event)"
+      [class.disabled]="disabled"
+    ></div>
+
+    <!-- Max Handle -->
+    <div
+      class="input-range-handle input-range-handle--max"
+      [style.left]="getMaxHandlePosition()"
+      (mousedown)="onMaxHandleMouseDown($event)"
+      (touchstart)="onMaxHandleTouchStart($event)"
+      [class.disabled]="disabled"
+    ></div>
+
+    <!-- Tick Marks -->
+    <div class="input-range-ticks" *ngIf="showTicks">
+      <div
+        *ngFor="let tick of ticks"
+        class="input-range-tick"
+        [class.input-range-tick--major]="isMajorTick(tick)"
+      ></div>
     </div>
 
-    <div #sliderTrack class="input-range-track"></div>
-    <input
-      class="input-range input-range--min"
-      type="range"
-      [attr.min]="initMinValue"
-      [attr.max]="initMaxValue"
-      [ngModel]="minValue"
-      [attr.step]="step"
-      #sliderOne
-      (input)="onMinValueChange()"
-    />
-    <input
-      class="input-range input-range--max"
-      type="range"
-      [attr.min]="initMinValue"
-      [attr.max]="initMaxValue"
-      [ngModel]="maxValue"
-      [attr.step]="step"
-      #sliderTwo
-      (input)="onMaxValueChange()"
-    />
-    <div class="input-range-ticks">
-      <span *ngFor="let tick of ticks" class="input-range-ticks__item"></span>
+    <!-- Labels -->
+    <div class="input-range-labels" *ngIf="showLabels">
+      <span *ngFor="let tick of majorTicks" class="input-range-label">
+        {{ tick }}
+      </span>
     </div>
-  </div>
-  <div class="input-range-labels">
-    <span *ngFor="let label of labels" class="input-range-labels__item">{{
-      label
-    }}</span>
   </div>
 </div>

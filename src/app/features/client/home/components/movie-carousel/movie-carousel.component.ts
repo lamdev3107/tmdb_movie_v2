@@ -102,12 +102,6 @@ export class MovieCarouselComponent
   // sau đó gọi this.cdr.detectChanges() để thông báo cho Angular cập nhật lại view nếu cần thiết.
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['type'] && changes['type'].currentValue) {
-      if (changes['type'].currentValue === 'tv') {
-        this.cardType = CardType.TV_SHOW;
-      }
-      if (changes['type'].currentValue === 'tv') {
-        this.cardType = CardType.TV_SHOW;
-      }
     }
   }
   ngOnInit(): void {

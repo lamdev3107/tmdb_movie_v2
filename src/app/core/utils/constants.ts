@@ -8,10 +8,6 @@ export const header_navigation = [
     link: '/movies',
   },
   {
-    title: 'TV Shows',
-    link: '/tv_shows',
-  },
-  {
     title: 'People',
     link: '/people',
   },

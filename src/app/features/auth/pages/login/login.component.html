@@ -2,7 +2,7 @@
   <app-loading [isOverlay]="true" *ngIf="isLoading"></app-loading>
 
   <div class="login-card">
-    <h1 class="login-title">Đăng nhập</h1>
+    <h1 class="login-title">Login</h1>
 
     <form
       [formGroup]="form"
@@ -29,7 +29,7 @@
 
       <div class="form-group">
         <label class="form-group__label">
-          Mật khẩu
+          Password
           <span class="form-group__required">(*)</span>
         </label>
         <div class="password-row">
@@ -93,8 +93,14 @@
       </div>
 
       <app-button type="submit" size="full-width" [disabled]="isLoading">
-        Đăng nhập
+        Sign in
       </app-button>
     </form>
+    <p class="login-register-text text-center text-white my-4">
+      Don't have an account ?
+      <a routerLink="/auth/register" class="login-register-link text-danger"
+        >Register here</a
+      >
+    </p>
   </div>
 </div>

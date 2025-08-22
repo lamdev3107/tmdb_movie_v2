@@ -23,7 +23,7 @@
       font-size: 1.5rem;
     }
   }
-  h1 {
+  h1.header__title {
     @include font-base(1.5rem, $semi-bold, $white);
   }
 

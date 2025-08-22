@@ -1,3 +1,4 @@
+import { AuthService } from '@core/services/auth.service';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Account } from '@core/models/account.model';
@@ -14,19 +15,26 @@ export interface ApiState<T> {
 })
 export class AccountLayoutComponent implements OnInit {
   accountDetails$!: Observable<ApiState<Account>>;
+  credential: any | null = null;
 
-  constructor(private accountService: AccountService, private router: Router) {}
+  constructor(
+    private accountService: AccountService,
+    private router: Router,
+    private authService: AuthService
+  ) {}
 
   ngOnInit(): void {
-    this.accountDetails$ = this.accountService.getAccountDetails().pipe(
-      startWith({ loading: true } as ApiState<Account>),
-      map(
-        (data) =>
-          ({
+    this.credential = this.authService.getCredential();
+    this.accountDetails$ = this.accountService
+      .getAccountDetails(this.credential.id)
+      .pipe(
+        startWith({ loading: true } as ApiState<Account>),
+        map((data) => {
+          return {
             loading: false,
             data,
-          } as ApiState<Account>)
-      )
-    );
+          } as ApiState<Account>;
+        })
+      );
   }
 }

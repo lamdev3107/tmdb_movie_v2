@@ -5,17 +5,17 @@
       <input
         type="text"
         class="form-input"
-        placeholder="Enter keyword to search..."
+        placeholder="Enter name keyword to search..."
         [(ngModel)]="searchQuery"
         (ngModelChange)="onSearchQueryChange($event)"
         style="width: 300px; margin-right: 1rem"
       />
       <button
-        class="action-btn"
-        (click)="onSearchQueryChange(searchQuery)"
+        class="clear-btn"
+        (click)="clearQuery()"
         style="vertical-align: middle"
       >
-        <i class="material-icons">search</i>
+        <i class="material-icons">close</i>
       </button>
     </div>
     <div class="header-actions">
@@ -48,7 +48,14 @@
       <tbody>
         <tr *ngFor="let person of people; trackBy: trackByPersonId">
           <td class="id-column">{{ person.id }}</td>
-          <td class="name-column">{{ person.name }}</td>
+          <td class="name-column">
+            <a
+              class="name-column__link"
+              [routerLink]="'edit/' + person.id?.toString()"
+            >
+              {{ person.name }}
+            </a>
+          </td>
 
           <td class="profile-column">
             <div class="profile-image">

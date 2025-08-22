@@ -1,0 +1,23 @@
+<div class="rating-page">
+  <h2 class="watchlist-title">My Rated Movies</h2>
+
+  <ng-container *ngIf="isLoading">
+    <div class="loading-container">
+      <app-loading></app-loading>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="!isLoading">
+    <div class="watchlist-items">
+      <app-watchlist-card
+        *ngFor="let item of ratedMovies"
+        [data]="item"
+        (removeFromList)="handleRemoveFromRating()"
+        (reloadList)="loadRatedMovies()"
+      ></app-watchlist-card>
+    </div>
+    <div *ngIf="ratedMovies?.length === 0">
+      <p class="no-data-text">No movies in this list</p>
+    </div>
+  </ng-container>
+</div>

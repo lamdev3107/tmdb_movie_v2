@@ -5,17 +5,17 @@
       <input
         type="text"
         class="form-input"
-        placeholder="Enter keyword to search..."
+        placeholder="Enter title keyword to search..."
         [(ngModel)]="searchQuery"
         (ngModelChange)="onSearchQueryChange($event)"
         style="width: 300px; margin-right: 1rem"
       />
       <button
-        class="action-btn"
-        (click)="onSearchQueryChange(searchQuery)"
+        class="clear-btn"
+        (click)="clearQuery()"
         style="vertical-align: middle"
       >
-        <i class="material-icons">search</i>
+        <i class="material-icons">close</i>
       </button>
     </div>
     <div class="header-actions">
@@ -51,8 +51,19 @@
       <tbody>
         <tr *ngFor="let movie of movies; trackBy: trackByMovieId">
           <td class="id-column">{{ movie.id }}</td>
-          <td class="name-column">{{ movie.title }}</td>
-          <td class="name-column">{{ movie.tagline }}</td>
+          <td class="name-column">
+            <a
+              class="name-column__link"
+              [routerLink]="'edit/' + movie.id?.toString()"
+            >
+              {{ movie.title }}
+            </a>
+          </td>
+          <td class="">
+            <span class="name-tagline">
+              {{ movie.tagline }}
+            </span>
+          </td>
           <td class="profile-column">
             <div class="profile-image">
               <img
@@ -100,7 +111,7 @@
 
   <!-- Loading State -->
   <div *ngIf="loading" class="loading-container">
-    <app-loading></app-loading>
+    <app-loading [isOverlay]="true"></app-loading>
   </div>
 
   <!-- Empty State -->

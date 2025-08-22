@@ -6,7 +6,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class ConvertPercentPipe implements PipeTransform {
   transform(value: number | null | undefined): string {
     if (!value) return '';
-    const percent = Math.round(value * 10);
+    const percent = Math.round(value);
     return `${percent}%`;
   }
 }

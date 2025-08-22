@@ -14,7 +14,9 @@ import {
   CrewJob,
   PersonDetail,
 } from '@features/client/people/models/person.model';
-import { PeopleService } from '../../services/people.service';
+import { AdminPerson } from '@features/admin/people/models/admin-person.model';
+import { PeopleService } from '@features/admin/people/services/people.service';
+import { Movie } from '@features/client/movies/models/movie.model';
 
 interface ApiState<T> {
   loading: boolean;
@@ -29,11 +31,11 @@ interface ApiState<T> {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PeopleDetailComponent {
-  personState$!: Observable<ApiState<PersonDetail>>;
-  knownForState$!: Observable<ApiState<any>>;
+  personState$!: Observable<ApiState<AdminPerson>>;
   creditState$!: Observable<
     ApiState<{ crewJobs: Record<string, CrewJob[]>; castJobs: CastJob[] }>
   >;
+  personMovies: Movie[] = [];
   showFullBio = false;
   sortedCastJob: CastJob[] = [];
   sortedCrewJob: CrewJob[] = [];
@@ -50,75 +52,17 @@ export class PeopleDetailComponent {
     // Person detail state
     this.personState$ = personId$.pipe(
       switchMap((id) =>
-        this.peopleService.getPersonDetail(id).pipe(
-          map((data) => ({ loading: false, data } as ApiState<PersonDetail>)),
-          startWith({ loading: true } as ApiState<PersonDetail>),
-          catchError((error) =>
-            of({ loading: false, error } as ApiState<PersonDetail>)
-          )
-        )
-      )
-    );
-
-    // Known for state
-    this.knownForState$ = personId$.pipe(
-      switchMap((id) =>
-        this.peopleService.getKnownFor(id).pipe(
+        this.peopleService.getPerson(id).pipe(
           map((data) => {
-            console.log('Check data', data);
-            return { loading: false, data } as ApiState<any>;
-          }),
-          startWith({ loading: true } as ApiState<any>),
-          catchError((error) => of({ loading: false, error } as ApiState<any>))
-        )
-      )
-    );
-
-    // Combined credit state
-    this.creditState$ = personId$.pipe(
-      switchMap((id) =>
-        this.peopleService.getPersonCombinedCredit(id).pipe(
-          map((res) => {
-            this.sortedCastJob = res.cast.sort((a: any, b: any) => {
-              // Ưu tiên dùng release_date, nếu không có thì fallback sang first_air_date
-              const dateA = a.release_date
-                ? new Date(a.release_date)
-                : a.first_air_date
-                ? new Date(a.first_air_date)
-                : null;
-              const dateB = b.release_date
-                ? new Date(b.release_date)
-                : b.first_air_date
-                ? new Date(b.first_air_date)
-                : null;
-
-              if (dateA && dateB) {
-                return dateB.getTime() - dateA.getTime();
-              }
-              if (dateA) return -1;
-              if (dateB) return 1;
-              return 0;
-            });
+            this.personMovies = data.movies;
             return {
               loading: false,
-              data: {
-                crewJobs: this.groupCrewByJob(res.crew),
-                castJobs: res.cast,
-              },
-            } as ApiState<{
-              crewJobs: Record<string, CrewJob[]>;
-              castJobs: CastJob[];
-            }>;
+              data: data.personDetail,
+            } as ApiState<AdminPerson>;
           }),
-          startWith({ loading: true } as ApiState<{
-            crewJobs: Record<string, CrewJob[]>;
-            castJobs: CastJob[];
-          }>),
+          startWith({ loading: true } as ApiState<AdminPerson>),
           catchError((error) =>
-            of({ loading: false, error } as ApiState<{
-              crewJobs: Record<string, CrewJob[]>;
-              castJobs: CastJob[];
-            }>)
+            of({ loading: false, error } as ApiState<AdminPerson>)
           )
         )
       )
@@ -126,21 +70,12 @@ export class PeopleDetailComponent {
   }
 
   renderCastLink(item: any) {
-    if (item.media_type === 'tv') {
-      return `/tv_shows/details/${item.id}`;
-    }
     return `/movies/details/${item.id}`;
   }
   renderKnowForLink(knownFor: any) {
-    if (knownFor.media_type === 'movie') {
-      return './movies/details/' + knownFor.id;
-    }
-    return '/tv_shows/details/' + knownFor.id;
+    return './movies/details/' + knownFor.id;
   }
-  renderAlsoKnownAs(alsoKnownAs: string[] | undefined) {
-    if (!alsoKnownAs) return '';
-    return alsoKnownAs.join(', ');
-  }
+
   calculateAge(birthday: string | undefined | null) {
     if (!birthday) return 0;
     const today = new Date();
@@ -169,12 +104,12 @@ export class PeopleDetailComponent {
       date: item.first_air_date,
     };
   }
-  renderGender(gender: number | undefined) {
-    if (gender === 1) {
-      return 'Female';
-    }
-    if (gender === 2) {
+  renderGender(gender: string | undefined) {
+    if (gender === 'MALE') {
       return 'Male';
+    }
+    if (gender === 'FEMALE') {
+      return 'FEMAIL';
     }
     return 'Others';
   }

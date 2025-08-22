@@ -1,10 +1,10 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { LoadingService } from '@core/services/loading.service';
 import { finalize, Subject, takeUntil } from 'rxjs';
-import { MovieDetail } from '../../models/movie.model';
-import { Cast, Crew } from '../../models/credit.model';
 import { MovieService } from '../../services/movie.service';
+import { Movie } from '../../models/movie.model';
+import { MovieCast } from '../../models/credit.model';
 
 @Component({
   selector: 'app-movie-cast',
@@ -13,10 +13,9 @@ import { MovieService } from '../../services/movie.service';
 })
 export class MovieCastComponent implements OnInit {
   movieId: string | null = null;
-  movie: MovieDetail | null = null;
-  casts: Cast[] = [];
-  crew: Crew[] = [];
-  crewByDepartment: Record<string, Crew[]> = {};
+  movie: Movie | null = null;
+  casts: MovieCast[] = [];
+  crew: MovieCast[] = [];
   private destroy$ = new Subject<void>(); // Subject để quản lý hủy đăng
 
   constructor(
@@ -28,7 +27,6 @@ export class MovieCastComponent implements OnInit {
   ngOnInit(): void {
     this.route.paramMap.pipe(takeUntil(this.destroy$)).subscribe((params) => {
       this.movieId = params.get('id');
-      this.loadMovieCredits(this.movieId);
       this.loadMovieDetails(this.movieId);
     });
   }
@@ -44,42 +42,13 @@ export class MovieCastComponent implements OnInit {
       )
       .subscribe({
         next: (res) => {
-          this.movie = res;
+          this.movie = res.data.movie;
+          this.casts = res.data.casting;
+          this.crew = res.data.crew;
         },
         error: (err) => {
           console.log('Error fetching trailers', err);
         },
       });
-  }
-
-  loadMovieCredits(movieId: string | null) {
-    this.loadingService.show();
-
-    this.movieService
-      .getMovieCredits(Number(movieId))
-      .pipe(
-        takeUntil(this.destroy$),
-        finalize(() => this.loadingService.hide()) // luôn hide loading dù success hay error
-      )
-      .subscribe({
-        next: (res) => {
-          this.casts = res.cast;
-          this.crew = res.crew;
-          console.log('check crew', this.crew);
-          this.groupCrewByDepartment(res.crew);
-        },
-        error: (err) => {
-          console.error(err);
-        },
-      });
-  }
-
-  private groupCrewByDepartment(crew: Crew[]) {
-    this.crewByDepartment = crew.reduce((acc: any, member: any) => {
-      const dept = member.department;
-      if (!acc[dept]) acc[dept] = [];
-      acc[dept].push(member);
-      return acc;
-    }, {});
   }
 }

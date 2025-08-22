@@ -1,17 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { Cast } from '../../models/credit.model';
+import { Cast, MovieCast } from '../../models/credit.model';
 import { MovieService } from '../../services/movie.service';
 import { ActivatedRoute } from '@angular/router';
 import { finalize, map, Subject, takeUntil } from 'rxjs';
-import { Movie, MovieDetail } from '../../models/movie.model';
+import { Movie } from '../../models/movie.model';
 import { Keyword } from '../../models/keyword.model';
 import { LoadingService } from '@core/services/loading.service';
 import { TabItem } from '@shared/components/tab/tab.component';
 import { CardType } from '@core/utils/enums';
 import { AccountService } from '@core/services/account.service';
 import { Review } from '@core/models/review.model';
-import { Video } from '../../models/video.model';
-import { Image } from '../../models/images.model';
 
 @Component({
   selector: 'app-movie-details',
@@ -20,16 +18,14 @@ import { Image } from '../../models/images.model';
 })
 export class MovieDetailsComponent implements OnInit {
   movieId: string | null = null;
-  castList: Cast[] = [];
+  castList: MovieCast[] = [];
+  crewList: MovieCast[] = [];
   keywords: Keyword[] = [];
   imageBaseUrl = 'https://image.tmdb.org/t/p/w500/';
   private destroy$ = new Subject<void>(); // Subject để quản lý hủy đăng
-  movie: MovieDetail | null = null;
+  movie: Movie | null = null;
   review: Review | null = null;
-  videos: Video[] = [];
-  posters: Image[] = [];
-  backdrops: Image[] = [];
-  recommendations: Movie[] = [];
+  recommendations: any[] = [];
   cardType = CardType.CAST;
 
   socialTab: TabItem[] = [{ id: 'reviews', label: 'Reviews' }];
@@ -51,11 +47,7 @@ export class MovieDetailsComponent implements OnInit {
     this.route.paramMap.pipe(takeUntil(this.destroy$)).subscribe((params) => {
       this.movieId = params.get('id');
       this.loadMovieDetails(this.movieId);
-      this.loadMovieKeywords(this.movieId);
-      this.loadMovieReview(this.movieId);
       this.loadMovieRecommendations(this.movieId);
-      this.loadMovieCredits(this.movieId);
-      this.loadMovieVideos(this.movieId);
     });
   }
 
@@ -66,40 +58,8 @@ export class MovieDetailsComponent implements OnInit {
   onMediaTabChange(tabId: string) {
     this.activeTabId = tabId;
     if (tabId !== 'videos') {
-      this.loadImages(this.movieId);
+      // this.loadImages(this.movieId);
     }
-  }
-
-  loadMovieVideos(movieId: string | null) {
-    this.movieService
-      .getMovieVideos(Number(movieId))
-      .pipe(
-        takeUntil(this.destroy$),
-        map((res: Video[]) => res.slice(0, 3))
-      )
-      .subscribe({
-        next: (res) => {
-          this.videos = res;
-        },
-      });
-  }
-
-  loadImages(movieId: string | null) {
-    this.loadingService.show();
-    this.movieService
-      .getImages(Number(movieId))
-      .pipe(
-        takeUntil(this.destroy$),
-        finalize(() => {
-          this.loadingService.hide();
-        })
-      )
-      .subscribe({
-        next: (res) => {
-          this.posters = res.posters.slice(0, 5);
-          this.backdrops = res.backdrops.slice(0, 5);
-        },
-      });
   }
 
   loadMovieDetails(movieId: string | null): void {
@@ -114,21 +74,12 @@ export class MovieDetailsComponent implements OnInit {
       )
       .subscribe({
         next: (res) => {
-          this.movie = res;
+          this.movie = res.data.movie;
+          this.castList = res.data.casting;
+          this.crewList = res.data.crew;
         },
         error: (err) => {
           console.log('Error fetching trailers', err);
-        },
-      });
-  }
-
-  loadMovieKeywords(movieId: string | null) {
-    this.movieService
-      .getMovieKeywords(Number(movieId))
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (res) => {
-          this.keywords = res;
         },
       });
   }
@@ -143,30 +94,11 @@ export class MovieDetailsComponent implements OnInit {
 
   loadMovieRecommendations(movieId: string | null) {
     this.movieService
-      .getMovieRecommendations(Number(movieId))
+      .getMovieRecommendations(Number(movieId), 1)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: (res) => {
-          this.recommendations = res;
-        },
-      });
-  }
-
-  loadMovieCredits(movieId: string | null) {
-    this.loadingService.show();
-
-    this.movieService
-      .getTopBilledCast(Number(movieId))
-      .pipe(
-        takeUntil(this.destroy$),
-        finalize(() => this.loadingService.hide()) // luôn hide loading dù success hay error
-      )
-      .subscribe({
-        next: (res) => {
-          this.castList = res;
-        },
-        error: (err) => {
-          console.error(err);
+        next: (res: any) => {
+          this.recommendations = res.data.results;
         },
       });
   }

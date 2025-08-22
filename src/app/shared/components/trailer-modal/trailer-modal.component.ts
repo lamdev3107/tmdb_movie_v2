@@ -7,7 +7,7 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { TrailerItem } from '@features/client/movies/models/movie.model';
+import { Movie, TrailerItem } from '@features/client/movies/models/movie.model';
 
 @Component({
   selector: 'app-trailer-modal',
@@ -16,7 +16,7 @@ import { TrailerItem } from '@features/client/movies/models/movie.model';
 })
 export class TrailerModalComponent implements OnInit {
   @Input() openModal: boolean = false;
-  @Input() trailer: TrailerItem | null = null;
+  @Input() movie: Movie | null = null;
   safeYoutubeUrl: SafeResourceUrl | null = null;
   @Output() closeEvent = new EventEmitter<void>();
   constructor(private sanitizer: DomSanitizer) {}
@@ -24,15 +24,15 @@ export class TrailerModalComponent implements OnInit {
   ngOnInit(): void {}
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['trailer'] && changes['trailer'].currentValue) {
-      this.handleOnPlayTrailer(changes['trailer'].currentValue);
+    if (changes['movie'] && changes['movie'].currentValue) {
+      this.handleOnPlayTrailer(changes['movie'].currentValue.trailerUrl);
     }
   }
 
-  handleOnPlayTrailer(trailer: TrailerItem): void {
-    this.safeYoutubeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
-      trailer.youtubeUrl
-    );
+  handleOnPlayTrailer(trailer: string): void {
+    const youtubeUrl = `https://www.youtube.com/embed/${trailer}`;
+    this.safeYoutubeUrl =
+      this.sanitizer.bypassSecurityTrustResourceUrl(youtubeUrl);
   }
 
   closeModal(): void {

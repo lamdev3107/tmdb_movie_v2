@@ -27,6 +27,11 @@ const routes: Routes = [
         loadChildren: () =>
           import('./companies/companies.module').then((m) => m.CompaniesModule),
       },
+      {
+        path: 'languages',
+        loadChildren: () =>
+          import('./languages/languages.module').then((m) => m.LanguagesModule),
+      },
     ],
   },
   {

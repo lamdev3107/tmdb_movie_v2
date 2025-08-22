@@ -9,7 +9,7 @@ import {
 import { SwiperOptions } from 'swiper';
 import { SwiperComponent } from 'swiper/angular';
 import Swiper from 'swiper';
-import { TrailerItem } from '@features/client/movies/models/movie.model';
+import { Movie, TrailerItem } from '@features/client/movies/models/movie.model';
 
 @Component({
   selector: 'app-trailers-carousel',
@@ -17,8 +17,8 @@ import { TrailerItem } from '@features/client/movies/models/movie.model';
   styleUrls: ['./trailers-carousel.component.scss'],
 })
 export class TrailersCarouselComponent implements AfterViewInit {
-  @Input() trailerList: TrailerItem[] = [];
-  selectedTrailer: TrailerItem | null = null;
+  @Input() movies: Movie[] = [];
+  selectedMovie: Movie | null = null;
   openTrailerModal = false;
   @ViewChild('swiper', { static: false }) swiper?: SwiperComponent;
   currentPage = 0;
@@ -63,7 +63,7 @@ export class TrailersCarouselComponent implements AfterViewInit {
   get totalPagesArray(): number[] {
     const slidesPerView = this.getCurrentSlidesPerView();
     return Array.from({
-      length: Math.ceil(this.trailerList.length / slidesPerView),
+      length: Math.ceil(this.movies.length / slidesPerView),
     }).map((_, i) => i);
   }
 
@@ -142,13 +142,13 @@ export class TrailersCarouselComponent implements AfterViewInit {
     return this.slidesPerView;
   }
 
-  handleOnPlayTrailer(trailer: TrailerItem): void {
-    this.selectedTrailer = trailer;
+  handleOnPlayTrailer(movie: Movie): void {
+    this.selectedMovie = movie;
     this.openTrailerModal = true;
   }
 
   closeTrailerModal(): void {
-    this.selectedTrailer = null;
+    this.selectedMovie = null;
     this.openTrailerModal = false;
   }
 }

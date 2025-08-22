@@ -1,46 +1,58 @@
 <div class="watchlist-page">
-  <h2 class="watchlist-title">My Watchlist</h2>
+  <div class="watchlist-page__header">
+    <h2 class="watchlist-title">My List of Movies</h2>
+    <button class="add-btn" (click)="handleAddList()">
+      Create new list
+      <i class="material-icons">add</i>
+    </button>
+  </div>
 
-  <!-- Watchlist Sub-tabs -->
-  <app-tab
-    [tabs]="watchlistSubTabs"
-    [activeTabId]="activeWatchlistTab"
-    (tabChange)="onWatchlistTabChange($event)"
-  >
-    <div class="sub-tab-content">
-      <!-- Movies Tab -->
-      <div *ngIf="activeWatchlistTab === 'movies'" class="sub-tab-panel">
-        <ng-container *ngIf="watchlistMovies$ | async as watchlistMovies">
-          <div class="watchlist-items">
-            <app-watchlist-card
-              *ngFor="let item of watchlistMovies.results"
-              [mediaType]="'movie'"
-              [data]="item"
-              (removeFromList)="handleRemoveFromWatchlist()"
-            ></app-watchlist-card>
+  <ng-container *ngIf="loadingService.loading$ | async; else list">
+    <app-loading [isOverlay]="true"></app-loading>
+  </ng-container>
+  <ng-template #list>
+    <div class="row gy-2">
+      <div class="col-12 col-md-6 gap-2" *ngFor="let item of listFilms">
+        <div class="watchlist-card">
+          <div class="watchlist-card__header">
+            <div class="watchlist-card__header-title">
+              <a
+                class="watchlist-card__header-title-link"
+                [routerLink]="['/watchlist', item.id]"
+                >{{ item.name }}</a
+              >
+            </div>
+            <div class="watchlist-card__header-actions">
+              <button class="edit-btn" (click)="handleEditList(item)">
+                <i class="material-icons">edit</i>
+              </button>
+              <button class="delete-btn" (click)="handleDeleteList(item)">
+                <i class="material-icons">delete</i>
+              </button>
+            </div>
           </div>
-          <div *ngIf="watchlistMovies.results.length === 0">
-            <p class="no-data-text">No movies in watchlist</p>
+          <div class="watchlist-card__body">
+            <div class="watchlist-card__body-content">
+              <p>{{ item.description }}</p>
+            </div>
           </div>
-        </ng-container>
+        </div>
       </div>
-
-      <!-- TV Shows Tab -->
-      <div *ngIf="activeWatchlistTab === 'tv'" class="sub-tab-panel">
-        <ng-container *ngIf="watchlistTv$ | async as watchlistTv">
-          <div class="watchlist-items">
-            <app-watchlist-card
-              *ngFor="let item of watchlistTv.results"
-              [mediaType]="'tv'"
-              [data]="item"
-              (removeFromList)="handleRemoveFromWatchlist()"
-            ></app-watchlist-card>
-          </div>
-          <div *ngIf="watchlistTv.results.length === 0">
-            <p class="no-data-text">No tv shows in watchlist</p>
-          </div>
-        </ng-container>
-      </div>
+      <!-- <app-watchlist-card
+        *ngFor="let item of listFilms"
+        [data]="item"
+        (removeFromList)="handleRemoveFromFavorite()"
+        (reloadList)="loadListFilms()"
+      ></app-watchlist-card> -->
     </div>
-  </app-tab>
+    <div *ngIf="listFilms?.length === 0">
+      <p class="no-data-text">No movies in watchlist</p>
+    </div>
+  </ng-template>
 </div>
+<app-list-form-modal
+  [isOpen]="isOpenListFormModal"
+  [data]="editingListFilm"
+  (reloadList)="loadListFilms()"
+  (closeModal)="handleCloseModal()"
+></app-list-form-modal>

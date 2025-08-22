@@ -28,8 +28,13 @@
     class="load-more"
     *ngIf="!(loadingService.loading$ | async) && movies.length > 0"
   >
-    <app-button [size]="'full-width'" (click)="handleLoadMore()">
+    <app-pagination
+      [totalPages]="totalPages"
+      [currentPage]="currentPage"
+      (pageChange)="handlePageChange($event)"
+    ></app-pagination>
+    <!-- <app-button [size]="'full-width'" (click)="handleLoadMore()">
       Load More
-    </app-button>
+    </app-button> -->
   </div>
 </app-list-page-layout>

@@ -9,10 +9,7 @@
           <div class="account-profile">
             <div class="account-avatar">
               <ng-container
-                *ngIf="
-                  accountDetails.data.avatar.tmdb.avatar_path;
-                  else defaultAvatar
-                "
+                *ngIf="accountDetails.data?.avatarUrl; else defaultAvatar"
               >
                 <img
                   class="avatar-image"
@@ -44,14 +41,11 @@
           <div class="account-profile">
             <div class="account-avatar">
               <ng-container
-                *ngIf="
-                  accountDetails?.data?.avatar?.tmdb?.avatar_path;
-                  else defaultAvatar
-                "
+                *ngIf="accountDetails?.data?.avatarUrl; else defaultAvatar"
               >
                 <img
                   class="avatar-image"
-                  [src]="accountDetails.data.avatar.tmdb.avatar_path"
+                  [src]="accountDetails.data?.avatarUrl"
                   alt="Account Avatar"
                 />
               </ng-container>
@@ -66,9 +60,12 @@
             </div>
             <div class="account-info">
               <h1 class="account-username">
-                {{ accountDetails?.data?.username || "account1234z" }}
+                {{ accountDetails?.data?.username }}
               </h1>
-              <p class="account-membership">Member since April 2025</p>
+              <p class="account-membership">
+                Member since
+                {{ accountDetails?.data?.created_at | date : "MMMM yyyy" }}
+              </p>
             </div>
           </div>
         </ng-template>

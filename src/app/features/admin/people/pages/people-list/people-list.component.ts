@@ -5,7 +5,7 @@ import {
   AdminPerson,
   AdminPeopleResponseData,
 } from '../../models/admin-person.model';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-people-list',
@@ -24,7 +24,8 @@ export class PeopleListComponent implements OnInit {
   constructor(
     private peopleService: PeopleService,
     private router: Router,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private activatedRoute: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
@@ -47,6 +48,11 @@ export class PeopleListComponent implements OnInit {
         this.loading = false;
       },
     });
+  }
+
+  clearQuery(): void {
+    this.searchQuery = '';
+    this.onSearchQueryChange('');
   }
 
   onSearchQueryChange(keyword: string): void {

@@ -6,6 +6,7 @@ import {
   Input,
   SimpleChanges,
   OnChanges,
+  OnInit,
 } from '@angular/core';
 import { TVShow } from '@features/client/tv-shows/models/tv-show.model';
 import { CardType } from '@core/utils/enums';
@@ -14,17 +15,21 @@ import { TVShowService } from '@features/client/services/tv-shows.service';
 import { ToastService } from '@core/services/toast.service';
 import { AccountService } from '@core/services/account.service';
 import { MovieService } from '@features/client/movies/services/movie.service';
-import { Movie, MovieDetail } from '@features/client/movies/models/movie.model';
+import { Movie } from '@features/client/movies/models/movie.model';
+import { AuthService } from '@core/services/auth.service';
+import { RatingModalService } from '@core/services/rating-modal.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-action-menu',
   templateUrl: './action-menu.component.html',
   styleUrls: ['./action-menu.component.scss'],
 })
-export class ActionMenuComponent implements OnChanges {
+export class ActionMenuComponent implements OnInit, OnChanges {
   isOpen = false;
   @Input() type: CardType = CardType.MOVIE;
   @Input() data?: any = null;
+  credential: any | null = null;
 
   id: number | null = null;
 
@@ -36,15 +41,18 @@ export class ActionMenuComponent implements OnChanges {
     private movieService: MovieService,
     private tvShowService: TVShowService,
     private toastService: ToastService,
-    private accountService: AccountService
+    private accountService: AccountService,
+    private authService: AuthService,
+    private ratingModalService: RatingModalService,
+    private router: Router
   ) {}
 
+  ngOnInit(): void {
+    this.credential = this.authService.getCredential();
+  }
   toggleMenu(event: MouseEvent) {
     event.preventDefault();
     event.stopPropagation();
-
-    if (!this.isOpen) {
-    }
 
     this.isOpen = !this.isOpen;
   }
@@ -55,21 +63,15 @@ export class ActionMenuComponent implements OnChanges {
       this.loadAccountStatus();
     }
   }
-
+  handleCloseRatingModal() {
+    this.showRatingModal = false;
+  }
   loadAccountStatus() {
-    if (this.type === CardType.MOVIE) {
-      this.movieService
-        .getMovieAccountStates(Number(this.id))
-        .subscribe((res) => {
-          this.accountStates = res;
-        });
-    } else {
-      this.tvShowService
-        .getTVShowAccountStates(Number(this.id))
-        .subscribe((res) => {
-          this.accountStates = res;
-        });
-    }
+    this.movieService
+      .getMovieAccountStates(Number(this.id))
+      .subscribe((res) => {
+        this.accountStates = res;
+      });
   }
 
   closeMenu() {
@@ -87,87 +89,88 @@ export class ActionMenuComponent implements OnChanges {
         this.handleToggleLikeBtn();
 
         break;
-      case 'addToWatchlist':
-        this.handleToggleAddBtn();
-        break;
+      // case 'addToWatchlist':
+      //   this.handleToggleAddBtn();
+      //   break;
       case 'rateMovie':
-        this.showRatingModal = true;
+        this.handleRating();
         break;
     }
-    // this.loadAccountStatus();
+    this.closeMenu();
+    this.loadAccountStatus();
   }
   handleToggleLikeBtn() {
-    if (this.type === CardType.MOVIE) {
+    if (!this.credential || !this.credential.id) {
+      alert('Please login to add this movie to your favorite');
+      this.router.navigate(['/auth/login']);
+      return;
+    }
+    if (!this.accountStates?.inFavourite) {
       this.accountService
-        .markAsFavorite(
-          'movie',
-          Number(this?.id),
-          !this.accountStates?.favorite
-        )
+        .addMovieToFavorite(Number(this?.id), Number(this.credential?.id))
         .subscribe((res) => {
           this.toastService.success('Thao tác thành công!');
           if (this.accountStates) {
-            this.accountStates.favorite = !this.accountStates.favorite;
+            this.accountStates.inFavourite = !this.accountStates.inFavourite;
           }
         });
     } else {
       this.accountService
-        .markAsFavorite('tv', Number(this?.id), !this.accountStates?.favorite)
+        .removeMovieFromFavorite(Number(this?.id))
         .subscribe((res) => {
           this.toastService.success('Thao tác thành công!');
           if (this.accountStates) {
-            this.accountStates.favorite = !this.accountStates.favorite;
+            this.accountStates.inFavourite = !this.accountStates.inFavourite;
           }
         });
     }
   }
 
-  handleToggleAddBtn() {
-    if (this.type === CardType.MOVIE) {
-      this.accountService
-        .addToWatchlist(
-          'movie',
-          Number(this?.id),
-          !this.accountStates?.watchlist
-        )
-        .subscribe((res) => {
-          this.toastService.success('Thao tác thành công!');
-          if (this.accountStates) {
-            this.accountStates.watchlist = !this.accountStates.watchlist;
-          }
-        });
-    } else {
-      this.accountService
-        .addToWatchlist('tv', Number(this?.id), !this.accountStates?.watchlist)
-        .subscribe((res) => {
-          this.toastService.success('Thao tác thành công!');
-          if (this.accountStates) {
-            this.accountStates.watchlist = !this.accountStates.watchlist;
-          }
-        });
+  handleRating() {
+    if (!this.credential || !this.credential.id) {
+      alert('Please login to rate this movie');
+      this.router.navigate(['/auth/login']);
+      return;
     }
+    this.ratingModalService.open({
+      movie: this.data as Movie,
+      onClose: () => {
+        this.loadAccountStatus();
+      },
+    });
   }
 
-  onRatingModalClose(): void {
-    this.showRatingModal = false;
-  }
-
-  onRatingSubmit(rating: number): void {
-    // this.accountStates = true;
-  }
-
-  onClearRating(): void {
-    // this.accountStates = false;
-    // TODO: Implement rating clear to API
-  }
+  // handleToggleAddBtn() {
+  //   if (this.type === CardType.MOVIE) {
+  //     this.accountService
+  //       .addToWatchlist(
+  //         'movie',
+  //         Number(this?.id),
+  //         !this.accountStates?.watchlist
+  //       )
+  //       .subscribe((res) => {
+  //         this.toastService.success('Thao tác thành công!');
+  //         if (this.accountStates) {
+  //           this.accountStates.watchlist = !this.accountStates.watchlist;
+  //         }
+  //       });
+  //   } else {
+  //     this.accountService
+  //       .addToWatchlist('tv', Number(this?.id), !this.accountStates?.watchlist)
+  //       .subscribe((res) => {
+  //         this.toastService.success('Thao tác thành công!');
+  //         if (this.accountStates) {
+  //           this.accountStates.watchlist = !this.accountStates.watchlist;
+  //         }
+  //       });
+  //   }
+  // }
 
   getMovieTitle(): string {
     if (!this.data) return '';
 
     if (this.type === CardType.MOVIE) {
-      return (this.data as Movie | MovieDetail).title || '';
-    } else if (this.type === CardType.TV_SHOW) {
-      return (this.data as TVShow).name || '';
+      return (this.data as Movie | Movie).title || '';
     }
 
     return '';

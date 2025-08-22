@@ -1,4 +1,85 @@
-<div class="genre-list-container row gx-5">
+<div class="genre-list-container row">
+  <div class="col-12 col-lg-8 mb-5">
+    <div class="people-list-header row">
+      <div class="search-bar w-100 w-md-50">
+        <input
+          type="text"
+          class="form-input"
+          placeholder="Enter title keyword to search..."
+          [(ngModel)]="searchQuery"
+          (ngModelChange)="onSearchQueryChange($event)"
+        />
+        <button
+          class="clear-btn"
+          (click)="clearQuery()"
+          style="vertical-align: middle"
+        >
+          <i class="material-icons">close</i>
+        </button>
+      </div>
+    </div>
+    <!-- Table Container -->
+    <div class="table-container">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Logo</th>
+            <th class="actions-column">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let company of companies; trackBy: trackByCompanyId">
+            <td class="id-column" style="width: 60px">{{ company.id }}</td>
+            <td class="name-column">{{ company.name }}</td>
+            <td class="profile-column" style="width: 250px">
+              <div class="profile-image">
+                <img
+                  [src]="company.logoPath"
+                  alt="Logo"
+                  style="border-radius: 8px; object-fit: cover"
+                />
+              </div>
+            </td>
+            <td class="actions-column" style="width: 100px">
+              <button
+                class="action-btn action-btn--warning"
+                style="margin-right: 0.5rem"
+                title="Chỉnh sửa"
+                (click)="handleClickEditBtn(company)"
+              >
+                <i class="material-icons">edit</i>
+              </button>
+              <button
+                class="action-btn action-btn--danger"
+                title="Xóa"
+                (click)="deleteCompany(company.id)"
+              >
+                <i class="material-icons">delete</i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Loading State -->
+    <div *ngIf="loading" class="loading-container">
+      <app-loading></app-loading>
+    </div>
+
+    <!-- Empty State -->
+    <div *ngIf="!loading && companies.length === 0" class="empty-state">
+      <p>No data found.</p>
+    </div>
+
+    <app-pagination
+      [totalPages]="totalPages"
+      [currentPage]="currentPage"
+      (pageChange)="onPageChange($event)"
+    ></app-pagination>
+  </div>
   <div class="col-12 col-lg-4 mb-3">
     <div class="genre-form">
       <h3 class="genre-form__title">
@@ -78,91 +159,26 @@
             </div>
           </div>
         </div>
-        <div class="row">
-          <!-- Buttons -->
-          <div class="form-actions">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              (click)="handleClickCancelBtn()"
-              *ngIf="editingCompany"
-            >
-              Cancel
-            </button>
+        <!-- Buttons -->
+        <div class="form-actions">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            (click)="handleClickCancelBtn()"
+            *ngIf="editingCompany"
+          >
+            Cancel
+          </button>
 
-            <button type="submit" class="btn btn-primary">
-              <span *ngIf="!isSubmitting">{{
-                editingCompany ? "Update" : "Create"
-              }}</span>
-              <span *ngIf="isSubmitting">Processing...</span>
-            </button>
-          </div>
+          <button type="submit" class="btn btn-primary">
+            <span *ngIf="!isSubmitting">{{
+              editingCompany ? "Update" : "Create"
+            }}</span>
+            <span *ngIf="isSubmitting">Processing...</span>
+          </button>
         </div>
       </form>
     </div>
-  </div>
-  <div class="col-12 col-lg-8">
-    <!-- Table Container -->
-    <div class="table-container">
-      <table class="table">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Logo</th>
-            <th class="actions-column">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let company of companies; trackBy: trackByCompanyId">
-            <td class="id-column" style="width: 60px">{{ company.id }}</td>
-            <td class="name-column">{{ company.name }}</td>
-            <td class="profile-column" style="width: 250px">
-              <div class="profile-image">
-                <img
-                  [src]="company.logoPath"
-                  alt="Logo"
-                  style="border-radius: 8px; object-fit: cover"
-                />
-              </div>
-            </td>
-            <td class="actions-column" style="width: 100px">
-              <button
-                class="action-btn action-btn--warning"
-                style="margin-right: 0.5rem"
-                title="Chỉnh sửa"
-                (click)="handleClickEditBtn(company)"
-              >
-                <i class="material-icons">edit</i>
-              </button>
-              <button
-                class="action-btn action-btn--danger"
-                title="Xóa"
-                (click)="deleteCompany(company.id)"
-              >
-                <i class="material-icons">delete</i>
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <!-- Loading State -->
-    <div *ngIf="loading" class="loading-container">
-      <app-loading></app-loading>
-    </div>
-
-    <!-- Empty State -->
-    <div *ngIf="!loading && companies.length === 0" class="empty-state">
-      <p>No data found.</p>
-    </div>
-
-    <app-pagination
-      [totalPages]="totalPages"
-      [currentPage]="currentPage"
-      (pageChange)="onPageChange($event)"
-    ></app-pagination>
   </div>
 </div>
 s

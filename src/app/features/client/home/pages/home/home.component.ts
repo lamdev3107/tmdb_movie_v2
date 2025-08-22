@@ -17,7 +17,10 @@ import {
   Movie,
   TrailerItem,
 } from '@features/client/movies/models/movie.model';
-import { MovieService } from '@features/client/movies/services/movie.service';
+import {
+  MovieCategoryEnum,
+  MovieService,
+} from '@features/client/movies/services/movie.service';
 
 @Component({
   selector: 'app-home',
@@ -26,63 +29,32 @@ import { MovieService } from '@features/client/movies/services/movie.service';
 })
 export class HomeComponent implements OnInit, OnDestroy {
   movieGenres: Genre[] = [];
-  trendingMovieList: Movie[] = [];
-  popularTVShowList: TVShow[] = [];
+  popularMovieList: Movie[] = [];
+  topRatedMovieList: Movie[] = [];
   trailerList: TrailerItem[] = [];
   private destroy$ = new Subject<void>(); // Subject để quản lý hủy đăng ký
-
-  trendingOptions = [
-    { value: 'day', label: 'Today' },
-    { value: 'week', label: 'This Week' },
-  ];
-  selectedTimeWindow: string = 'day';
 
   constructor(
     private genreService: GenreService,
     private movieService: MovieService,
-    private tvShowService: TVShowService,
-    private loadingService: LoadingService
+    public loadingService: LoadingService
   ) {}
 
   ngOnInit(): void {
     this.loadMovieGenres();
-    this.loadTrendingMovieLists();
-    this.loadPopularTVShowLists();
-    this.loadTrailers();
-  }
-
-  onTrendingWindowChanged(newValue: string) {
-    this.selectedTimeWindow = newValue;
-    this.loadTrendingMovieLists();
+    this.loadTopRatedMovieLists();
+    this.loadPopularMovieLists();
   }
 
   loadMovieGenres(): void {
     this.loadingService.show();
     this.genreService.getMovieGenreList();
   }
-  loadTrailers(): void {
+
+  loadTopRatedMovieLists(): void {
     this.loadingService.show();
     this.movieService
-      .getLatestTrailers()
-      .pipe(
-        take(1),
-        finalize(() => {
-          this.loadingService.hide();
-        })
-      )
-      .subscribe({
-        next: (res) => {
-          this.trailerList = res;
-        },
-        error: (err) => {
-          console.log('Error fetching trailers', err);
-        },
-      });
-  }
-  loadTrendingMovieLists(): void {
-    this.loadingService.show();
-    this.movieService
-      .getTrendingMovies(this.selectedTimeWindow)
+      .getMoviesByCategory(MovieCategoryEnum.TOP_RATED)
       .pipe(
         takeUntil(this.destroy$),
         finalize(() => {
@@ -90,8 +62,8 @@ export class HomeComponent implements OnInit, OnDestroy {
         })
       )
       .subscribe({
-        next: (res: ListMovieResponse) => {
-          this.trendingMovieList = res.results;
+        next: (res: any) => {
+          this.topRatedMovieList = res.data;
         },
         error: (err) => {
           console.error('Error fetching trending movie list', err);
@@ -99,10 +71,10 @@ export class HomeComponent implements OnInit, OnDestroy {
       });
   }
 
-  loadPopularTVShowLists(): void {
+  loadPopularMovieLists(): void {
     this.loadingService.show();
-    this.tvShowService
-      .getTVShowsByCategory(TVShowCategoryEnum.POPULAR)
+    this.movieService
+      .getMoviesByCategory(MovieCategoryEnum.POPULAR)
       .pipe(
         takeUntil(this.destroy$),
         finalize(() => {
@@ -110,8 +82,8 @@ export class HomeComponent implements OnInit, OnDestroy {
         })
       )
       .subscribe({
-        next: (res: ListTVShowResponse) => {
-          this.popularTVShowList = res.results;
+        next: (res: any) => {
+          this.popularMovieList = res.data;
         },
         error: (err: any) => {
           console.error('Error fetching popular tv show list', err);

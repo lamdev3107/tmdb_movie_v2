@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { SearchResponse } from '@features/client/search/models/search.model';
-import { SearchService } from '@features/client/search/services/search.service';
+import { PeopleService } from '@features/admin/people/services/people.service';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -10,33 +9,45 @@ import { Observable } from 'rxjs';
   styleUrls: ['./person.component.scss'],
 })
 export class PersonComponent implements OnInit {
-  personResults$!: Observable<SearchResponse>;
+  personResults$!: Observable<any>;
   currentPage!: number;
   totalPages!: number;
   query!: string;
   constructor(
     private route: ActivatedRoute,
-    private serviceService: SearchService
+    private peopleService: PeopleService
   ) {}
 
   ngOnInit() {
     this.route.queryParams.subscribe((params) => {
       const query = params['query'];
       if (query) {
-        this.personResults$ = this.serviceService.searchPerson(query!);
+        this.personResults$ = this.peopleService.getPeople(
+          this.currentPage,
+          10,
+          query!
+        );
         this.query = query;
       } else {
-        this.personResults$ = this.serviceService.searchPerson('');
+        this.personResults$ = new Observable((observer) => {
+          observer.next({ data: [] });
+          observer.complete();
+        });
         this.query = '';
       }
       this.personResults$.subscribe((data) => {
-        this.totalPages = data.total_pages;
-        this.currentPage = data.page;
+        this.totalPages = data.metaInfo.totalPages;
+        this.currentPage = data.metaInfo.page;
       });
     });
   }
 
   onPageChange(page: number) {
-    this.personResults$ = this.serviceService.searchPerson(this.query, page);
+    this.currentPage = page + 1;
+    this.personResults$ = this.peopleService.getPeople(
+      this.currentPage,
+      10,
+      this.query
+    );
   }
 }

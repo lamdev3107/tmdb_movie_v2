@@ -1,12 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { forkJoin, map, Observable, switchMap } from 'rxjs';
-import {
-  ListMovieResponse,
-  Movie,
-  MovieDetail,
-  TrailerItem,
-} from '../models/movie.model';
+import { ListMovieResponse, Movie, TrailerItem } from '../models/movie.model';
 import { Cast, CreditsResponse } from '../models/credit.model';
 import { Keyword, KeywordResponse } from '../models/keyword.model';
 import { ImagesResponse } from '../models/images.model';
@@ -14,6 +9,7 @@ import { Video, VideoResponse } from '../models/video.model';
 import { Account, AccountStates } from '@core/models/account.model';
 import { ReviewResponse } from '@core/models/review.model';
 import { environment } from '@environments/environment';
+import { MovieResponseData } from '@features/admin/movies/models/movie.model';
 
 export interface queryListMovie {
   language: string;
@@ -22,9 +18,7 @@ export interface queryListMovie {
 }
 export enum MovieCategoryEnum {
   POPULAR = 'popular',
-  AIRING_TODAY = 'airing_today',
-  ON_TV = 'on_tv',
-  TOP_RATED = 'top_rated',
+  TOP_RATED = 'top-rated',
 }
 export enum queryListMovieEnum {
   language = 'en-US',
@@ -36,7 +30,7 @@ export enum queryListMovieEnum {
   providedIn: 'root',
 })
 export class MovieService {
-  private baseUrl = environment.apiUrl + 'movie';
+  private baseUrl = environment.backendUrl + 'movies';
   private params = {
     language: queryListMovieEnum.language,
     page: queryListMovieEnum.page,
@@ -51,19 +45,33 @@ export class MovieService {
     };
     return this.http.post(`${this.baseUrl}/${id}/rating`, body, { params });
   }
-
+  getMovies(
+    page: number = 1,
+    size: number = 30,
+    keyword: string = ''
+  ): Observable<MovieResponseData[]> {
+    return this.http
+      .get<MovieResponseData[]>(
+        `${this.baseUrl}/searchByTitle?page=${page}&size=${size}&keyword=${keyword}`
+      )
+      .pipe(
+        map((res: any) => {
+          return res.data;
+        })
+      );
+  }
   getMoviesByCategory(
     category: MovieCategoryEnum,
     page: number = 1
-  ): Observable<ListMovieResponse> {
+  ): Observable<any> {
     this.params.page = page;
-    return this.http.get<ListMovieResponse>(`${this.baseUrl}/${category}`, {
+    return this.http.get<any>(`${this.baseUrl}/${category}`, {
       params: this.params,
     });
   }
 
-  getMovieDetails(movieId: number): Observable<MovieDetail> {
-    return this.http.get<MovieDetail>(`${this.baseUrl}/${movieId}`, {
+  getMovieDetails(movieId: number): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}/${movieId}`, {
       params: this.params,
     });
   }
@@ -171,82 +179,77 @@ export class MovieService {
 
   getMovieRecommendations(
     movieId: number,
-    page: number = 1,
-    count = 10
-  ): Observable<Movie[]> {
-    const url = `${this.baseUrl}/${movieId}/recommendations`;
-    const params = { ...this.params, page };
+    page: number,
+    size: number = 5
+  ): Observable<any[]> {
+    const url = `${this.baseUrl}/recommendation/${movieId}`;
+    const params = { page, size };
 
-    return this.http
-      .get<ListMovieResponse>(url, { params })
-      .pipe(map((res) => res.results.slice(0, count)));
-  }
-
-  getImages(movieId: number): Observable<ImagesResponse> {
-    const url = `${this.baseUrl}/${movieId}/images`;
-    return this.http.get<ImagesResponse>(url);
-  }
-
-  getMovieVideos(movieId: number): Observable<Video[]> {
-    const url = `${this.baseUrl}/${movieId}/videos`;
-    return this.http
-      .get<VideoResponse>(url, { params: this.params })
-      .pipe(map((res) => res.results));
+    return this.http.get<any>(url, { params });
   }
 
   getMovieAccountStates(movieId: number): Observable<AccountStates> {
     const url = `${this.baseUrl}/${movieId}/account_states`;
     return this.http
-      .get<AccountStates>(url, { params: this.params })
-      .pipe(map((res) => res));
+      .get<any>(url, { params: this.params })
+      .pipe(map((res) => res.data));
   }
 
-  discoverMovie(
-    filters: {
-      sort_by?: string;
-      with_genres?: string; // VD: "28,12"
-      primary_release_date_gte?: string; // YYYY-MM-DD
-      primary_release_date_lte?: string;
-      with_original_language?: string;
-      with_original_country?: string;
-      with_release_type?: string; //1,2,3,4,5
-      with_keywords?: string;
-      page?: number;
-    },
-    page: number
+  searchGeneral(
+    keyword: string,
+    page: number = 1,
+    size: number = 10
   ): Observable<any> {
-    const url = `discover/movie`;
-    let params = new HttpParams();
+    const url = `${this.baseUrl}/searchGeneral`;
+    const params = { keyword: keyword, page, size };
+    return this.http.get<any>(url, { params });
+  }
 
-    if (filters.sort_by) params = params.set('sort_by', filters.sort_by);
-    if (filters.with_genres)
-      params = params.set('with_genres', filters.with_genres);
-    if (filters.primary_release_date_gte)
-      params = params.set(
-        'primary_release_date.gte',
-        filters.primary_release_date_gte
-      );
-    if (filters.primary_release_date_lte)
-      params = params.set(
-        'primary_release_date.lte',
-        filters.primary_release_date_lte
-      );
-    // if (filters.keyword) params = params.set('keyword', filters.keyword);
-    if (filters.with_original_language)
-      params = params.set(
-        'with_original_language',
-        filters.with_original_language
-      );
-    if (filters.with_original_country)
-      params = params.set(
-        'with_original_country',
-        filters.with_original_country
-      );
-    if (filters.with_keywords)
-      params = params.set('with_keywords', filters.with_keywords);
-    if (filters.with_release_type)
-      params = params.set('with_release_type', filters.with_release_type);
+  searchMovie(
+    filters: {
+      sortBy?: string;
+      sortDirection?: 'asc' | 'desc';
+      genreIds?: string; // VD: "28,12"
+      fromReleaseDate?: string; // YYYY-MM-DD
+      toReleaseDate?: string;
+      languageIds?: string;
+      countryIds?: string;
+      // title?: string;
+      page?: number;
+      minRuntime?: number;
+      maxRuntime?: number;
+      minVoteAverage?: number;
+      maxVoteAverage?: number;
+    },
+    page: number,
+    size: number = 10
+  ): Observable<any> {
+    const url = `${this.baseUrl}/search`;
+    let params = new HttpParams();
+    console.log(filters);
+    if (filters.sortBy) params = params.set('sortBy', filters.sortBy);
+    if (filters.sortDirection)
+      params = params.set('sortDirection', filters.sortDirection);
+    if (filters.genreIds) params = params.set('genreIds', filters.genreIds);
+    if (filters.fromReleaseDate)
+      params = params.set('fromReleaseDate', filters.fromReleaseDate);
+    if (filters.toReleaseDate)
+      params = params.set('toReleaseDate', filters.toReleaseDate);
+    if (filters.languageIds)
+      params = params.set('languageIds', filters.languageIds);
+    if (filters.countryIds)
+      params = params.set('countryIds', filters.countryIds);
+    if (filters.minRuntime !== undefined)
+      params = params.set('minRuntime', filters.minRuntime);
+    if (filters.maxRuntime !== undefined)
+      params = params.set('maxRuntime', filters.maxRuntime);
+    // if (filters.title) params = params.set('maxRuntime', filters.title);
+    if (filters.minVoteAverage !== undefined)
+      params = params.set('minVoteAverage', filters.minVoteAverage);
+    if (filters.maxVoteAverage)
+      params = params.set('maxVoteAverage', filters.maxVoteAverage);
     params = params.set('page', page);
+    params = params.set('size', size);
 
     return this.http.get(url, { params: params });
   }

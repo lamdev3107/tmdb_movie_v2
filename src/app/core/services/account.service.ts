@@ -1,86 +1,54 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { Account } from '@core/models/account.model';
 import { environment } from '@environments/environment';
+import { SuccessResponse } from '@core/models/auth.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AccountService {
-  private baseUrl = environment.apiUrl + 'account';
+  private baseUrl = environment.backendUrl + 'users';
   private accountId = 21966283;
   constructor(private http: HttpClient) {}
 
-  getAccountDetails(): Observable<Account> {
-    return this.http.get<Account>(`${this.baseUrl}/${this.accountId}`);
+  getAccountDetails(id: number): Observable<Account> {
+    return this.http.get<any>(`${this.baseUrl}/${id}`).pipe(
+      map((res: any) => {
+        return res.data;
+      })
+    );
   }
 
-  markAsFavorite(
-    mediaType: 'movie' | 'tv',
-    mediaId: number,
-    favorite: boolean
-  ): Observable<any> {
-    const params = new HttpParams();
-
+  addMovieToFavorite(movieId: number, userId: number): Observable<any> {
     const body = {
-      media_type: mediaType,
-      media_id: mediaId,
-      favorite: favorite,
+      movieId: movieId,
+      userId: userId,
     };
 
-    return this.http.post(`${this.baseUrl}/${this.accountId}/favorite`, body, {
-      params,
+    return this.http.post(`${this.baseUrl}/favourite-films`, body, {
+      headers: { 'Content-Type': 'application/json' },
     });
   }
 
   getFavoriteMovies(page: number = 1): Observable<any> {
     const params = new HttpParams().set('page', page);
 
-    return this.http.get(`${this.baseUrl}/${this.accountId}/favorite/movies`, {
-      params,
-    });
+    return this.http
+      .get(`${this.baseUrl}/favourite-films`, {
+        params,
+      })
+      .pipe(
+        map((res: any) => {
+          return res.data;
+        })
+      );
   }
 
-  getFavoriteTV(page: number = 1): Observable<any> {
-    const params = new HttpParams().set('page', page);
-
-    return this.http.get(`${this.baseUrl}/${this.accountId}/favorite/tv`, {
-      params,
-    });
-  }
-
-  addToWatchlist(
-    mediaType: 'movie' | 'tv',
-    mediaId: number,
-    watchlist: boolean
-  ): Observable<any> {
-    const params = new HttpParams();
-
-    const body = {
-      media_type: mediaType,
-      media_id: mediaId,
-      watchlist: watchlist,
-    };
-
-    return this.http.post(`${this.baseUrl}/${this.accountId}/watchlist`, body, {
-      params,
-    });
-  }
-
-  getWatchlistMovies(page: number = 1): Observable<any> {
-    const params = new HttpParams().set('page', page);
-
-    return this.http.get(`${this.baseUrl}/${this.accountId}/watchlist/movies`, {
-      params,
-    });
-  }
-
-  getWatchlistTV(page: number = 1): Observable<any> {
-    const params = new HttpParams().set('page', page);
-
-    return this.http.get(`${this.baseUrl}/${this.accountId}/watchlist/tv`, {
-      params,
+  removeMovieFromFavorite(movieId: number): Observable<any> {
+    return this.http.delete(`${this.baseUrl}/favourite-films/${movieId}`, {
+      headers: { 'Content-Type': 'application/json' },
     });
   }
 

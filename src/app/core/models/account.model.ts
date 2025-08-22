@@ -1,25 +1,17 @@
 export interface Account {
-  avatar: {
-    gravatar: {
-      hash: string | null;
-    };
-    tmdb: {
-      avatar_path: string | null;
-    };
-  };
   id: number;
-  iso_639_1: string;
-  iso3166_1: string;
-  name: string;
-  include_adult: boolean;
-  username: string;
+  fullName?: string | null;
+  role?: string | null;
+  email?: string | null;
+  avatarUrl?: string | null;
+  include_adult?: boolean | null;
+  username?: string | null;
+  created_at?: string;
 }
 
 export interface AccountStates {
-  id: number;
-  favorite: boolean;
-  watchlist: boolean;
-  rated: {
-    value: number;
-  };
+  inFavourite: boolean;
+  inUserList: boolean;
+  isRated: boolean;
+  ratingScore: number | null;
 }

@@ -1,0 +1,164 @@
+<div class="genre-list-container row gx-4">
+  <div class="col-12 col-lg-7">
+    <div class="people-list-header row">
+      <div class="search-bar">
+        <input
+          type="text"
+          class="form-input"
+          placeholder="Enter title keyword to search..."
+          [(ngModel)]="searchQuery"
+          (ngModelChange)="onSearchQueryChange($event)"
+          style="width: 300px; margin-right: 1rem"
+        />
+        <button
+          class="clear-btn"
+          (click)="clearQuery()"
+          style="vertical-align: middle"
+        >
+          <i class="material-icons">close</i>
+        </button>
+      </div>
+    </div>
+    <!-- Table Container -->
+    <div class="table-container">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Language Code</th>
+            <th class="actions-column" style="width: 100px">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let language of languages; trackBy: trackByLanguageId">
+            <td class="id-column">{{ language.id }}</td>
+            <td class="name-column">{{ language.name }}</td>
+            <td class="name-column">{{ language.languageCode }}</td>
+            <td class="actions-column">
+              <button
+                class="action-btn action-btn--warning"
+                style="margin-right: 0.5rem"
+                title="Chỉnh sửa"
+                (click)="handleClickEditBtn(language)"
+              >
+                <i class="material-icons">edit</i>
+              </button>
+              <button
+                class="action-btn action-btn--danger"
+                title="Xóa"
+                (click)="deleteLanguage(language.id)"
+              >
+                <i class="material-icons">delete</i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Loading State -->
+    <div *ngIf="loading" class="loading-container">
+      <app-loading></app-loading>
+    </div>
+
+    <!-- Empty State -->
+    <div *ngIf="!loading && languages.length === 0" class="empty-state">
+      <p>No data found.</p>
+    </div>
+
+    <app-pagination
+      [totalPages]="totalPages"
+      [currentPage]="currentPage"
+      (pageChange)="onPageChange($event)"
+    ></app-pagination>
+  </div>
+
+  <div class="col-12 col-lg-5 mb-3">
+    <div class="genre-form">
+      <h3 class="genre-form__title">
+        {{ editingLanguage ? "Edit Language" : "Create New Language" }}
+      </h3>
+      <form
+        [formGroup]="languageForm"
+        class="d-flex flex-column gap-4"
+        (ngSubmit)="onSubmit()"
+      >
+        <!-- Name -->
+        <div class="form-field">
+          <label for="name" class="field-label">
+            <span class="required">*</span>
+            Name
+          </label>
+          <input
+            id="name"
+            type="text"
+            formControlName="name"
+            class="form-input"
+            placeholder="Enter genre name..."
+            [class.error]="
+              languageForm.get('name')?.invalid &&
+              languageForm.get('name')?.touched
+            "
+          />
+          <div
+            class="error-message"
+            *ngIf="
+              languageForm.get('name')?.invalid &&
+              languageForm.get('name')?.touched
+            "
+          >
+            {{ getErrorMessage("name") }}
+          </div>
+        </div>
+        <div class="form-field">
+          <label for="name" class="field-label">
+            <span class="required">*</span>
+            Language Code
+          </label>
+          <input
+            id="languageCode"
+            type="text"
+            formControlName="languageCode"
+            class="form-input"
+            placeholder="Enter language code..."
+            [class.error]="
+              languageForm.get('languageCode')?.invalid &&
+              languageForm.get('languageCode')?.touched
+            "
+          />
+          <div
+            class="error-message"
+            *ngIf="
+              languageForm.get('languageCode')?.invalid &&
+              languageForm.get('languageCode')?.touched
+            "
+          >
+            {{ getErrorMessage("languageCode") }}
+          </div>
+        </div>
+        <div class="row">
+          <!-- Buttons -->
+          <div class="form-actions">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              (click)="handleClickCancelBtn()"
+              *ngIf="editingLanguage"
+            >
+              Cancel
+            </button>
+
+            <button type="submit" class="btn btn-primary">
+              <span *ngIf="!isSubmitting">{{
+                editingLanguage ? "Update" : "Create"
+              }}</span>
+              <span *ngIf="isSubmitting">Processing...</span>
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+s

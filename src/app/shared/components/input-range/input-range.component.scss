@@ -1,41 +1,26 @@
 @use "../../../../assets/styles/variables" as *;
 @use "../../../../assets/styles/mixins" as *;
 
+.input-range-container {
+  width: 100%;
+  padding: 1rem 0;
+}
+
+.input-range-title {
+  text-align: center;
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: white;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
 .input-range-wrapper {
   position: relative;
   width: 100%;
-  padding: 1.6rem 0;
+  height: 67px;
+  padding: 2rem 0;
 }
 
-.input-range-tooltip {
-  position: absolute;
-  top: -32px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: $black-30;
-  padding: 4px 10px;
-  white-space: nowrap;
-  z-index: 2;
-  border-radius: 0.4rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  pointer-events: none;
-  @include font-base(1.4rem, $semi-bold, $white);
-}
-
-.input-range {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  width: 100%;
-  outline: none;
-  position: absolute;
-  margin: auto;
-  z-index: 10;
-  top: 0;
-  bottom: 0;
-  background-color: transparent;
-  pointer-events: none;
-}
 .input-range-track {
   width: 100%;
   height: 5px;
@@ -43,85 +28,131 @@
   margin: auto;
   top: 0;
   bottom: 0;
-  background: $black-30;
+  background: $grey-80;
   border-radius: 5px;
-  &--selected {
-    background: $primary;
+  z-index: 1;
+  cursor: pointer;
+  transition: background 0.2s ease;
+
+  &:hover {
+    background: #d0d0d0;
+  }
+
+  &.disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
   }
 }
 
+// Custom handles
+.input-range-handle {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 1.2em;
+  height: 1.2em;
+  background-color: $primary;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 10;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: all 0.2s ease;
+  user-select: none;
+  touch-action: none;
+
+  &:hover {
+    transform: translate(-50%, -50%) scale(1.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    z-index: 11;
+  }
+
+  &:active {
+    transform: translate(-50%, -50%) scale(0.95);
+  }
+
+  &.disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+
+  // Min handle (left)
+  &--min {
+    z-index: 10;
+  }
+
+  // Max handle (right)
+  &--max {
+    z-index: 11;
+  }
+}
+
+// Tick marks
+.input-range-ticks {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 8px;
+  height: 24px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.input-range-tick {
+  width: 2px;
+  height: 8px;
+  background: $black-25;
+  margin: 0 0.5px;
+  align-self: flex-end;
+  transition: all 0.2s ease;
+
+  &--major {
+    height: 12px;
+    background: $black-30;
+    width: 3px;
+  }
+}
+
+// Labels
 .input-range-labels {
   display: flex;
   justify-content: space-between;
-  margin-top: 4px;
-  font-size: 16px;
-  color: $grey-65;
+  margin-top: 2rem;
   width: 100%;
-  padding: 0 2px;
-  &__item {
-    min-width: 24px;
-    text-align: center;
+}
+
+.input-range-label {
+  min-width: 24px;
+  text-align: center;
+  font-size: 1.4rem;
+  color: #666;
+  font-weight: 500;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .input-range-title {
+    font-size: 1.4rem;
+  }
+
+  .input-range-label {
+    font-size: 1.2rem;
+  }
+
+  .input-range-handle {
+    width: 1.4em;
+    height: 1.4em;
   }
 }
 
-.input-range-ticks {
-  position: absolute;
-  left: 8px;
-  right: 8px;
-  top: 8px;
-  height: 24px;
-  width: calc(100% - 16px);
-  display: flex;
-  justify-content: space-between;
-  z-index: 4;
-  pointer-events: none;
-  &__item {
-    width: 2px;
-    height: 12px;
-    background: $black-20;
-    margin: 0 0.5px;
-    align-self: flex-end;
+// Touch device improvements
+@media (hover: none) and (pointer: coarse) {
+  .input-range-handle {
+    width: 1.6em;
+    height: 1.6em;
   }
 }
-input[type="range"]::-webkit-slider-runnable-track {
-  -webkit-appearance: none;
-  height: 5px;
-}
-input[type="range"]::-moz-range-track {
-  -moz-appearance: none;
-  height: 5px;
-}
-input[type="range"]::-ms-track {
-  appearance: none;
-  height: 5px;
-}
-input[type="range"]::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  height: 1.2em;
-  width: 1.2em;
-  background-color: $primary;
-  cursor: pointer;
-  margin-top: -4px;
-  pointer-events: auto;
-  border-radius: 50%;
-}
-input[type="range"]::-moz-range-thumb {
-  -webkit-appearance: none;
-  height: 1.2em;
-  width: 1.2em;
-  cursor: pointer;
-  border-radius: 50%;
-  background-color: $primary;
-  pointer-events: auto;
-  border: none;
-}
-input[type="range"]::-ms-thumb {
-  appearance: none;
-  height: 1.2em;
-  width: 1.2em;
-  cursor: pointer;
-  border-radius: 50%;
-  background-color: $primary;
-  pointer-events: auto;
-}
-  

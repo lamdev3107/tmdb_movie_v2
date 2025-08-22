@@ -15,22 +15,23 @@ export class EditPeopleComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private peopleService: PeopleService
+    private peopleService: PeopleService,
+    private activatedRoute: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
-    const personId = this.route.snapshot.paramMap.get('id');
-    if (personId) {
-      this.loadPerson(parseInt(personId));
-    } else {
-      this.router.navigate(['/admin/people']);
-    }
+    this.route.params.subscribe((params) => {
+      const personId = params['id'];
+      if (personId) {
+        this.loadPerson(+personId);
+      }
+    });
   }
 
   private loadPerson(personId: number): void {
     this.peopleService.getPerson(personId).subscribe({
       next: (res) => {
-        this.personData = res;
+        this.personData = res.personDetail;
         this.isLoading = false;
       },
       error: (error) => {

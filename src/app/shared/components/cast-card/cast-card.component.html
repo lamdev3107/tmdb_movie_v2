@@ -1,22 +1,25 @@
 <div class="cast-card">
   <a [routerLink]="['/people', getCastId()]" class="cast-card__image">
     <img
-      *ngIf="cast?.profile_path"
-      [src]="cast?.profile_path | imageUrl : 500 : false"
-      [alt]="cast?.name"
+      *ngIf="cast?.personDTO?.profilePath"
+      [src]="cast?.personDTO?.profilePath"
+      [alt]="cast?.personDTO?.name"
     />
     <img
-      *ngIf="!cast?.profile_path"
+      *ngIf="!cast?.personDTO?.profilePath"
       src="assets/images/default-avatar.jpg"
-      [alt]="cast?.name"
+      [alt]="cast?.personDTO?.name"
     />
   </a>
   <div class="card-card__info">
     <a [routerLink]="['/people', getCastId()]" class="cast-card__info-name">{{
-      cast?.name || crew?.name
+      cast?.personDTO?.name
     }}</a>
-    <p class="cast-card__info-character">
-      {{ cast?.character || crew?.job }}
+    <p class="cast-card__info-character" *ngIf="!isCrew">
+      {{ cast?.characterName !== "" ? cast?.characterName : "" }}
+    </p>
+    <p class="cast-card__info-character" *ngIf="isCrew">
+      {{ cast?.job }}
     </p>
   </div>
 </div>

@@ -105,7 +105,6 @@ export class PersonFormComponent implements OnInit, OnChanges {
   }
 
   onSubmit(): void {
-    console.log('check this.person', this.personForm.value);
     // return;
     if (this.personForm.valid) {
       this.isSubmitting = true;

@@ -6,10 +6,10 @@
     (swiper)="onSwiper($event)"
     (slideChange)="onSlideChange()"
   >
-    <ng-template swiperSlide *ngFor="let trailer of trailerList">
+    <ng-template swiperSlide *ngFor="let movie of movies">
       <app-trailer-card
-        [trailer]="trailer"
-        (clickTrailerEvent)="handleOnPlayTrailer(trailer)"
+        [movie]="movie"
+        (clickTrailerEvent)="handleOnPlayTrailer(movie)"
       ></app-trailer-card>
     </ng-template>
   </swiper>
@@ -64,6 +64,6 @@
 </div>
 <app-trailer-modal
   [openModal]="openTrailerModal"
-  [trailer]="selectedTrailer"
+  [movie]="selectedMovie"
   (closeEvent)="closeTrailerModal()"
 ></app-trailer-modal>

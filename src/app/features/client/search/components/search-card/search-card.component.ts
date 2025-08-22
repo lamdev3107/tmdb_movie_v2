@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { AdminPerson } from '@features/admin/people/models/admin-person.model';
 import { Movie } from '@features/client/movies/models/movie.model';
 import { Person } from '@features/client/people/models/person.model';
 import { TVShow } from '@features/client/tv-shows/models/tv-show.model';
@@ -9,13 +10,11 @@ import { TVShow } from '@features/client/tv-shows/models/tv-show.model';
   styleUrls: ['./search-card.component.scss'],
 })
 export class SearchCardComponent implements OnInit {
-  @Input() item!: Person | Movie | TVShow;
+  @Input() item!: AdminPerson | Movie;
   @Input() type!: 'tv' | 'person' | 'movie';
   constructor() {}
 
-  ngOnInit(): void {
-    console.log('check item', this.item);
-  }
+  ngOnInit(): void {}
 
   getItemTitle(item: any): string {
     if (this.type === 'movie') return item.title;
@@ -24,13 +23,11 @@ export class SearchCardComponent implements OnInit {
 
   getImagePath(item: any): string {
     if (this.type === 'person') {
-      return item.profile_path
-        ? `https://image.tmdb.org/t/p/w200${item.profile_path}`
+      return item.profilePath
+        ? `${item.profilePath}`
         : 'assets/images/default-avatar.jpg';
     }
-    return item.poster_path
-      ? `https://image.tmdb.org/t/p/w200${item.poster_path}`
-      : `assets/icons/picture.svg`;
+    return item.posterPath ? item.posterPath : `assets/icons/picture.svg`;
   }
 
   getKnownForDepartment(item: any): string {
@@ -45,7 +42,7 @@ export class SearchCardComponent implements OnInit {
     }
   }
 
-  getRouterLink(item: Person | Movie | TVShow): string {
+  getRouterLink(item: AdminPerson | Movie): string {
     switch (this.type) {
       case 'movie':
         return `/movies/details/${item.id}`;

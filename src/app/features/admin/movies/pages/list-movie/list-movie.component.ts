@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ToastService } from '@core/services/toast.service';
 import { MovieService } from '../../services/movie.service';
 import { MovieResponseData } from '../../models/movie.model';
@@ -20,7 +20,8 @@ export class ListMovieComponent implements OnInit {
   constructor(
     private movieService: MovieService,
     private router: Router,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private activatedRoute: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
@@ -43,6 +44,11 @@ export class ListMovieComponent implements OnInit {
         this.loading = false;
       },
     });
+  }
+
+  clearQuery(): void {
+    this.searchQuery = '';
+    this.onSearchQueryChange('');
   }
 
   onSearchQueryChange(keyword: string): void {

@@ -1,3 +1,4 @@
+import { Country } from '@core/models/country.model';
 import { Genre } from '@core/models/genre.model';
 import { Language } from '@core/services/configuration.service';
 
@@ -13,20 +14,33 @@ export interface releaseType {
 }
 
 export interface Movie {
-  adult: boolean;
-  backdrop_path: string;
-  genre_ids: number[];
   id: number;
-  original_language: string;
-  original_title: string;
-  overview: string;
-  popularity: number;
-  poster_path: string;
-  release_date: string;
   title: string;
-  video: boolean;
-  vote_average: number;
-  vote_count: number;
+  originalTitle: string;
+  overview: string;
+  releaseDate: string;
+  runtime: number;
+  posterPath: string | null;
+  posterPublicId: string | null;
+  backdropPath: string | null;
+  backdropPublicId: string | null;
+  voteAverage: number;
+  voteCount: number;
+  trailerUrl: string | null;
+  budget: number;
+  revenue: number;
+  tagline: string;
+  homepageUrl: string | null;
+  status: string;
+  createdAt: string;
+  updatedAt: string | null;
+  createdBy: string;
+  updatedBy: string | null;
+  genres: any[];
+  countries: Country[];
+  languages: any[];
+  companies: any[];
+  comments: any[];
 }
 
 export interface ListMovieResponse {
@@ -46,31 +60,31 @@ export interface TrailerItem {
   backdrop_path: string;
 }
 
-export interface MovieDetail {
-  adult: boolean;
-  backdrop_path: string;
-  belongs_to_collection: any;
-  budget: number;
-  genres: Genre[];
-  homepage: string;
-  id: number;
-  imdb_id: string;
-  origin_country: any[];
-  original_language: string;
-  original_title: string;
-  overview: string;
-  popularity: number;
-  poster_path: string;
-  production_companies: Company[];
-  production_countries: any[];
-  release_date: string;
-  revenue: number;
-  runtime: number;
-  spoken_languages: Language[];
-  status: string;
-  tagline: string;
-  title: string;
-  video: boolean;
-  vote_average: number;
-  vote_count: number;
-}
+// export interface MovieDetail {
+//   adult: boolean;
+//   backdropPath: string;
+//   belongs_to_collection: any;
+//   budget: number;
+//   genres: Genre[];
+//   homepage: string;
+//   id: number;
+//   imdb_id: string;
+//   origin_country: any[];
+//   original_language: string;
+//   original_title: string;
+//   overview: string;
+//   popularity: number;
+//   poster_path: string;
+//   production_companies: Company[];
+//   production_countries: any[];
+//   release_date: string;
+//   revenue: number;
+//   runtime: number;
+//   spoken_languages: Language[];
+//   status: string;
+//   tagline: string;
+//   title: string;
+//   video: boolean;
+//   vote_average: number;
+//   vote_count: number;
+// }

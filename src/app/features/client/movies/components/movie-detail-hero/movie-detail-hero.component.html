@@ -2,8 +2,7 @@
   class="hero-section"
   [style.background-image]="
     'linear-gradient(to bottom, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.8)), url(' +
-    imageBaseUrl +
-    movie?.backdrop_path +
+    movie?.backdropPath +
     ')'
   "
   [style.background-repeat]="'no-repeat'"
@@ -11,13 +10,11 @@
   [style.background-size]="'cover'"
 >
   <div class="hero-section__container">
-    <div class="hero-section__poster" *ngIf="movie?.poster_path">
+    <div class="hero-section__poster" *ngIf="movie?.posterPath">
       <img
         class="hero-section__poster-image"
         [src]="
-          movie?.poster_path
-            ? (movie?.poster_path | imageUrl : 500 : false)
-            : 'assets/images/no-picture.png'
+          movie?.posterPath ? movie?.posterPath : 'assets/images/no-picture.png'
         "
         [alt]="movie?.title"
         loading="lazy"
@@ -25,7 +22,7 @@
     </div>
     <div
       class="hero-section__poster hero-section__poster--no-image"
-      *ngIf="!movie?.poster_path"
+      *ngIf="!movie?.posterPath"
     >
       <img
         class="hero-section__poster-image--no-image"
@@ -40,14 +37,14 @@
         <h1 class="hero-section__info-title">
           {{ movie?.title || "-------" }}
           <span class="hero-section__info-year"
-            >({{ movie?.release_date | date : "yyyy" }})</span
+            >({{ movie?.releaseDate | date : "yyyy" }})</span
           >
         </h1>
         <div class="hero-section__meta">
           <span class="hero-section__meta-age">{{ age }}</span>
           <span> </span>
           <span class="hero-section__meta-date">{{
-            movie?.release_date | date : "dd/MM/yyyy"
+            movie?.releaseDate | date : "dd/MM/yyyy"
           }}</span>
           <span class="hero-section__meta-genre">{{ genres }}</span>
           <span class="hero-section__meta-duration">{{
@@ -59,9 +56,33 @@
       <div class="hero-section__user-score">
         <app-user-score
           [size]="'medium'"
-          [score]="movie?.vote_average"
+          [score]="movie?.voteAverage"
         ></app-user-score>
         <span class="hero-section__user-score-label">User Score</span>
+        <ng-container>
+          <button
+            class="hero-section__user-score-button"
+            (click)="openRating()"
+          >
+            {{
+              accountStates?.isRated
+                ? "Your Rating: " + accountStates?.ratingScore + "%"
+                : "Rate This Movie"
+            }}
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              class="size-6"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z"
+                clip-rule="evenodd"
+              />
+            </svg>
+          </button>
+        </ng-container>
       </div>
 
       <div class="hero-section__actions">
@@ -82,37 +103,7 @@
 
         <app-tooltip
           [text]="
-            accountStates?.watchlist
-              ? 'Remove from watchlist'
-              : 'Add to watchlist'
-          "
-          [position]="'top'"
-        >
-          <app-button
-            variant="icon"
-            size="medium"
-            (click)="handleToggleAddBtn()"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-              class="action-btn-icon"
-              [class.action-btn-icon--is-watchlist]="accountStates?.watchlist"
-            >
-              <path
-                fill-rule="evenodd"
-                d="M6.32 2.577a49.255 49.255 0 0 1 11.36 0c1.497.174 2.57 1.46 2.57 2.93V21a.75.75 0 0 1-1.085.67L12 18.089l-7.165 3.583A.75.75 0 0 1 3.75 21V5.507c0-1.47 1.073-2.756 2.57-2.93Z"
-                clip-rule="evenodd"
-              />
-            </svg>
-          </app-button>
-        </app-tooltip>
-
-        <!-- (clicked)="onLike() -->
-        <app-tooltip
-          [text]="
-            accountStates?.favorite
+            accountStates?.inFavourite
               ? 'Remove from favorite list'
               : 'Mark as favorite'
           "
@@ -130,7 +121,7 @@
               stroke-width="1.5"
               class="action-btn-icon"
               stroke="currentColor"
-              [class.action-btn-icon--is-favorite]="accountStates?.favorite"
+              [class.action-btn-icon--is-favorite]="accountStates?.inFavourite"
             >
               <path
                 stroke-linecap="round"
@@ -140,6 +131,31 @@
             </svg>
           </app-button>
         </app-tooltip>
+
+        <!-- <app-tooltip
+          [text]="
+            accountStates?.inUserList
+              ? 'Remove from watchlist'
+              : 'Add to watchlist'
+          "
+          [position]="'top'"
+        >
+          <app-button variant="icon" size="medium" (click)="openListModal()">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              class="action-btn-icon"
+              [class.action-btn-icon--is-watchlist]="accountStates?.inUserList"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M6.32 2.577a49.255 49.255 0 0 1 11.36 0c1.497.174 2.57 1.46 2.57 2.93V21a.75.75 0 0 1-1.085.67L12 18.089l-7.165 3.583A.75.75 0 0 1 3.75 21V5.507c0-1.47 1.073-2.756 2.57-2.93Z"
+                clip-rule="evenodd"
+              />
+            </svg>
+          </app-button>
+        </app-tooltip> -->
       </div>
 
       <p class="hero-section__tagline">
@@ -159,5 +175,5 @@
 <app-trailer-modal
   [openModal]="openTrailerModal"
   (closeEvent)="onCloseTrailerModal()"
-  [trailer]="trailer"
+  [movie]="movie"
 ></app-trailer-modal>

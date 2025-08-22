@@ -32,6 +32,29 @@
     &__title {
       @include font-base(1.5rem, $medium, $grey-80);
     }
+    select {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1px solid $black-20;
+      border-radius: 8px;
+      @include font-base(1.5rem, $regular, $grey-70);
+      transition: all 0.3s ease;
+      background: $black-20;
+
+      &:focus {
+        outline: none;
+        border-color: $grey-65;
+      }
+
+      &.error {
+        border-color: #e74c3c;
+        box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1);
+      }
+
+      &::placeholder {
+        color: #bdc3c7;
+      }
+    }
   }
 }
 .movie-genres {
@@ -104,5 +127,29 @@
   }
   &__label {
     @include font-base(1.4rem, $medium, $grey-60);
+  }
+}
+
+.movies-page__sidebar-button {
+  padding: 1rem 1.6rem;
+  flex: 1;
+  border-radius: 0.8rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &--clear {
+    background-color: $black-15;
+    color: $white;
+    &:hover {
+      background-color: $black-20;
+    }
+  }
+  &--filter {
+    background-color: $primary;
+    color: $white;
+    &:hover {
+      background-color: $red-55;
+    }
   }
 }

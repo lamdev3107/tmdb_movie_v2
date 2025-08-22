@@ -3,8 +3,8 @@ import { LoadingService } from '@core/services/loading.service';
 import { ActivatedRoute } from '@angular/router';
 import { finalize, Subject, takeUntil } from 'rxjs';
 import { Review } from '@core/models/review.model';
-import { MovieDetail } from '../../models/movie.model';
 import { MovieService } from '../../services/movie.service';
+import { Movie } from '../../models/movie.model';
 
 @Component({
   selector: 'app-movie-review',
@@ -14,7 +14,7 @@ import { MovieService } from '../../services/movie.service';
 export class MovieReviewComponent implements OnInit {
   reviews: Review[] = [];
   movieId: string | null = null;
-  movie: MovieDetail | null = null;
+  movie: Movie | null = null;
   private destroy$ = new Subject<void>(); // Subject để quản lý hủy đăng
 
   constructor(

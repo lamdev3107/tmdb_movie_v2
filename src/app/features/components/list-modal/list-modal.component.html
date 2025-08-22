@@ -1,0 +1,44 @@
+<div *ngIf="isOpen" class="overlay">
+  <div class="rating-modal">
+    <div class="rating-modal__header">
+      <h3 class="rating-modal__header-title">Add Movie to List</h3>
+      <button class="rating-modal__header-close" (click)="close()">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="white"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="size-6"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M6 18 18 6M6 6l12 12"
+          />
+        </svg>
+      </button>
+    </div>
+
+    <div class="rating-modal__body">
+      <!-- INSERT_YOUR_CODE -->
+
+      <form
+        (ngSubmit)="addMovieToList()"
+        [formGroup]="addToListForm"
+        class="form-field"
+      >
+        <label class="field-label" for="listName">List Films</label>
+        <app-input-search
+          id="listFilm"
+          [options]="listFilms"
+          formControlName="listName"
+          (onInputChange)="handleQueryListChange($event)"
+        ></app-input-search>
+        <button class="create-btn" (click)="addMovieToList()">
+          Add to list
+        </button>
+      </form>
+    </div>
+  </div>
+</div>

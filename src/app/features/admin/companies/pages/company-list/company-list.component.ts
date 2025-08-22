@@ -21,6 +21,9 @@ export class CompanyListComponent implements OnInit {
   companyForm: FormGroup;
   isSubmitting = false;
 
+  searchQuery = '';
+  private debounceTimeout: any;
+
   constructor(
     private companyService: CompanyService,
     private toastService: ToastService,
@@ -34,6 +37,22 @@ export class CompanyListComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadCompanies();
+  }
+
+  clearQuery(): void {
+    this.searchQuery = '';
+    this.onSearchQueryChange('');
+  }
+
+  onSearchQueryChange(keyword: string): void {
+    // Sử dụng debounce 500ms thì mới gọi loadPeople
+    if (this.debounceTimeout) {
+      clearTimeout(this.debounceTimeout);
+    }
+    this.searchQuery = keyword;
+    this.debounceTimeout = setTimeout(() => {
+      this.loadCompanies(1, 8, this.searchQuery);
+    }, 500);
   }
 
   loadCompanies(
@@ -75,7 +94,6 @@ export class CompanyListComponent implements OnInit {
   }
 
   handleClickEditBtn(company: Company): void {
-    console.log('Chekc company', company);
     this.editingCompany = company;
     this.populateForm();
     // this.router.navigate(['/admin/people/edit', id]);

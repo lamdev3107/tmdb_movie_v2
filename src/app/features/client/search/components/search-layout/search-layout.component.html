@@ -103,8 +103,8 @@
             <!-- movie suggestion -->
             <ng-container
               *ngIf="
-                suggestions.suggestions.movie &&
-                suggestions.suggestions.movie.results.length > 0
+                suggestions.suggestions.movies &&
+                suggestions.suggestions.movies.results.length > 0
               "
             >
               <div
@@ -113,7 +113,7 @@
                   onClickItem({
                     media_type: 'movie',
                     query: getItemTitle(
-                      suggestions.suggestions.movie.results[0]
+                      suggestions.suggestions.movies.results[0]
                     )
                   })
                 "
@@ -124,36 +124,8 @@
                 />
 
                 <p class="search-results__item-title">
-                  {{ getItemTitle(suggestions.suggestions.movie.results[0]) }}
+                  {{ getItemTitle(suggestions.suggestions.movies.results[0]) }}
                   <span class="search-results__item-title-sub"> in Movie </span>
-                </p>
-              </div>
-            </ng-container>
-
-            <!-- tv suggestion -->
-            <ng-container
-              *ngIf="
-                suggestions.suggestions.tv &&
-                suggestions.suggestions.tv.results.length > 0
-              "
-            >
-              <div
-                class="search-results__item"
-                (click)="
-                  onClickItem({
-                    media_type: 'tv',
-                    query: getItemTitle(suggestions.suggestions.tv.results[0])
-                  })
-                "
-              >
-                <img
-                  [src]="'assets/icons/tv.svg'"
-                  class="search-results__item-media-type"
-                />
-
-                <p class="search-results__item-title">
-                  {{ getItemTitle(suggestions.suggestions.tv.results[0]) }}
-                  <span class="search-results__item-title-sub"> in TV </span>
                 </p>
               </div>
             </ng-container>
@@ -161,8 +133,8 @@
             <!-- person suggestion -->
             <ng-container
               *ngIf="
-                suggestions.suggestions.person &&
-                suggestions.suggestions.person.results.length > 0
+                suggestions.suggestions.persons &&
+                suggestions.suggestions.persons.results.length > 0
               "
             >
               <div
@@ -171,7 +143,7 @@
                   onClickItem({
                     media_type: 'person',
                     query: getItemTitle(
-                      suggestions.suggestions.person.results[0]
+                      suggestions.suggestions.persons.results[0]
                     )
                   })
                 "
@@ -182,7 +154,7 @@
                 />
 
                 <p class="search-results__item-title">
-                  {{ getItemTitle(suggestions.suggestions.person.results[0]) }}
+                  {{ getItemTitle(suggestions.suggestions.persons.results[0]) }}
                   <span class="search-results__item-title-sub">
                     in Person
                   </span>
@@ -194,15 +166,13 @@
             <ng-container
               *ngIf="
                 suggestions.suggestions.multi &&
-                  suggestions.suggestions.multi.results.length > 0;
+                  suggestions.suggestions.multi.length > 0;
                 else notFound
               "
             >
               <div
                 class="search-results__item"
-                *ngFor="
-                  let item of suggestions.suggestions.multi.results.slice(0, 8)
-                "
+                *ngFor="let item of suggestions.suggestions.multi"
                 (click)="
                   onClickItem({
                     media_type: getMediaType(item),

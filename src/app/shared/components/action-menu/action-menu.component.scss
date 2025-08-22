@@ -25,8 +25,8 @@
   }
 
   &__icon {
-    width: 2.4rem;
-    height: 2.4rem;
+    width: 2rem;
+    height: 2rem;
     color: $white;
     transition: color 0.3s ease;
     &:hover {
@@ -64,6 +64,10 @@
     transition: all 0.3s ease;
     cursor: pointer;
 
+    &-icon {
+      transform: translateY(-0.2rem);
+    }
+
     &:hover {
       background-color: $black-20;
       color: $white;
@@ -97,7 +101,7 @@
       }
     }
 
-    &--rating {
+    &--rated {
       svg {
         fill: $yellow;
       }

@@ -30,8 +30,8 @@ export class PeopleService {
       );
   }
 
-  getPerson(id: number): Observable<AdminPerson> {
-    return this.http.get<AdminPerson>(`${this.baseUrl}/${id}`).pipe(
+  getPerson(id: number): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}/${id}`).pipe(
       map((response: any) => {
         return response.data;
       })

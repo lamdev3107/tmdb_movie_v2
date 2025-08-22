@@ -164,16 +164,22 @@
       visibility: visible;
       transform: translateY(0);
     }
-
+    &-divider {
+      height: 2px;
+      background: $black-20;
+    }
     &-item {
       display: flex;
       flex-direction: column;
       gap: 0.8rem;
 
-      a {
+      &-link {
         display: flex;
         align-items: center;
         gap: 1.2rem;
+        border: none;
+        outline: none;
+        background: transparent;
         padding: 1.2rem;
         color: $grey-75;
         text-decoration: none;
@@ -184,7 +190,14 @@
           background-color: $black-15;
           color: $white;
         }
-
+        i {
+          font-size: 2rem;
+        }
+        svg {
+          width: 2rem;
+          height: 2rem;
+          fill: $white;
+        }
         img {
           width: 2rem;
           height: 2rem;
@@ -295,6 +308,7 @@
       height: 2rem;
       opacity: 0.8;
     }
+
     span {
       @include font-base(1.5rem, $semi-bold, $grey-75);
     }

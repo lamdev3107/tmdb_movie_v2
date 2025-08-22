@@ -5,8 +5,8 @@
         crossorigin="anonymous"
         class="review-page-header__image"
         [src]="
-          movie?.poster_path
-            ? (movie?.poster_path | imageUrl : 500 : false)
+          movie?.posterPath
+            ? movie?.posterPath
             : 'assets/images/default-avatar.jpg'
         "
         loading="lazy"
@@ -26,11 +26,11 @@
             >{{ movie?.title }}</a
           >
           <p
-            *ngIf="movie?.release_date"
+            *ngIf="movie?.releaseDate"
             class="review-page-header__content-year"
           >
             (
-            {{ movie?.release_date | date : "yyyy" }} )
+            {{ movie?.releaseDate | date : "yyyy" }} )
           </p>
         </div>
         <a

@@ -1,0 +1,184 @@
+@use "../../../../assets/styles/mixins" as *;
+@use "../../../../assets/styles/variables" as *;
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+}
+
+.rating-modal {
+  background: $black-15;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 80%;
+  transform: translate(-50%, -50%);
+  max-height: 80vh;
+  overflow: hidden;
+  border-radius: 1.2rem;
+  z-index: 1000;
+  @include mq-md {
+    width: 50%;
+    max-width: 700px;
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 2rem;
+    border-bottom: 1px solid $black-30;
+    &-title {
+      @include font-base(2.8rem, $semi-bold, $white);
+    }
+    &-close {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      color: $white;
+      svg {
+        width: 4rem;
+        height: 4rem;
+        fill: $white;
+      }
+    }
+  }
+
+  &__body {
+    padding: 2rem 2rem 3rem;
+  }
+
+  &__question {
+    @include font-base(1.6rem, $regular, $grey-70);
+    margin-bottom: 1.2rem;
+  }
+
+  &__user-score {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.2rem;
+    gap: 3rem;
+    &-text {
+      @include font-base(1.4rem, $regular, $grey-70);
+      margin-left: 1rem;
+    }
+  }
+
+  &__movie-title {
+    @include font-base(1.6rem, $semi-bold, $primary);
+  }
+
+  &__your-score {
+    @include font-base(1.4rem, $semi-bold, $grey-70);
+    &-value {
+      @include font-base(1.6rem, $semi-bold, $white);
+    }
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 2rem;
+  }
+
+  &__clear {
+    @include font-base(1.4rem, $semi-bold, $primary);
+    background: transparent;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border: none;
+    cursor: pointer;
+  }
+  &__submit {
+    @include font-base(1.4rem, $semi-bold, $white);
+    background: $primary;
+    border-radius: 0.5rem;
+    border: none;
+    padding: 1rem 2rem;
+    cursor: pointer;
+    &:hover {
+      background: $red-55;
+    }
+  }
+}
+
+.slider {
+  width: 100%;
+  margin-top: 1rem;
+
+  input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 8px;
+    border-radius: 4px;
+    background: #e6e6e6;
+    outline: none;
+  }
+
+  // Force track height so we can vertically center the thumb
+  input[type="range"]::-webkit-slider-runnable-track {
+    height: 8px;
+    border-radius: 4px;
+    background: transparent;
+  }
+  input[type="range"]::-moz-range-track {
+    height: 8px;
+    border-radius: 4px;
+    background: transparent;
+  }
+
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #12223b;
+    border: 3px solid white;
+    cursor: pointer;
+    // Center thumb relative to 8px track: -(thumb(24+border*2) - track)/2 = -11px
+    margin-top: -11px;
+  }
+
+  input[type="range"]::-moz-range-thumb {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #12223b;
+    border: 3px solid white;
+    cursor: pointer;
+  }
+
+  &__ticks {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 6px;
+    padding: 0 1rem;
+  }
+
+  &__tick {
+    width: 2px;
+    height: 8px;
+    background: $black-30;
+  }
+
+  &__labels {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 0.8rem;
+    padding: 0 1rem;
+    span {
+      @include font-base(1.2rem, $regular, $grey-70);
+    }
+  }
+}

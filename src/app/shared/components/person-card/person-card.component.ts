@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Cast } from '@features/client/movies/models/credit.model';
+import { MovieCast } from '@features/client/movies/models/credit.model';
 
 @Component({
   selector: 'app-person-card',
@@ -7,7 +7,7 @@ import { Cast } from '@features/client/movies/models/credit.model';
   styleUrls: ['./person-card.component.scss'],
 })
 export class PersonCardComponent implements OnInit {
-  @Input() cast!: Cast;
+  @Input() cast!: MovieCast;
   @Input() isLoading!: boolean | null;
   constructor() {}
 

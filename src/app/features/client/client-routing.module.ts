@@ -22,11 +22,7 @@ const routes: Routes = [
         loadChildren: () =>
           import('./search/search.module').then((m) => m.SearchModule),
       },
-      {
-        path: 'tv-shows',
-        loadChildren: () =>
-          import('./tv-shows/tv-shows.module').then((m) => m.TvShowsModule),
-      },
+
       {
         path: 'account',
         loadChildren: () =>

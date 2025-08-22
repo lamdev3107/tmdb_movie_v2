@@ -15,9 +15,9 @@ export class CompanyService {
     page: number = 1,
     size: number = 30,
     keyword: string = ''
-  ): Observable<CompanyResponseData[]> {
+  ): Observable<CompanyResponseData> {
     return this.http
-      .get<CompanyResponseData[]>(
+      .get<CompanyResponseData>(
         `${this.baseUrl}?page=${page}&size=${size}&keyword=${keyword}`
       )
       .pipe(
